@@ -229,47 +229,38 @@ The simplest first launch should stay narrow and manual where possible.
 
 ## 16. Kanban Backlog
 
-### Epic 1: Account and Access
+### To Do
 
-- Create buyer sign-up and sign-in flow.
-- Create dealer and private seller sign-up flow.
-- Add role-based account types.
-- Add password reset and account recovery.
+- Set up buyer auth flow - Let buyers register, log in, and manage sessions.
+- Set up dealer and seller auth - Create sign-up and login paths for both seller types.
+- Add role-based user model - Store and enforce buyer, dealer, and private-seller roles.
+- Build listing creation form - Allow sellers to enter core vehicle and pricing details.
+- Add photo upload ordering - Support multiple photos and custom display order.
+- Build listing detail page - Show full vehicle info, photos, seller type, and CTA.
+- Build search results page - Display matching listings with clean cards and pagination.
+- Add listing filters - Filter by model, year, mileage, price, location, and seller type.
+- Add listing sort options - Sort by relevance, newest, price, and mileage.
+- Add saved listings - Let buyers save and revisit listings.
+- Build buyer inquiry form - Send structured questions from listing pages to sellers.
+- Build seller inbox view - Let sellers see and respond to incoming inquiries.
+- Add message history by listing - Keep conversation threads tied to each listing.
+- Add inquiry status tracking - Track inquiry lifecycle (new, replied, closed).
+- Create manual verification queue - Give admins a queue to review seller verification requests.
+- Add listing moderation actions - Enable approve, reject, pause, and remove actions.
+- Add seller trust badges - Display verification and trust markers on listings.
+- Track listing created events - Capture when listings are drafted, published, or updated.
+- Track inquiry events - Capture inquiry sent, viewed, and replied events.
+- Build basic KPI dashboard - Show listings, inquiries, conversion, and seller mix.
 
-### Epic 2: Listings
+### In Progress
 
-- Build listing creation form.
-- Add photo upload and ordering.
-- Add listing edit, pause, and delete actions.
-- Build listing detail page.
+- Define launch region and seed inventory - Choose first market and target initial listing count.
+- Define moderation policy and SLAs - Set review rules, escalation paths, and response targets.
 
-### Epic 3: Search and Discovery
+### Done
 
-- Build search results page.
-- Add filters for year, model, price, mileage, location, and seller type.
-- Add sort options.
-- Add saved listings.
-
-### Epic 4: Inquiry and Messaging
-
-- Build buyer inquiry form.
-- Build seller inbox.
-- Add message history per listing.
-- Add inquiry status tracking.
-
-### Epic 5: Trust and Moderation
-
-- Add manual seller verification workflow.
-- Add admin review queue.
-- Add listing approval and rejection actions.
-- Add trust indicators on listings.
-
-### Epic 6: Analytics and Reporting
-
-- Track listing creation events.
-- Track inquiries and responses.
-- Track saved listing activity.
-- Create a basic marketplace dashboard.
+- Finalize MVP scope - Lock in launch features and explicitly excluded work.
+- Finalize phase roadmap - Sequence Phase 1 to Phase 4 deliverables.
 
 ## 17. Open Questions
 
