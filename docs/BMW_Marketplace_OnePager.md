@@ -1,31 +1,41 @@
 # BMW Marketplace One-Pager
 
 ## Problem Statement
-- Difficulty in finding luxury vehicles and reaching suitable buyers.
+
+- Dealers and individual sellers need a focused place to reach serious vehicle buyers without competing in a generic classifieds experience.
 
 ## Solution Overview
-- An exclusive platform tailored for luxury vehicle transactions.
+
+- A dedicated marketplace for BMW vehicles that connects authorized dealers and private owners with buyers in one trusted platform.
 
 ## Key Features
-- Advanced search, messaging, and personalized user experiences.
+
+- Advanced search, seller verification, messaging, saved listings, and personalized experiences for buyers, dealers, and private sellers.
 
 ## Market Opportunity
-- Growing demand for luxury and unique vehicles in the online marketplace.
+
+- Strong demand for a specialized automotive marketplace that serves both dealer inventory and peer-to-peer vehicle sales.
 
 ## Go-to-Market Strategy
-- Collaborate with dealerships, engage in social media marketing, and leverage influencer partnerships.
+
+- Partner with dealerships, onboard private sellers through referral loops, and use targeted social and enthusiast community marketing.
 
 ## Competitive Advantages
-- Focused user base, high-quality listings, and a streamlined process.
+
+- One marketplace for both dealer inventory and individual listings, with higher trust, better filtering, and a more relevant audience.
 
 ## Business Model
-- Commission-based model for transactions and premium listing fees.
+
+- Dealer subscription plans, premium listing fees, featured placements, and optional transaction-based revenue.
 
 ## Success Metrics
-- User acquisition, transaction volume, and engagement rates.
+
+- Active dealer accounts, active private sellers, listing volume, inquiries, transaction volume, and repeat usage.
 
 ## Team Requirements
-- Product managers, developers, marketing experts, and customer support.
+
+- Product managers, developers, trust and safety specialists, marketing experts, and customer support.
 
 ## Next Steps
-- Finalize platform development and initiate marketing campaigns.
+
+- Finalize the marketplace experience for dealers and individual sellers, then launch with targeted onboarding and marketing.
