@@ -1,5 +1,21 @@
 # UX Model
 
+## Project Overview (Plain Language)
+
+BMW Marketplace helps three groups work in one place:
+
+- Buyers: Find and compare BMW listings from trusted sellers.
+- Dealers: Publish inventory and manage incoming buyer leads.
+- Private sellers: List personal vehicles and connect with serious buyers.
+
+At a high level, the experience is simple: sellers post listings, buyers discover listings, both sides chat safely, and the platform tracks progress from inquiry to completed sale.
+
+## Diagram Notes
+
+- The file `docs/BMW_Marketplace_UML_Diagram.drawio` is an overview UML use-case diagram.
+- It intentionally focuses on people and actions, not low-level technical implementation details.
+- The goal is to make the project understandable to both technical and non-technical stakeholders.
+
 ## User Personas
 
 ### Buyer Ben
