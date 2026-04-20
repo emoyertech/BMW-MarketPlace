@@ -64,7 +64,7 @@ Private owners listing a BMW vehicle for sale and looking for a straightforward,
 
 ## 8. Functional Requirements
 
-### Search and Discovery
+### Search and Discovery Acceptance
 
 - Users can search listings by model, year, price, mileage, location, and seller type.
 - Results can be sorted by relevance, price, recent listings, and mileage.
@@ -76,13 +76,13 @@ Private owners listing a BMW vehicle for sale and looking for a straightforward,
 - Listings must support structured vehicle attributes, images, seller type, and contact/inquiry handling.
 - Dealer listings should support inventory scale without degrading the buyer experience.
 
-### Messaging and Inquiries
+### Messaging and Inquiries Acceptance
 
 - Buyers can contact sellers through an in-platform inquiry flow.
 - Sellers can review and respond to inquiries.
 - Message history should be retained for the lifecycle of a listing or transaction.
 
-### Trust and Verification
+### Trust and Verification Acceptance
 
 - Dealer accounts should support verification.
 - Private sellers should be able to complete lightweight account verification.
@@ -117,28 +117,85 @@ Private owners listing a BMW vehicle for sale and looking for a straightforward,
 - Transaction volume.
 - Repeat visits and saved listing engagement.
 
-## 12. Release Phases
+## 12. MVP Scope
+
+The MVP should prove that the marketplace can attract quality BMW listings from both dealers and individual sellers, and that buyers can search, inquire, and save listings without friction.
+
+### In Scope for MVP
+
+- Buyer account creation and sign-in.
+- Dealer and private seller account creation.
+- Structured listing creation with photos and pricing.
+- Search, filter, sort, and save listing workflows.
+- Buyer-to-seller inquiry flow.
+- Basic trust indicators for dealer and private seller listings.
+- Admin or internal moderation tools for listing review and removal.
+
+### Out of Scope for MVP
+
+- In-platform payments and escrow.
+- Financing and insurance workflows.
+- Advanced recommendation or AI ranking systems.
+- Multi-brand marketplace support beyond BMW.
+- Full dealer CRM replacement.
+
+## 13. Acceptance Criteria
+
+### Search and Discovery
+
+- Users can find listings using model, year, price, mileage, location, and seller type filters.
+- Search results display listing price, seller type, location, and a primary photo.
+- Users can save and revisit listings after signing back in.
+
+### Listing Creation
+
+- Dealers and private sellers can create a listing with required vehicle attributes, photos, and asking price.
+- A listing cannot be published if required fields are missing.
+- Sellers can edit or pause an active listing after publishing.
+
+### Messaging and Inquiries
+
+- Buyers can submit an inquiry from a listing detail page.
+- Sellers can view incoming inquiries in their account.
+- Inquiry records are retained and associated with the correct listing.
+
+### Trust and Verification
+
+- Dealer accounts can be marked as verified.
+- Private seller listings show a seller type or trust indicator.
+- Moderation can remove listings that violate platform standards.
+
+### Analytics
+
+- The platform records listing creation, inquiry events, saves, and completed transactions.
+- Core funnel metrics can be reported by seller type.
+
+## 14. Delivery Plan
 
 ### Phase 1
 
-- Marketplace foundations.
-- Buyer search and discovery.
-- Seller listing creation.
-- Messaging and inquiry flow.
+- Account system for buyers, dealers, and private sellers.
+- Listing creation, editing, and publishing.
+- Search, filter, sort, and listing detail pages.
+- Inquiry submission and inbox handling.
+- Basic moderation and trust indicators.
 
 ### Phase 2
 
-- Dealer verification and inventory workflows.
-- Saved listings and personalization.
+- Dealer verification workflow.
+- Saved listings and user favorites.
+- Better profile pages for dealers and private sellers.
 - Review and trust enhancements.
+- Inventory management improvements for dealer accounts.
 
 ### Phase 3
 
-- Conversion and transaction reporting.
-- Advanced analytics.
-- Premium placement and monetization controls.
+- Transaction reporting and lifecycle tracking.
+- Advanced analytics and funnel reporting.
+- Premium placement, featured listings, and monetization controls.
+- Platform optimization for scale and operational workflows.
 
-## 13. Open Questions
+## 15. Open Questions
 
 - Should dealer verification be manual, automated, or hybrid at launch?
 - Which transaction steps, if any, should happen fully in-platform?
