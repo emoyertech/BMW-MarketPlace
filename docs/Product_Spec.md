@@ -139,7 +139,28 @@ The MVP should prove that the marketplace can attract quality BMW listings from 
 - Multi-brand marketplace support beyond BMW.
 - Full dealer CRM replacement.
 
-## 13. Acceptance Criteria
+## 13. Simple Start
+
+The simplest first launch should stay narrow and manual where possible.
+
+### Start With
+
+- BMW only.
+- One region or market only.
+- Dealer and private seller listings.
+- Manual seller approval.
+- Search, filters, listing pages, and inquiry flow.
+- No in-platform payments.
+
+### Build First
+
+1. Listing creation and listing detail pages.
+2. Search, filter, and sort.
+3. Buyer inquiry flow.
+4. Manual moderation and seller verification.
+5. Basic reporting for listings and inquiries.
+
+## 14. Acceptance Criteria
 
 ### Search and Discovery
 
@@ -170,7 +191,7 @@ The MVP should prove that the marketplace can attract quality BMW listings from 
 - The platform records listing creation, inquiry events, saves, and completed transactions.
 - Core funnel metrics can be reported by seller type.
 
-## 14. Delivery Plan
+## 15. Future Phases
 
 ### Phase 1
 
@@ -179,6 +200,7 @@ The MVP should prove that the marketplace can attract quality BMW listings from 
 - Search, filter, sort, and listing detail pages.
 - Inquiry submission and inbox handling.
 - Basic moderation and trust indicators.
+- Manual verification for early dealer onboarding.
 
 ### Phase 2
 
@@ -187,6 +209,7 @@ The MVP should prove that the marketplace can attract quality BMW listings from 
 - Better profile pages for dealers and private sellers.
 - Review and trust enhancements.
 - Inventory management improvements for dealer accounts.
+- Email or in-app notifications for inquiries and saves.
 
 ### Phase 3
 
@@ -194,8 +217,61 @@ The MVP should prove that the marketplace can attract quality BMW listings from 
 - Advanced analytics and funnel reporting.
 - Premium placement, featured listings, and monetization controls.
 - Platform optimization for scale and operational workflows.
+- Structured offers or deal status tracking.
 
-## 15. Open Questions
+### Phase 4
+
+- Region expansion beyond the initial launch market.
+- Subscription plans for dealers.
+- More advanced moderation and fraud detection.
+- API or partner integrations.
+- Optional financing or payment workflows if the business needs them.
+
+## 16. Kanban Backlog
+
+### Epic 1: Account and Access
+
+- Create buyer sign-up and sign-in flow.
+- Create dealer and private seller sign-up flow.
+- Add role-based account types.
+- Add password reset and account recovery.
+
+### Epic 2: Listings
+
+- Build listing creation form.
+- Add photo upload and ordering.
+- Add listing edit, pause, and delete actions.
+- Build listing detail page.
+
+### Epic 3: Search and Discovery
+
+- Build search results page.
+- Add filters for year, model, price, mileage, location, and seller type.
+- Add sort options.
+- Add saved listings.
+
+### Epic 4: Inquiry and Messaging
+
+- Build buyer inquiry form.
+- Build seller inbox.
+- Add message history per listing.
+- Add inquiry status tracking.
+
+### Epic 5: Trust and Moderation
+
+- Add manual seller verification workflow.
+- Add admin review queue.
+- Add listing approval and rejection actions.
+- Add trust indicators on listings.
+
+### Epic 6: Analytics and Reporting
+
+- Track listing creation events.
+- Track inquiries and responses.
+- Track saved listing activity.
+- Create a basic marketplace dashboard.
+
+## 17. Open Questions
 
 - Should dealer verification be manual, automated, or hybrid at launch?
 - Which transaction steps, if any, should happen fully in-platform?
