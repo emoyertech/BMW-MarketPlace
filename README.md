@@ -12,3 +12,27 @@ BMW Marketplace is a hybrid automotive marketplace for dealerships and individua
 ## Product Summary
 
 The platform is designed to bring dealer inventory and private listings into one trusted marketplace. Buyers can search, compare, save, and inquire about vehicles, while sellers can publish listings, manage leads, and complete transactions in a focused automotive environment.
+
+## Script Starter
+
+Use these scripts to generate local test data and a basic KPI snapshot while you start building Phase 1.
+
+1. Generate seed data:
+
+```bash
+python3 scripts/seed_data.py
+```
+
+1. View KPI snapshot:
+
+```bash
+python3 scripts/kpi_report.py
+```
+
+1. Run local homepage with listings:
+
+```bash
+python3 scripts/home_page.py
+```
+
+Then open `http://127.0.0.1:8000` in your browser.

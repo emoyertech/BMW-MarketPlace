@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BMW Marketplace | Home</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main class="page-shell">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">BMW Marketplace</p>
+        <h1>{{HERO_TITLE}}</h1>
+        <p class="sub">{{HERO_SUBTITLE}}</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#featured">Browse featured</a>
+          <a class="button secondary" href="#inventory">View inventory</a>
+          <a class="button secondary" href="/create-listing">Create listing</a>
+        </div>
+        <div class="stats">
+          <div class="stat"><small>Active listings</small><strong>{{ACTIVE_COUNT}}</strong></div>
+          <div class="stat"><small>Total listings</small><strong>{{LISTINGS_COUNT}}</strong></div>
+          <div class="stat"><small>Total users</small><strong>{{USERS_COUNT}}</strong></div>
+          <div class="stat"><small>Total inquiries</small><strong>{{INQUIRIES_COUNT}}</strong></div>
+        </div>
+      </div>
+      <aside class="hero-panel">
+        <div class="hero-card">
+          <span class="panel-label">Featured Listing</span>
+          <img src="{{FEATURED_IMAGE}}" alt="{{FEATURED_YEAR}} BMW {{FEATURED_MODEL}}" class="hero-image" loading="eager" />
+          <div class="hero-card-copy">
+            <h2>{{FEATURED_YEAR}} BMW {{FEATURED_MODEL}}</h2>
+            <p>{{FEATURED_TRIM}}</p>
+            <div class="hero-row">
+              <strong>{{FEATURED_PRICE}}</strong>
+              <span>{{FEATURED_STATUS}}</span>
+            </div>
+            <p class="hero-meta">{{FEATURED_LOCATION}} · {{FEATURED_TITLE_TYPE}}</p>
+          </div>
+        </div>
+        <div class="mini-stats">
+          <div><strong>{{DEALER_COUNT}}</strong><span>Dealer listings</span></div>
+          <div><strong>{{PRIVATE_COUNT}}</strong><span>Private listings</span></div>
+          <div><strong>{{AVG_PRICE}}</strong><span>Avg asking price</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" id="featured">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">Featured inventory</p>
+          <h2>Fresh arrivals across the marketplace</h2>
+        </div>
+        <p class="section-note">A single view of the newest active listings pulled straight from seed data.</p>
+      </div>
+      <div class="grid featured-grid">
+        {{FEATURED_CARDS_HTML}}
+      </div>
+    </section>
+
+    <section class="section split-sections" id="inventory">
+      <article class="subsection">
+        <div class="section-heading compact">
+          <div>
+            <p class="section-kicker">Dealer stock</p>
+            <h2>Inventory from partner dealers</h2>
+          </div>
+        </div>
+        <div class="grid compact-grid">
+          {{DEALER_CARDS_HTML}}
+        </div>
+      </article>
+
+      <article class="subsection">
+        <div class="section-heading compact">
+          <div>
+            <p class="section-kicker">Private sellers</p>
+            <h2>Individual listings with real catalog media</h2>
+          </div>
+        </div>
+        <div class="grid compact-grid">
+          {{PRIVATE_CARDS_HTML}}
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Create Listing | BMW Marketplace</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main class="page-shell form-shell">
+    <a class="back-link" href="/">Back to marketplace</a>
+
+    <section class="form-hero">
+      <p class="eyebrow">Seller Tools</p>
+      <h1>Create your listing</h1>
+      <p class="sub">Submit a BMW listing and store it in the local app database.</p>
+    </section>
+
+    {{ERROR_HTML}}
+
+    <form class="listing-form" action="/create-listing" method="post" enctype="multipart/form-data">
+      <div class="form-grid">
+        <label>Name*<input type="text" name="seller_name" value="{{SELLER_NAME}}" required /></label>
+        <label>Email*<input type="email" name="seller_email" value="{{SELLER_EMAIL}}" required /></label>
+        <label>Seller type
+          <select name="seller_type">
+            <option value="PRIVATE_SELLER" {{PRIVATE_SELECTED}}>Private Seller</option>
+            <option value="DEALER" {{DEALER_SELECTED}}>Dealer</option>
+          </select>
+        </label>
+        <label>Status
+          <select name="status">
+            <option value="ACTIVE" {{ACTIVE_SELECTED}}>Active</option>
+            <option value="PAUSED" {{PAUSED_SELECTED}}>Paused</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="form-grid">
+        <label>Model*<input type="text" name="model" placeholder="3 Series" value="{{MODEL}}" required /></label>
+        <label>Trim<input type="text" name="trim" placeholder="330i xDrive" value="{{TRIM}}" /></label>
+        <label>Year*<input type="number" name="year" min="1970" max="2035" value="{{YEAR}}" required /></label>
+        <label>Price (USD)*<input type="number" name="price" min="1000" step="1" value="{{PRICE}}" required /></label>
+        <label>Mileage*<input type="number" name="mileage" min="0" step="1" value="{{MILEAGE}}" required /></label>
+        <label>Location*<input type="text" name="location" placeholder="San Diego, CA" value="{{LOCATION}}" required /></label>
+      </div>
+
+      <div class="form-grid">
+        <label>Body style<input type="text" name="body_style" placeholder="Sedan" value="{{BODY_STYLE}}" /></label>
+        <label>Drive type<input type="text" name="drive_type" placeholder="All Wheel Drive" value="{{DRIVE_TYPE}}" /></label>
+        <label>Title type<input type="text" name="title_type" placeholder="Clean" value="{{TITLE_TYPE}}" /></label>
+      </div>
+
+      <label>Primary image file
+        <input type="file" name="primary_image" accept="image/*" />
+      </label>
+      <label>Gallery image files (optional, multiple)
+        <input type="file" name="gallery_images_files" accept="image/*" multiple />
+      </label>
+      <label>Description
+        <textarea name="description" rows="6" placeholder="Tell buyers about the car.">{{DESCRIPTION}}</textarea>
+      </label>
+
+      <button class="button primary" type="submit">Save listing</button>
+    </form>
+  </main>
+</body>
+</html>

@@ -1,0 +1,198 @@
+[
+  {
+    "user_id": "buyer-1",
+    "role": "BUYER",
+    "full_name": "Buyer 1",
+    "email": "buyer1@example.com",
+    "created_at": "2026-03-29T15:57:25.700055+00:00"
+  },
+  {
+    "user_id": "buyer-2",
+    "role": "BUYER",
+    "full_name": "Buyer 2",
+    "email": "buyer2@example.com",
+    "created_at": "2026-04-08T15:57:25.700072+00:00"
+  },
+  {
+    "user_id": "buyer-3",
+    "role": "BUYER",
+    "full_name": "Buyer 3",
+    "email": "buyer3@example.com",
+    "created_at": "2026-03-25T15:57:25.700077+00:00"
+  },
+  {
+    "user_id": "buyer-4",
+    "role": "BUYER",
+    "full_name": "Buyer 4",
+    "email": "buyer4@example.com",
+    "created_at": "2026-04-02T15:57:25.700080+00:00"
+  },
+  {
+    "user_id": "buyer-5",
+    "role": "BUYER",
+    "full_name": "Buyer 5",
+    "email": "buyer5@example.com",
+    "created_at": "2026-04-15T15:57:25.700083+00:00"
+  },
+  {
+    "user_id": "buyer-6",
+    "role": "BUYER",
+    "full_name": "Buyer 6",
+    "email": "buyer6@example.com",
+    "created_at": "2026-04-14T15:57:25.700085+00:00"
+  },
+  {
+    "user_id": "buyer-7",
+    "role": "BUYER",
+    "full_name": "Buyer 7",
+    "email": "buyer7@example.com",
+    "created_at": "2026-04-15T15:57:25.700087+00:00"
+  },
+  {
+    "user_id": "buyer-8",
+    "role": "BUYER",
+    "full_name": "Buyer 8",
+    "email": "buyer8@example.com",
+    "created_at": "2026-04-14T15:57:25.700090+00:00"
+  },
+  {
+    "user_id": "buyer-9",
+    "role": "BUYER",
+    "full_name": "Buyer 9",
+    "email": "buyer9@example.com",
+    "created_at": "2026-04-15T15:57:25.700092+00:00"
+  },
+  {
+    "user_id": "buyer-10",
+    "role": "BUYER",
+    "full_name": "Buyer 10",
+    "email": "buyer10@example.com",
+    "created_at": "2026-03-30T15:57:25.700095+00:00"
+  },
+  {
+    "user_id": "buyer-11",
+    "role": "BUYER",
+    "full_name": "Buyer 11",
+    "email": "buyer11@example.com",
+    "created_at": "2026-03-30T15:57:25.700097+00:00"
+  },
+  {
+    "user_id": "buyer-12",
+    "role": "BUYER",
+    "full_name": "Buyer 12",
+    "email": "buyer12@example.com",
+    "created_at": "2026-04-18T15:57:25.700099+00:00"
+  },
+  {
+    "user_id": "buyer-13",
+    "role": "BUYER",
+    "full_name": "Buyer 13",
+    "email": "buyer13@example.com",
+    "created_at": "2026-03-29T15:57:25.700101+00:00"
+  },
+  {
+    "user_id": "buyer-14",
+    "role": "BUYER",
+    "full_name": "Buyer 14",
+    "email": "buyer14@example.com",
+    "created_at": "2026-03-27T15:57:25.700104+00:00"
+  },
+  {
+    "user_id": "buyer-15",
+    "role": "BUYER",
+    "full_name": "Buyer 15",
+    "email": "buyer15@example.com",
+    "created_at": "2026-04-16T15:57:25.700106+00:00"
+  },
+  {
+    "user_id": "dealer-1",
+    "role": "DEALER",
+    "full_name": "Dealer 1",
+    "email": "dealer1@example.com",
+    "created_at": "2026-03-26T15:57:25.700109+00:00"
+  },
+  {
+    "user_id": "dealer-2",
+    "role": "DEALER",
+    "full_name": "Dealer 2",
+    "email": "dealer2@example.com",
+    "created_at": "2026-03-29T15:57:25.700111+00:00"
+  },
+  {
+    "user_id": "dealer-3",
+    "role": "DEALER",
+    "full_name": "Dealer 3",
+    "email": "dealer3@example.com",
+    "created_at": "2026-04-11T15:57:25.700114+00:00"
+  },
+  {
+    "user_id": "dealer-4",
+    "role": "DEALER",
+    "full_name": "Dealer 4",
+    "email": "dealer4@example.com",
+    "created_at": "2026-03-28T15:57:25.700116+00:00"
+  },
+  {
+    "user_id": "dealer-5",
+    "role": "DEALER",
+    "full_name": "Dealer 5",
+    "email": "dealer5@example.com",
+    "created_at": "2026-03-22T15:57:25.700118+00:00"
+  },
+  {
+    "user_id": "seller-1",
+    "role": "PRIVATE_SELLER",
+    "full_name": "Private Seller 1",
+    "email": "seller1@example.com",
+    "created_at": "2026-03-27T15:57:25.700121+00:00"
+  },
+  {
+    "user_id": "seller-2",
+    "role": "PRIVATE_SELLER",
+    "full_name": "Private Seller 2",
+    "email": "seller2@example.com",
+    "created_at": "2026-04-20T15:57:25.700123+00:00"
+  },
+  {
+    "user_id": "seller-3",
+    "role": "PRIVATE_SELLER",
+    "full_name": "Private Seller 3",
+    "email": "seller3@example.com",
+    "created_at": "2026-04-06T15:57:25.700126+00:00"
+  },
+  {
+    "user_id": "seller-4",
+    "role": "PRIVATE_SELLER",
+    "full_name": "Private Seller 4",
+    "email": "seller4@example.com",
+    "created_at": "2026-04-06T15:57:25.700128+00:00"
+  },
+  {
+    "user_id": "seller-5",
+    "role": "PRIVATE_SELLER",
+    "full_name": "Private Seller 5",
+    "email": "seller5@example.com",
+    "created_at": "2026-03-24T15:57:25.700130+00:00"
+  },
+  {
+    "user_id": "seller-6",
+    "role": "PRIVATE_SELLER",
+    "full_name": "Private Seller 6",
+    "email": "seller6@example.com",
+    "created_at": "2026-03-28T15:57:25.700133+00:00"
+  },
+  {
+    "user_id": "seller-7",
+    "role": "PRIVATE_SELLER",
+    "full_name": "Private Seller 7",
+    "email": "seller7@example.com",
+    "created_at": "2026-03-31T15:57:25.700135+00:00"
+  },
+  {
+    "user_id": "seller-8",
+    "role": "PRIVATE_SELLER",
+    "full_name": "Private Seller 8",
+    "email": "seller8@example.com",
+    "created_at": "2026-04-17T15:57:25.700137+00:00"
+  }
+]

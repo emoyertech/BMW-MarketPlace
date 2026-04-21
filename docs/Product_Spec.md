@@ -100,14 +100,54 @@ Private owners listing a BMW vehicle for sale and looking for a straightforward,
 - User and seller data must be protected with access controls and appropriate privacy handling.
 - The system should support a marketplace structure that can grow from launch inventory to larger dealer participation.
 
-## 10. Data Requirements
+## 10. Python-Based Technical Architecture
+
+### Backend Service
+
+- Framework: FastAPI (Python 3.11+).
+- API style: REST JSON endpoints with versioned routes (`/api/v1`).
+- Validation: Pydantic request and response schemas.
+- Auth: JWT-based authentication with role-based authorization (buyer, dealer, private seller, admin).
+
+### Data Layer
+
+- ORM: SQLAlchemy 2.x.
+- Migrations: Alembic.
+- Primary database: PostgreSQL.
+- Local development option: SQLite for quick startup only.
+
+### Async and Background Work
+
+- Queue: Celery or RQ for asynchronous tasks.
+- Broker/cache: Redis.
+- Background tasks: image processing, notification dispatch, and analytics aggregation.
+
+### Storage and Integrations
+
+- Image storage: local filesystem in development, object storage (S3-compatible) in production.
+- Notifications: email provider integration via background tasks.
+- Observability: structured logging, request IDs, and basic metrics.
+
+### Suggested Python Project Layout
+
+- `app/main.py` - FastAPI app bootstrap.
+- `app/api/` - route handlers by domain.
+- `app/models/` - SQLAlchemy models.
+- `app/schemas/` - Pydantic schemas.
+- `app/services/` - business logic.
+- `app/repositories/` - data access layer.
+- `app/workers/` - background jobs.
+- `alembic/` - database migrations.
+- `tests/` - pytest test suite.
+
+## 11. Data Requirements
 
 - User accounts must distinguish buyers, dealers, and private sellers.
 - Listings must link to a seller entity and include structured vehicle attributes.
 - Messages, inquiries, saved vehicles, reviews, and transactions should be persisted for lifecycle tracking.
 - Verification events should be stored for audit and trust management.
 
-## 11. Success Metrics
+## 12. Success Metrics
 
 - Active buyers.
 - Active dealer accounts.
@@ -117,7 +157,7 @@ Private owners listing a BMW vehicle for sale and looking for a straightforward,
 - Transaction volume.
 - Repeat visits and saved listing engagement.
 
-## 12. MVP Scope
+## 13. MVP Scope
 
 The MVP should prove that the marketplace can attract quality BMW listings from both dealers and individual sellers, and that buyers can search, inquire, and save listings without friction.
 
@@ -139,7 +179,7 @@ The MVP should prove that the marketplace can attract quality BMW listings from 
 - Multi-brand marketplace support beyond BMW.
 - Full dealer CRM replacement.
 
-## 13. Simple Start
+## 14. Simple Start
 
 The simplest first launch should stay narrow and manual where possible.
 
@@ -160,7 +200,7 @@ The simplest first launch should stay narrow and manual where possible.
 4. Manual moderation and seller verification.
 5. Basic reporting for listings and inquiries.
 
-## 14. Acceptance Criteria
+## 15. Acceptance Criteria
 
 ### Search and Discovery
 
@@ -191,7 +231,7 @@ The simplest first launch should stay narrow and manual where possible.
 - The platform records listing creation, inquiry events, saves, and completed transactions.
 - Core funnel metrics can be reported by seller type.
 
-## 15. Future Phases
+## 16. Future Phases
 
 ### Phase 1
 
@@ -227,17 +267,18 @@ The simplest first launch should stay narrow and manual where possible.
 - API or partner integrations.
 - Optional financing or payment workflows if the business needs them.
 
-## 16. Kanban Backlog
+## 17. Kanban Backlog
 
 ### To Do
 
-- Set up buyer auth flow - Let buyers register, log in, and manage sessions.
-- Set up dealer and seller auth - Create sign-up and login paths for both seller types.
-- Add role-based user model - Store and enforce buyer, dealer, and private-seller roles.
+- Set up buyer auth flow - Implement FastAPI auth endpoints and JWT sessions for buyers.
+- Set up dealer and seller auth - Implement registration and login paths for both seller types.
+- Add role-based user model - Enforce buyer, dealer, private-seller, and admin roles in Python services.
+- Initialize SQLAlchemy models and Alembic - Create initial migrations for core marketplace tables.
 - Build listing creation form - Allow sellers to enter core vehicle and pricing details.
 - Add photo upload ordering - Support multiple photos and custom display order.
 - Build listing detail page - Show full vehicle info, photos, seller type, and CTA.
-- Build search results page - Display matching listings with clean cards and pagination.
+- Build search results page - Display matching listings with clean cards and pagination from Python APIs.
 - Add listing filters - Filter by model, year, mileage, price, location, and seller type.
 - Add listing sort options - Sort by relevance, newest, price, and mileage.
 - Add saved listings - Let buyers save and revisit listings.
@@ -250,7 +291,14 @@ The simplest first launch should stay narrow and manual where possible.
 - Add seller trust badges - Display verification and trust markers on listings.
 - Track listing created events - Capture when listings are drafted, published, or updated.
 - Track inquiry events - Capture inquiry sent, viewed, and replied events.
-- Build basic KPI dashboard - Show listings, inquiries, conversion, and seller mix.
+- Build basic KPI dashboard - Show listings, inquiries, conversion, and seller mix from Python reporting endpoints.
+
+### Python Engineering Tasks
+
+- Configure pytest and test factories - Create baseline API and service tests.
+- Add linting and formatting - Enable Ruff and Black for consistent Python code quality.
+- Create environment settings module - Centralize config with Pydantic settings.
+- Add Docker local stack - Run FastAPI, Postgres, and Redis in development.
 
 ### In Progress
 
@@ -262,7 +310,66 @@ The simplest first launch should stay narrow and manual where possible.
 - Finalize MVP scope - Lock in launch features and explicitly excluded work.
 - Finalize phase roadmap - Sequence Phase 1 to Phase 4 deliverables.
 
-## 17. Open Questions
+## 18. Week 1 Execution Plan
+
+### Week 1 Stack Lock
+
+- FastAPI + SQLAlchemy + Alembic + PostgreSQL.
+- Redis for cache/queue foundation.
+- Pytest + Ruff + Black for engineering quality.
+
+### Day 1 - Scope and Setup
+
+- Lock week scope to listing, discovery, inquiry, and moderation basics.
+- Create implementation board from the Kanban backlog.
+- Define week success targets (listings created, inquiries sent, moderation turnaround).
+
+### Day 2 - Data and Auth Foundation
+
+- Implement SQLAlchemy core entities (users, vehicles, listings, inquiries, messages).
+- Generate initial Alembic migrations and apply database schema.
+- Build FastAPI sign-up and sign-in for buyer, dealer, and private seller roles.
+- Validate role-based access in route and service layers.
+
+### Day 3 - Seller Listing Flow
+
+- Build listing creation form with required fields.
+- Add photo upload and ordering support.
+- Add listing edit and pause actions.
+
+### Day 4 - Buyer Discovery Flow
+
+- Build listing detail page.
+- Build search results page.
+- Add core filters (year, price, location, seller type) and sorting.
+
+### Day 5 - Inquiry and Moderation
+
+- Add buyer inquiry form on listing pages.
+- Build seller inbox for incoming inquiries.
+- Add admin moderation actions (approve, hide, reject).
+
+### Day 6 - QA and Seed Data
+
+- Seed realistic BMW test listings for both seller types.
+- Run pytest and end-to-end flow checks across buyer, seller, and admin journeys.
+- Fix critical defects in the launch flow.
+
+### Day 7 - Review and Next Sprint Planning
+
+- Demo the complete flow from listing creation to inquiry response.
+- Record baseline metrics and key issues found.
+- Prioritize next sprint tasks from feedback and defects.
+
+### Week 1 Exit Criteria
+
+- Buyer, dealer, and private seller authentication works.
+- Sellers can publish and manage listings.
+- Buyers can discover listings and send inquiries.
+- Sellers can receive and respond to inquiries.
+- Admin moderation and basic trust workflows are operational.
+
+## 19. Open Questions
 
 - Should dealer verification be manual, automated, or hybrid at launch?
 - Which transaction steps, if any, should happen fully in-platform?

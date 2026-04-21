@@ -1,0 +1,642 @@
+[
+  {
+    "inquiry_id": "inquiry-1",
+    "listing_id": "listing-20",
+    "buyer_user_id": "buyer-15",
+    "seller_user_id": "dealer-4",
+    "status": "CLOSED",
+    "created_at": "2026-04-10T15:58:15.440714+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-2",
+    "listing_id": "listing-33",
+    "buyer_user_id": "buyer-14",
+    "seller_user_id": "dealer-2",
+    "status": "NEW",
+    "created_at": "2026-04-11T15:58:15.441280+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-3",
+    "listing_id": "listing-23",
+    "buyer_user_id": "buyer-7",
+    "seller_user_id": "seller-6",
+    "status": "RESPONDED",
+    "created_at": "2026-04-16T15:58:15.441437+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-4",
+    "listing_id": "listing-9",
+    "buyer_user_id": "buyer-2",
+    "seller_user_id": "seller-3",
+    "status": "NEW",
+    "created_at": "2026-04-19T15:58:15.441452+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-5",
+    "listing_id": "listing-30",
+    "buyer_user_id": "buyer-5",
+    "seller_user_id": "seller-3",
+    "status": "NEW",
+    "created_at": "2026-04-14T15:58:15.441462+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-6",
+    "listing_id": "listing-38",
+    "buyer_user_id": "buyer-11",
+    "seller_user_id": "dealer-2",
+    "status": "NEW",
+    "created_at": "2026-04-09T15:58:15.441471+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-7",
+    "listing_id": "listing-9",
+    "buyer_user_id": "buyer-6",
+    "seller_user_id": "seller-3",
+    "status": "RESPONDED",
+    "created_at": "2026-04-21T15:58:15.441479+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-8",
+    "listing_id": "listing-28",
+    "buyer_user_id": "buyer-3",
+    "seller_user_id": "dealer-5",
+    "status": "RESPONDED",
+    "created_at": "2026-04-16T15:58:15.441487+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-9",
+    "listing_id": "listing-37",
+    "buyer_user_id": "buyer-3",
+    "seller_user_id": "seller-4",
+    "status": "CLOSED",
+    "created_at": "2026-04-14T15:58:15.441496+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-10",
+    "listing_id": "listing-32",
+    "buyer_user_id": "buyer-2",
+    "seller_user_id": "seller-7",
+    "status": "RESPONDED",
+    "created_at": "2026-04-08T15:58:15.441504+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-11",
+    "listing_id": "listing-1",
+    "buyer_user_id": "buyer-1",
+    "seller_user_id": "dealer-1",
+    "status": "CLOSED",
+    "created_at": "2026-04-17T15:58:15.441512+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-12",
+    "listing_id": "listing-5",
+    "buyer_user_id": "buyer-12",
+    "seller_user_id": "dealer-4",
+    "status": "RESPONDED",
+    "created_at": "2026-04-10T15:58:15.441521+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-13",
+    "listing_id": "listing-16",
+    "buyer_user_id": "buyer-12",
+    "seller_user_id": "dealer-4",
+    "status": "NEW",
+    "created_at": "2026-04-11T15:58:15.441566+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-14",
+    "listing_id": "listing-6",
+    "buyer_user_id": "buyer-4",
+    "seller_user_id": "seller-6",
+    "status": "CLOSED",
+    "created_at": "2026-04-09T15:58:15.441579+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-15",
+    "listing_id": "listing-12",
+    "buyer_user_id": "buyer-1",
+    "seller_user_id": "dealer-2",
+    "status": "NEW",
+    "created_at": "2026-04-12T15:58:15.441588+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-16",
+    "listing_id": "listing-2",
+    "buyer_user_id": "buyer-8",
+    "seller_user_id": "seller-5",
+    "status": "NEW",
+    "created_at": "2026-04-12T15:58:15.441597+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-17",
+    "listing_id": "listing-47",
+    "buyer_user_id": "buyer-10",
+    "seller_user_id": "dealer-2",
+    "status": "RESPONDED",
+    "created_at": "2026-04-11T15:58:15.441606+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-18",
+    "listing_id": "listing-48",
+    "buyer_user_id": "buyer-1",
+    "seller_user_id": "seller-3",
+    "status": "NEW",
+    "created_at": "2026-04-19T15:58:15.441614+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-19",
+    "listing_id": "listing-9",
+    "buyer_user_id": "buyer-1",
+    "seller_user_id": "seller-3",
+    "status": "CLOSED",
+    "created_at": "2026-04-11T15:58:15.441621+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-20",
+    "listing_id": "listing-5",
+    "buyer_user_id": "buyer-10",
+    "seller_user_id": "dealer-4",
+    "status": "NEW",
+    "created_at": "2026-04-21T15:58:15.445447+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-21",
+    "listing_id": "listing-32",
+    "buyer_user_id": "buyer-6",
+    "seller_user_id": "seller-7",
+    "status": "RESPONDED",
+    "created_at": "2026-04-08T15:58:15.445584+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-22",
+    "listing_id": "listing-9",
+    "buyer_user_id": "buyer-6",
+    "seller_user_id": "seller-3",
+    "status": "NEW",
+    "created_at": "2026-04-08T15:58:15.445643+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-23",
+    "listing_id": "listing-33",
+    "buyer_user_id": "buyer-1",
+    "seller_user_id": "dealer-2",
+    "status": "NEW",
+    "created_at": "2026-04-11T15:58:15.445659+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-24",
+    "listing_id": "listing-21",
+    "buyer_user_id": "buyer-7",
+    "seller_user_id": "dealer-4",
+    "status": "NEW",
+    "created_at": "2026-04-21T15:58:15.445670+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-25",
+    "listing_id": "listing-22",
+    "buyer_user_id": "buyer-6",
+    "seller_user_id": "seller-3",
+    "status": "CLOSED",
+    "created_at": "2026-04-09T15:58:15.445678+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-26",
+    "listing_id": "listing-27",
+    "buyer_user_id": "buyer-12",
+    "seller_user_id": "seller-7",
+    "status": "CLOSED",
+    "created_at": "2026-04-19T15:58:15.445688+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-27",
+    "listing_id": "listing-6",
+    "buyer_user_id": "buyer-15",
+    "seller_user_id": "seller-6",
+    "status": "NEW",
+    "created_at": "2026-04-15T15:58:15.445696+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-28",
+    "listing_id": "listing-18",
+    "buyer_user_id": "buyer-13",
+    "seller_user_id": "dealer-4",
+    "status": "NEW",
+    "created_at": "2026-04-18T15:58:15.445705+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-29",
+    "listing_id": "listing-23",
+    "buyer_user_id": "buyer-7",
+    "seller_user_id": "seller-6",
+    "status": "RESPONDED",
+    "created_at": "2026-04-21T15:58:15.445747+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-30",
+    "listing_id": "listing-31",
+    "buyer_user_id": "buyer-11",
+    "seller_user_id": "seller-6",
+    "status": "NEW",
+    "created_at": "2026-04-15T15:58:15.445775+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-31",
+    "listing_id": "listing-47",
+    "buyer_user_id": "buyer-8",
+    "seller_user_id": "dealer-2",
+    "status": "RESPONDED",
+    "created_at": "2026-04-10T15:58:15.445786+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-32",
+    "listing_id": "listing-49",
+    "buyer_user_id": "buyer-7",
+    "seller_user_id": "dealer-5",
+    "status": "CLOSED",
+    "created_at": "2026-04-09T15:58:15.445821+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-33",
+    "listing_id": "listing-39",
+    "buyer_user_id": "buyer-15",
+    "seller_user_id": "dealer-2",
+    "status": "RESPONDED",
+    "created_at": "2026-04-19T15:58:15.445832+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-34",
+    "listing_id": "listing-29",
+    "buyer_user_id": "buyer-5",
+    "seller_user_id": "seller-8",
+    "status": "RESPONDED",
+    "created_at": "2026-04-09T15:58:15.445842+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-35",
+    "listing_id": "listing-48",
+    "buyer_user_id": "buyer-3",
+    "seller_user_id": "seller-3",
+    "status": "RESPONDED",
+    "created_at": "2026-04-19T15:58:15.445851+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-36",
+    "listing_id": "listing-15",
+    "buyer_user_id": "buyer-7",
+    "seller_user_id": "seller-7",
+    "status": "CLOSED",
+    "created_at": "2026-04-12T15:58:15.445892+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-37",
+    "listing_id": "listing-9",
+    "buyer_user_id": "buyer-9",
+    "seller_user_id": "seller-3",
+    "status": "CLOSED",
+    "created_at": "2026-04-11T15:58:15.445902+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-38",
+    "listing_id": "listing-50",
+    "buyer_user_id": "buyer-12",
+    "seller_user_id": "dealer-3",
+    "status": "RESPONDED",
+    "created_at": "2026-04-16T15:58:15.445910+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-39",
+    "listing_id": "listing-5",
+    "buyer_user_id": "buyer-11",
+    "seller_user_id": "dealer-4",
+    "status": "CLOSED",
+    "created_at": "2026-04-14T15:58:15.445918+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-40",
+    "listing_id": "listing-28",
+    "buyer_user_id": "buyer-11",
+    "seller_user_id": "dealer-5",
+    "status": "NEW",
+    "created_at": "2026-04-14T15:58:15.445937+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-41",
+    "listing_id": "listing-9",
+    "buyer_user_id": "buyer-12",
+    "seller_user_id": "seller-3",
+    "status": "CLOSED",
+    "created_at": "2026-04-12T15:58:15.445945+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-42",
+    "listing_id": "listing-31",
+    "buyer_user_id": "buyer-2",
+    "seller_user_id": "seller-6",
+    "status": "CLOSED",
+    "created_at": "2026-04-16T15:58:15.445963+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-43",
+    "listing_id": "listing-6",
+    "buyer_user_id": "buyer-15",
+    "seller_user_id": "seller-6",
+    "status": "RESPONDED",
+    "created_at": "2026-04-09T15:58:15.445972+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-44",
+    "listing_id": "listing-50",
+    "buyer_user_id": "buyer-10",
+    "seller_user_id": "dealer-3",
+    "status": "RESPONDED",
+    "created_at": "2026-04-14T15:58:15.445981+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-45",
+    "listing_id": "listing-13",
+    "buyer_user_id": "buyer-6",
+    "seller_user_id": "dealer-1",
+    "status": "NEW",
+    "created_at": "2026-04-15T15:58:15.445989+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-46",
+    "listing_id": "listing-26",
+    "buyer_user_id": "buyer-9",
+    "seller_user_id": "seller-3",
+    "status": "RESPONDED",
+    "created_at": "2026-04-07T15:58:15.445996+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-47",
+    "listing_id": "listing-30",
+    "buyer_user_id": "buyer-2",
+    "seller_user_id": "seller-3",
+    "status": "RESPONDED",
+    "created_at": "2026-04-10T15:58:15.446004+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-48",
+    "listing_id": "listing-48",
+    "buyer_user_id": "buyer-13",
+    "seller_user_id": "seller-3",
+    "status": "CLOSED",
+    "created_at": "2026-04-13T15:58:15.446012+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-49",
+    "listing_id": "listing-15",
+    "buyer_user_id": "buyer-1",
+    "seller_user_id": "seller-7",
+    "status": "CLOSED",
+    "created_at": "2026-04-08T15:58:15.446019+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-50",
+    "listing_id": "listing-34",
+    "buyer_user_id": "buyer-7",
+    "seller_user_id": "seller-6",
+    "status": "NEW",
+    "created_at": "2026-04-10T15:58:15.446027+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-51",
+    "listing_id": "listing-5",
+    "buyer_user_id": "buyer-4",
+    "seller_user_id": "dealer-4",
+    "status": "RESPONDED",
+    "created_at": "2026-04-16T15:58:15.446035+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-52",
+    "listing_id": "listing-29",
+    "buyer_user_id": "buyer-10",
+    "seller_user_id": "seller-8",
+    "status": "CLOSED",
+    "created_at": "2026-04-10T15:58:15.446044+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-53",
+    "listing_id": "listing-19",
+    "buyer_user_id": "buyer-3",
+    "seller_user_id": "dealer-3",
+    "status": "NEW",
+    "created_at": "2026-04-09T15:58:15.446052+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-54",
+    "listing_id": "listing-22",
+    "buyer_user_id": "buyer-2",
+    "seller_user_id": "seller-3",
+    "status": "CLOSED",
+    "created_at": "2026-04-09T15:58:15.446105+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-55",
+    "listing_id": "listing-27",
+    "buyer_user_id": "buyer-9",
+    "seller_user_id": "seller-7",
+    "status": "RESPONDED",
+    "created_at": "2026-04-10T15:58:15.446117+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-56",
+    "listing_id": "listing-38",
+    "buyer_user_id": "buyer-11",
+    "seller_user_id": "dealer-2",
+    "status": "NEW",
+    "created_at": "2026-04-21T15:58:15.446126+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-57",
+    "listing_id": "listing-49",
+    "buyer_user_id": "buyer-6",
+    "seller_user_id": "dealer-5",
+    "status": "NEW",
+    "created_at": "2026-04-11T15:58:15.446133+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-58",
+    "listing_id": "listing-15",
+    "buyer_user_id": "buyer-9",
+    "seller_user_id": "seller-7",
+    "status": "RESPONDED",
+    "created_at": "2026-04-13T15:58:15.446141+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-59",
+    "listing_id": "listing-26",
+    "buyer_user_id": "buyer-11",
+    "seller_user_id": "seller-3",
+    "status": "NEW",
+    "created_at": "2026-04-14T15:58:15.446149+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-60",
+    "listing_id": "listing-32",
+    "buyer_user_id": "buyer-11",
+    "seller_user_id": "seller-7",
+    "status": "CLOSED",
+    "created_at": "2026-04-10T15:58:15.446157+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-61",
+    "listing_id": "listing-23",
+    "buyer_user_id": "buyer-14",
+    "seller_user_id": "seller-6",
+    "status": "NEW",
+    "created_at": "2026-04-11T15:58:15.446209+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-62",
+    "listing_id": "listing-38",
+    "buyer_user_id": "buyer-14",
+    "seller_user_id": "dealer-2",
+    "status": "NEW",
+    "created_at": "2026-04-18T15:58:15.446218+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-63",
+    "listing_id": "listing-26",
+    "buyer_user_id": "buyer-6",
+    "seller_user_id": "seller-3",
+    "status": "CLOSED",
+    "created_at": "2026-04-13T15:58:15.446226+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-64",
+    "listing_id": "listing-48",
+    "buyer_user_id": "buyer-5",
+    "seller_user_id": "seller-3",
+    "status": "CLOSED",
+    "created_at": "2026-04-09T15:58:15.446234+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-65",
+    "listing_id": "listing-7",
+    "buyer_user_id": "buyer-7",
+    "seller_user_id": "seller-1",
+    "status": "NEW",
+    "created_at": "2026-04-10T15:58:15.446258+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-66",
+    "listing_id": "listing-30",
+    "buyer_user_id": "buyer-14",
+    "seller_user_id": "seller-3",
+    "status": "RESPONDED",
+    "created_at": "2026-04-19T15:58:15.446288+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-67",
+    "listing_id": "listing-6",
+    "buyer_user_id": "buyer-2",
+    "seller_user_id": "seller-6",
+    "status": "NEW",
+    "created_at": "2026-04-12T15:58:15.446297+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-68",
+    "listing_id": "listing-9",
+    "buyer_user_id": "buyer-15",
+    "seller_user_id": "seller-3",
+    "status": "RESPONDED",
+    "created_at": "2026-04-12T15:58:15.446309+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-69",
+    "listing_id": "listing-22",
+    "buyer_user_id": "buyer-4",
+    "seller_user_id": "seller-3",
+    "status": "NEW",
+    "created_at": "2026-04-19T15:58:15.446317+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-70",
+    "listing_id": "listing-1",
+    "buyer_user_id": "buyer-12",
+    "seller_user_id": "dealer-1",
+    "status": "NEW",
+    "created_at": "2026-04-07T15:58:15.446328+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-71",
+    "listing_id": "listing-22",
+    "buyer_user_id": "buyer-13",
+    "seller_user_id": "seller-3",
+    "status": "CLOSED",
+    "created_at": "2026-04-19T15:58:15.446336+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-72",
+    "listing_id": "listing-1",
+    "buyer_user_id": "buyer-3",
+    "seller_user_id": "dealer-1",
+    "status": "RESPONDED",
+    "created_at": "2026-04-15T15:58:15.446344+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-73",
+    "listing_id": "listing-29",
+    "buyer_user_id": "buyer-10",
+    "seller_user_id": "seller-8",
+    "status": "CLOSED",
+    "created_at": "2026-04-15T15:58:15.446352+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-74",
+    "listing_id": "listing-9",
+    "buyer_user_id": "buyer-6",
+    "seller_user_id": "seller-3",
+    "status": "RESPONDED",
+    "created_at": "2026-04-07T15:58:15.446359+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-75",
+    "listing_id": "listing-46",
+    "buyer_user_id": "buyer-8",
+    "seller_user_id": "dealer-1",
+    "status": "RESPONDED",
+    "created_at": "2026-04-09T15:58:15.446367+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-76",
+    "listing_id": "listing-6",
+    "buyer_user_id": "buyer-10",
+    "seller_user_id": "seller-6",
+    "status": "RESPONDED",
+    "created_at": "2026-04-20T15:58:15.446375+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-77",
+    "listing_id": "listing-39",
+    "buyer_user_id": "buyer-11",
+    "seller_user_id": "dealer-2",
+    "status": "NEW",
+    "created_at": "2026-04-17T15:58:15.446384+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-78",
+    "listing_id": "listing-20",
+    "buyer_user_id": "buyer-5",
+    "seller_user_id": "dealer-4",
+    "status": "RESPONDED",
+    "created_at": "2026-04-11T15:58:15.446512+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-79",
+    "listing_id": "listing-24",
+    "buyer_user_id": "buyer-9",
+    "seller_user_id": "dealer-5",
+    "status": "CLOSED",
+    "created_at": "2026-04-10T15:58:15.446527+00:00"
+  },
+  {
+    "inquiry_id": "inquiry-80",
+    "listing_id": "listing-29",
+    "buyer_user_id": "buyer-5",
+    "seller_user_id": "seller-8",
+    "status": "CLOSED",
+    "created_at": "2026-04-21T15:58:15.446536+00:00"
+  }
+]

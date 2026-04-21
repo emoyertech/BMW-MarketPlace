@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{PAGE_TITLE}}</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main class="page-shell detail-shell">
+    <a class="back-link" href="/">Back to marketplace</a>
+
+    <section class="detail-hero">
+      <div class="detail-media">
+        {{GALLERY_HTML}}
+        <p class="detail-gallery-note">{{GALLERY_NOTICE}}</p>
+      </div>
+
+      <div class="detail-copy">
+        <p class="eyebrow">{{SELLER_TYPE}}</p>
+        <h1 class="detail-title">{{DETAIL_TITLE}}</h1>
+        <p class="detail-subtitle">{{DETAIL_SUBTITLE}}</p>
+        <div class="detail-price">{{PRICE}}</div>
+
+        <div class="detail-meta-grid">
+          {{DETAIL_SPEC_HTML}}
+        </div>
+
+        <div class="seller-card">
+          <span class="panel-label">Seller</span>
+          <strong>{{SELLER_NAME}}</strong>
+          <span>{{SELLER_EMAIL}}</span>
+        </div>
+
+        <div class="tags detail-tags">
+          <span class="tag">{{STATUS}}</span>
+          <span class="tag">Listing ID: {{LISTING_ID}}</span>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
