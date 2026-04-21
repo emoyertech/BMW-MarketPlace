@@ -43,6 +43,8 @@ SEED_IMAGES_DIR_NAME = "seed-images"
 IMAGE_PLACEHOLDER_URL = "https://placehold.co/1200x800?text=BMW+Listing"
 SESSION_COOKIE_NAME = "bmw_marketplace_session"
 SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 14
+LISTING_TTL_SECONDS = 60 * 60 * 24 * 7
+LISTING_REMINDER_INTERVALS_SECONDS = [60 * 60 * 24, 60 * 60, 5 * 60]
 
 
 def load_json(path: Path) -> list[dict]:
@@ -125,7 +127,12 @@ def init_db(db_path: Path) -> None:
                 price INTEGER NOT NULL,
                 location TEXT NOT NULL,
                 status TEXT NOT NULL,
-                created_at TEXT NOT NULL
+                created_at TEXT NOT NULL,
+                updated_at TEXT,
+                expires_at TEXT,
+                reminder_24h_sent_at TEXT,
+                reminder_1h_sent_at TEXT,
+                reminder_5m_sent_at TEXT
             )
             """
         )
@@ -155,6 +162,86 @@ def init_db(db_path: Path) -> None:
         column_names = {row[1] for row in columns}
         if "seller_user_id" not in column_names:
             conn.execute("ALTER TABLE user_listings ADD COLUMN seller_user_id TEXT")
+        if "updated_at" not in column_names:
+            conn.execute("ALTER TABLE user_listings ADD COLUMN updated_at TEXT")
+        if "expires_at" not in column_names:
+            conn.execute("ALTER TABLE user_listings ADD COLUMN expires_at TEXT")
+        if "reminder_24h_sent_at" not in column_names:
+            conn.execute("ALTER TABLE user_listings ADD COLUMN reminder_24h_sent_at TEXT")
+        if "reminder_1h_sent_at" not in column_names:
+            conn.execute("ALTER TABLE user_listings ADD COLUMN reminder_1h_sent_at TEXT")
+        if "reminder_5m_sent_at" not in column_names:
+            conn.execute("ALTER TABLE user_listings ADD COLUMN reminder_5m_sent_at TEXT")
+
+
+def _parse_iso_utc(value: str) -> datetime | None:
+    if not value:
+        return None
+    try:
+        parsed = datetime.fromisoformat(value)
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        return parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
+
+def _iso_now() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+
+def _compute_expiry(base_time: datetime) -> str:
+    return (base_time + timedelta(seconds=LISTING_TTL_SECONDS)).isoformat()
+
+
+def expire_and_track_listing_reminders(db_path: Path) -> None:
+    init_db(db_path)
+    now = datetime.now(timezone.utc)
+    with sqlite3.connect(db_path) as conn:
+        rows = conn.execute(
+            """
+            SELECT listing_id, status, created_at, updated_at, expires_at,
+                   reminder_24h_sent_at, reminder_1h_sent_at, reminder_5m_sent_at
+            FROM user_listings
+            """
+        ).fetchall()
+        for row in rows:
+            listing_id = str(row[0])
+            status = str(row[1] or "ACTIVE")
+            created_at = _parse_iso_utc(str(row[2] or ""))
+            updated_at = _parse_iso_utc(str(row[3] or ""))
+            expires_at = _parse_iso_utc(str(row[4] or ""))
+            base_time = updated_at or created_at or now
+            target_expiry = expires_at or _parse_iso_utc(_compute_expiry(base_time))
+            if target_expiry is None:
+                target_expiry = now + timedelta(seconds=LISTING_TTL_SECONDS)
+            if row[4] is None:
+                conn.execute(
+                    "UPDATE user_listings SET updated_at = COALESCE(updated_at, created_at), expires_at = ? WHERE listing_id = ?",
+                    (target_expiry.isoformat(), listing_id),
+                )
+
+            if status == "ACTIVE" and now >= target_expiry:
+                conn.execute("UPDATE user_listings SET status = 'EXPIRED' WHERE listing_id = ?", (listing_id,))
+                continue
+
+            if status != "ACTIVE":
+                continue
+
+            seconds_left = int((target_expiry - now).total_seconds())
+            reminders = [
+                ("reminder_24h_sent_at", 60 * 60 * 24, row[5]),
+                ("reminder_1h_sent_at", 60 * 60, row[6]),
+                ("reminder_5m_sent_at", 5 * 60, row[7]),
+            ]
+            for column_name, threshold_seconds, sent_marker in reminders:
+                if sent_marker:
+                    continue
+                if 0 < seconds_left <= threshold_seconds:
+                    conn.execute(
+                        f"UPDATE user_listings SET {column_name} = ? WHERE listing_id = ?",
+                        (_iso_now(), listing_id),
+                    )
 
 
 def _dict_from_row(row: tuple) -> dict:
@@ -187,11 +274,17 @@ def _dict_from_row(row: tuple) -> dict:
         "location": row[16],
         "status": row[17],
         "created_at": row[18],
+        "updated_at": row[19],
+        "expires_at": row[20],
+        "reminder_24h_sent_at": row[21],
+        "reminder_1h_sent_at": row[22],
+        "reminder_5m_sent_at": row[23],
     }
 
 
 def load_user_listings(db_path: Path) -> list[dict]:
     init_db(db_path)
+    expire_and_track_listing_reminders(db_path)
     with sqlite3.connect(db_path) as conn:
         rows = conn.execute(
             """
@@ -214,7 +307,12 @@ def load_user_listings(db_path: Path) -> list[dict]:
                 price,
                 location,
                 status,
-                created_at
+                created_at,
+                updated_at,
+                expires_at,
+                reminder_24h_sent_at,
+                reminder_1h_sent_at,
+                reminder_5m_sent_at
             FROM user_listings
             ORDER BY created_at DESC
             """
@@ -299,8 +397,10 @@ def get_app_user_by_id(db_path: Path, user_id: str) -> dict | None:
 
 def create_user_listing(db_path: Path, values: dict[str, str], current_user: dict[str, str]) -> str:
     init_db(db_path)
-    listing_id = f"user-{int(datetime.now(timezone.utc).timestamp() * 1000)}"
-    created_at = datetime.now(timezone.utc).isoformat()
+    now = datetime.now(timezone.utc)
+    listing_id = f"user-{int(now.timestamp() * 1000)}"
+    created_at = now.isoformat()
+    expires_at = _compute_expiry(now)
 
     gallery_values = [part.strip() for part in values.get("gallery_images", "").split(",") if part.strip()]
     image_url = values.get("image_url", "").strip()
@@ -313,8 +413,8 @@ def create_user_listing(db_path: Path, values: dict[str, str], current_user: dic
             INSERT INTO user_listings (
                 listing_id, seller_user_id, seller_name, seller_email, seller_type, model, trim,
                 body_style, drive_type, title_type, image_url, gallery_images_json,
-                description, year, mileage, price, location, status, created_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                description, year, mileage, price, location, status, created_at, updated_at, expires_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 listing_id,
@@ -336,10 +436,45 @@ def create_user_listing(db_path: Path, values: dict[str, str], current_user: dic
                 values.get("location", ""),
                 values.get("status", "ACTIVE"),
                 created_at,
+                created_at,
+                expires_at,
             ),
         )
 
     return listing_id
+
+
+def refresh_user_listing(db_path: Path, listing_id: str, owner_user_id: str) -> bool:
+    init_db(db_path)
+    now = datetime.now(timezone.utc)
+    with sqlite3.connect(db_path) as conn:
+        result = conn.execute(
+            """
+            UPDATE user_listings
+            SET updated_at = ?, expires_at = ?, status = 'ACTIVE',
+                reminder_24h_sent_at = NULL, reminder_1h_sent_at = NULL, reminder_5m_sent_at = NULL
+            WHERE listing_id = ? AND seller_user_id = ?
+            """,
+            (now.isoformat(), _compute_expiry(now), listing_id, owner_user_id),
+        )
+    return result.rowcount > 0
+
+
+def format_expiry_notice(listing: dict) -> str:
+    expires_at = _parse_iso_utc(str(listing.get("expires_at", "")))
+    if not expires_at:
+        return ""
+    seconds_left = int((expires_at - datetime.now(timezone.utc)).total_seconds())
+    if seconds_left <= 0:
+        return "This listing expired due to inactivity."
+    minutes_left = seconds_left // 60
+    if minutes_left < 60:
+        return f"Update required: this listing expires in about {minutes_left} minute(s)."
+    hours_left = minutes_left // 60
+    if hours_left < 24:
+        return f"Update required: this listing expires in about {hours_left} hour(s)."
+    days_left = hours_left // 24
+    return f"Update required: this listing expires in about {days_left} day(s)."
 
 
 def create_app_session(db_path: Path, user_id: str, max_age_seconds: int = SESSION_MAX_AGE_SECONDS) -> str:
@@ -500,7 +635,7 @@ def render_spec_item(label: str, value: str) -> str:
     return f'<div class="spec-card"><span>{html.escape(label)}</span><strong>{html.escape(value)}</strong></div>'
 
 
-def render_listing_detail(data_dir: Path, listing_id: str) -> str:
+def render_listing_detail(data_dir: Path, listing_id: str, current_user: dict | None = None) -> str:
     users = load_json(data_dir / "users.json")
     listings = load_all_listings(data_dir)
     users_by_id = {u["user_id"]: u for u in users}
@@ -559,6 +694,20 @@ def render_listing_detail(data_dir: Path, listing_id: str) -> str:
 
     gallery_count = len(thumb_images) + (1 if primary_image else 0)
     gallery_notice = f"{gallery_count} images available" if gallery_count > 1 else "Single image available"
+    owner_controls_html = ""
+    if current_user and str(current_user.get("user_id", "")) == str(listing.get("seller_user_id", "")):
+        notice = format_expiry_notice(listing)
+        notice_html = f'<p class="listing-expiry-note">{html.escape(notice)}</p>' if notice else ""
+        owner_controls_html = (
+            '<section class="owner-controls">'
+            "<h3>Listing freshness</h3>"
+            f"{notice_html}"
+            '<form method="post" action="/refresh-listing">'
+            f'<input type="hidden" name="listing_id" value="{html.escape(str(listing.get("listing_id", "")))}" />'
+            '<button class="button primary" type="submit">Keep listing active</button>'
+            "</form>"
+            "</section>"
+        )
 
     return (
         template.replace("{{PAGE_TITLE}}", html.escape(title))
@@ -582,6 +731,7 @@ def render_listing_detail(data_dir: Path, listing_id: str) -> str:
         .replace("{{SELLER_NAME}}", html.escape(seller_name))
         .replace("{{SELLER_EMAIL}}", html.escape(seller_email))
         .replace("{{SELLER_TYPE}}", html.escape(role_label(str(listing.get("seller_type", "")))))
+        .replace("{{OWNER_CONTROLS_HTML}}", owner_controls_html)
     )
 
 
@@ -635,6 +785,32 @@ def render_home(data_dir: Path, current_user: dict[str, str] | None = None) -> s
     )
 
     template = TEMPLATE_PATH.read_text(encoding="utf-8")
+    reminder_html = ""
+    if current_user:
+        owned_active = [
+            listing
+            for listing in active
+            if str(listing.get("seller_user_id", "")) == str(current_user.get("user_id", ""))
+        ]
+        reminder_items: list[str] = []
+        for listing in owned_active:
+            if listing.get("reminder_24h_sent_at") or listing.get("reminder_1h_sent_at") or listing.get("reminder_5m_sent_at"):
+                notice = format_expiry_notice(listing)
+                if notice:
+                    listing_url = "/listing?listing_id=" + urllib.parse.quote(str(listing.get("listing_id", "")))
+                    reminder_items.append(
+                        f'<li><a href="{listing_url}">{html.escape(str(listing.get("year", "")))} BMW {html.escape(str(listing.get("model", "")))}</a>: {html.escape(notice)}</li>'
+                    )
+        if reminder_items:
+            reminder_html = (
+                '<section class="alert-panel">'
+                '<h2>Listing expiry alerts</h2>'
+                '<p>These listings are close to expiration. Open each one and refresh to keep it active.</p>'
+                "<ul>"
+                + "".join(reminder_items[:5])
+                + "</ul>"
+                "</section>"
+            )
     if current_user:
         auth_header_html = (
             f'<span class="auth-welcome">Signed in as {html.escape(current_user.get("full_name", ""))}</span>'
@@ -669,6 +845,7 @@ def render_home(data_dir: Path, current_user: dict[str, str] | None = None) -> s
         .replace("{{DEALER_CARDS_HTML}}", dealer_html)
         .replace("{{PRIVATE_CARDS_HTML}}", private_html)
         .replace("{{AUTH_HEADER_HTML}}", auth_header_html)
+        .replace("{{REMINDER_PANEL_HTML}}", reminder_html)
     )
 
 
@@ -795,7 +972,7 @@ class AppHandler(BaseHTTPRequestHandler):
         if parsed.path == "/listing":
             listing_id = query.get("listing_id", [""])[0]
             if listing_id:
-                self._send_html(render_listing_detail(self.data_dir, listing_id))
+                self._send_html(render_listing_detail(self.data_dir, listing_id, self._current_user()))
                 return
             self.send_error(HTTPStatus.NOT_FOUND, "Listing not found")
             return
@@ -838,6 +1015,20 @@ class AppHandler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:  # noqa: N802 (HTTP verb naming)
         parsed = urllib.parse.urlparse(self.path)
+        if parsed.path == "/refresh-listing":
+            current_user = self._current_user()
+            if not current_user:
+                self._redirect("/login?next=/")
+                return
+            values = self._read_form_data()
+            listing_id = values.get("listing_id", "").strip()
+            if not listing_id:
+                self.send_error(HTTPStatus.BAD_REQUEST, "Missing listing_id")
+                return
+            refresh_user_listing(db_path_for(self.data_dir), listing_id, str(current_user.get("user_id", "")))
+            self._redirect("/listing?listing_id=" + urllib.parse.quote(listing_id))
+            return
+
         if parsed.path == "/register":
             values = self._read_form_data()
             full_name = values.get("full_name", "").strip()

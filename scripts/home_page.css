@@ -59,6 +59,32 @@ a {
   margin-bottom: 14px;
 }
 
+.alert-panel {
+  margin-bottom: 16px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 196, 87, 0.45);
+  background: rgba(93, 62, 0, 0.28);
+}
+
+.alert-panel h2 {
+  font-size: 22px;
+}
+
+.alert-panel p {
+  margin: 8px 0 0;
+  color: var(--ink-soft);
+}
+
+.alert-panel ul {
+  margin: 10px 0 0;
+  padding-left: 20px;
+}
+
+.alert-panel li {
+  margin-bottom: 6px;
+}
+
 .hero {
   display: grid;
   grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.95fr);
@@ -521,6 +547,23 @@ h3 {
 .seller-card strong {
   margin-top: 4px;
   font-size: 18px;
+}
+
+.owner-controls {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(158, 227, 125, 0.32);
+  background: rgba(39, 74, 31, 0.22);
+}
+
+.owner-controls h3 {
+  color: var(--ink);
+}
+
+.listing-expiry-note {
+  margin: 8px 0 12px;
+  color: #ffdfb2;
 }
 
 .detail-section {
