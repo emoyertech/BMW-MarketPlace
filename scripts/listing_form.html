@@ -14,14 +14,13 @@
       <p class="eyebrow">Seller Tools</p>
       <h1>Create your listing</h1>
       <p class="sub">Submit a BMW listing and store it in the local app database.</p>
+      <p class="signed-in-note">Signed in as <strong>{{SELLER_NAME}}</strong> ({{SELLER_EMAIL}})</p>
     </section>
 
     {{ERROR_HTML}}
 
     <form class="listing-form" action="/create-listing" method="post" enctype="multipart/form-data">
       <div class="form-grid">
-        <label>Name*<input type="text" name="seller_name" value="{{SELLER_NAME}}" required /></label>
-        <label>Email*<input type="email" name="seller_email" value="{{SELLER_EMAIL}}" required /></label>
         <label>Seller type
           <select name="seller_type">
             <option value="PRIVATE_SELLER" {{PRIVATE_SELECTED}}>Private Seller</option>

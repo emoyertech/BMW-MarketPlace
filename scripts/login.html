@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Log In | BMW Marketplace</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main class="page-shell form-shell auth-shell">
+    <a class="back-link" href="/">Back to marketplace</a>
+    <section class="form-hero">
+      <p class="eyebrow">Account</p>
+      <h1>Log in</h1>
+      <p class="sub">Sign in to create and manage your listings.</p>
+    </section>
+
+    {{ERROR_HTML}}
+
+    <form class="listing-form auth-form" action="/login" method="post">
+      <input type="hidden" name="next" value="{{NEXT}}" />
+      <label>Email
+        <input type="email" name="email" value="{{EMAIL}}" required />
+      </label>
+      <label>Password
+        <input type="password" name="password" required />
+      </label>
+      <button class="button primary" type="submit">Log in</button>
+      <p class="auth-hint">New here? <a href="/register?next={{NEXT}}">Create an account</a>.</p>
+    </form>
+  </main>
+</body>
+</html>

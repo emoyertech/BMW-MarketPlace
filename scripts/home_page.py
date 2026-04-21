@@ -10,19 +10,23 @@ from __future__ import annotations
 
 import argparse
 import html
+import hashlib
+import hmac
 import json
 import mimetypes
 import os
 import re
+import secrets
 import sqlite3
 import urllib.parse
 import uuid
+from http.cookies import SimpleCookie
 from email.parser import BytesParser
 from email.policy import default
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -31,10 +35,14 @@ CSS_PATH = BASE_DIR / "home_page.css"
 CARD_TEMPLATE_PATH = BASE_DIR / "home_page_card.html"
 DETAIL_TEMPLATE_PATH = BASE_DIR / "listing_detail.html"
 FORM_TEMPLATE_PATH = BASE_DIR / "listing_form.html"
+LOGIN_TEMPLATE_PATH = BASE_DIR / "login.html"
+REGISTER_TEMPLATE_PATH = BASE_DIR / "register.html"
 DB_NAME = "marketplace.db"
 UPLOADS_DIR_NAME = "uploads"
 SEED_IMAGES_DIR_NAME = "seed-images"
 IMAGE_PLACEHOLDER_URL = "https://placehold.co/1200x800?text=BMW+Listing"
+SESSION_COOKIE_NAME = "bmw_marketplace_session"
+SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 14
 
 
 def load_json(path: Path) -> list[dict]:
@@ -100,6 +108,7 @@ def init_db(db_path: Path) -> None:
             """
             CREATE TABLE IF NOT EXISTS user_listings (
                 listing_id TEXT PRIMARY KEY,
+                seller_user_id TEXT,
                 seller_name TEXT NOT NULL,
                 seller_email TEXT NOT NULL,
                 seller_type TEXT NOT NULL,
@@ -120,13 +129,39 @@ def init_db(db_path: Path) -> None:
             )
             """
         )
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS app_users (
+                user_id TEXT PRIMARY KEY,
+                full_name TEXT NOT NULL,
+                email TEXT NOT NULL UNIQUE,
+                password_hash TEXT NOT NULL,
+                created_at TEXT NOT NULL
+            )
+            """
+        )
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS app_sessions (
+                session_token TEXT PRIMARY KEY,
+                user_id TEXT NOT NULL,
+                expires_at TEXT NOT NULL,
+                created_at TEXT NOT NULL,
+                FOREIGN KEY(user_id) REFERENCES app_users(user_id)
+            )
+            """
+        )
+        columns = conn.execute("PRAGMA table_info(user_listings)").fetchall()
+        column_names = {row[1] for row in columns}
+        if "seller_user_id" not in column_names:
+            conn.execute("ALTER TABLE user_listings ADD COLUMN seller_user_id TEXT")
 
 
 def _dict_from_row(row: tuple) -> dict:
     gallery_images: list[str] = []
-    if row[10]:
+    if row[11]:
         try:
-            parsed = json.loads(row[10])
+            parsed = json.loads(row[11])
             if isinstance(parsed, list):
                 gallery_images = [str(item) for item in parsed if str(item).strip()]
         except json.JSONDecodeError:
@@ -134,24 +169,24 @@ def _dict_from_row(row: tuple) -> dict:
 
     return {
         "listing_id": row[0],
-        "seller_user_id": "",
-        "seller_name": row[1],
-        "seller_email": row[2],
-        "seller_type": row[3],
-        "model": row[4],
-        "trim": row[5],
-        "body_style": row[6],
-        "drive_type": row[7],
-        "title_type": row[8],
-        "image_url": row[9],
+        "seller_user_id": row[1] or "",
+        "seller_name": row[2],
+        "seller_email": row[3],
+        "seller_type": row[4],
+        "model": row[5],
+        "trim": row[6],
+        "body_style": row[7],
+        "drive_type": row[8],
+        "title_type": row[9],
+        "image_url": row[10],
         "gallery_images": gallery_images,
-        "description": row[11],
-        "year": row[12],
-        "mileage": row[13],
-        "price": row[14],
-        "location": row[15],
-        "status": row[16],
-        "created_at": row[17],
+        "description": row[12],
+        "year": row[13],
+        "mileage": row[14],
+        "price": row[15],
+        "location": row[16],
+        "status": row[17],
+        "created_at": row[18],
     }
 
 
@@ -162,6 +197,7 @@ def load_user_listings(db_path: Path) -> list[dict]:
             """
             SELECT
                 listing_id,
+                seller_user_id,
                 seller_name,
                 seller_email,
                 seller_type,
@@ -193,7 +229,75 @@ def load_all_listings(data_dir: Path) -> list[dict]:
     return sorted(combined, key=lambda item: item.get("created_at", ""), reverse=True)
 
 
-def create_user_listing(db_path: Path, values: dict[str, str]) -> str:
+def hash_password(password: str) -> str:
+    salt = secrets.token_hex(16)
+    digest = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt.encode("utf-8"), 200_000)
+    return f"{salt}${digest.hex()}"
+
+
+def verify_password(password: str, password_hash: str) -> bool:
+    parts = password_hash.split("$", 1)
+    if len(parts) != 2:
+        return False
+    salt, expected_hex = parts
+    digest = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt.encode("utf-8"), 200_000)
+    return hmac.compare_digest(digest.hex(), expected_hex)
+
+
+def create_app_user(db_path: Path, full_name: str, email: str, password: str) -> dict:
+    init_db(db_path)
+    created_at = datetime.now(timezone.utc).isoformat()
+    user = {
+        "user_id": f"app-{uuid.uuid4().hex}",
+        "full_name": full_name.strip(),
+        "email": email.strip().lower(),
+        "password_hash": hash_password(password),
+        "created_at": created_at,
+    }
+    with sqlite3.connect(db_path) as conn:
+        conn.execute(
+            """
+            INSERT INTO app_users (user_id, full_name, email, password_hash, created_at)
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            (user["user_id"], user["full_name"], user["email"], user["password_hash"], user["created_at"]),
+        )
+    return user
+
+
+def get_app_user_by_email(db_path: Path, email: str) -> dict | None:
+    init_db(db_path)
+    with sqlite3.connect(db_path) as conn:
+        row = conn.execute(
+            """
+            SELECT user_id, full_name, email, password_hash, created_at
+            FROM app_users
+            WHERE email = ?
+            """,
+            (email.strip().lower(),),
+        ).fetchone()
+    if not row:
+        return None
+    return {"user_id": row[0], "full_name": row[1], "email": row[2], "password_hash": row[3], "created_at": row[4]}
+
+
+def get_app_user_by_id(db_path: Path, user_id: str) -> dict | None:
+    init_db(db_path)
+    with sqlite3.connect(db_path) as conn:
+        row = conn.execute(
+            """
+            SELECT user_id, full_name, email, password_hash, created_at
+            FROM app_users
+            WHERE user_id = ?
+            """,
+            (user_id,),
+        ).fetchone()
+    if not row:
+        return None
+    return {"user_id": row[0], "full_name": row[1], "email": row[2], "password_hash": row[3], "created_at": row[4]}
+
+
+def create_user_listing(db_path: Path, values: dict[str, str], current_user: dict[str, str]) -> str:
     init_db(db_path)
     listing_id = f"user-{int(datetime.now(timezone.utc).timestamp() * 1000)}"
     created_at = datetime.now(timezone.utc).isoformat()
@@ -207,15 +311,16 @@ def create_user_listing(db_path: Path, values: dict[str, str]) -> str:
         conn.execute(
             """
             INSERT INTO user_listings (
-                listing_id, seller_name, seller_email, seller_type, model, trim,
+                listing_id, seller_user_id, seller_name, seller_email, seller_type, model, trim,
                 body_style, drive_type, title_type, image_url, gallery_images_json,
                 description, year, mileage, price, location, status, created_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 listing_id,
-                values.get("seller_name", "Unknown Seller"),
-                values.get("seller_email", ""),
+                current_user.get("user_id", ""),
+                current_user.get("full_name", "Unknown Seller"),
+                current_user.get("email", ""),
                 values.get("seller_type", "PRIVATE_SELLER"),
                 values.get("model", "BMW"),
                 values.get("trim", "Base"),
@@ -235,6 +340,57 @@ def create_user_listing(db_path: Path, values: dict[str, str]) -> str:
         )
 
     return listing_id
+
+
+def create_app_session(db_path: Path, user_id: str, max_age_seconds: int = SESSION_MAX_AGE_SECONDS) -> str:
+    init_db(db_path)
+    now = datetime.now(timezone.utc)
+    token = secrets.token_urlsafe(32)
+    expires_at = (now + timedelta(seconds=max_age_seconds)).isoformat()
+    with sqlite3.connect(db_path) as conn:
+        conn.execute(
+            """
+            INSERT INTO app_sessions (session_token, user_id, expires_at, created_at)
+            VALUES (?, ?, ?, ?)
+            """,
+            (token, user_id, expires_at, now.isoformat()),
+        )
+    return token
+
+
+def get_user_id_for_session(db_path: Path, token: str) -> str:
+    if not token:
+        return ""
+    init_db(db_path)
+    with sqlite3.connect(db_path) as conn:
+        row = conn.execute(
+            """
+            SELECT user_id, expires_at
+            FROM app_sessions
+            WHERE session_token = ?
+            """,
+            (token,),
+        ).fetchone()
+        if not row:
+            return ""
+        user_id = str(row[0])
+        try:
+            expires_at = datetime.fromisoformat(str(row[1]))
+        except ValueError:
+            conn.execute("DELETE FROM app_sessions WHERE session_token = ?", (token,))
+            return ""
+        if expires_at <= datetime.now(timezone.utc):
+            conn.execute("DELETE FROM app_sessions WHERE session_token = ?", (token,))
+            return ""
+    return user_id
+
+
+def delete_app_session(db_path: Path, token: str) -> None:
+    if not token:
+        return
+    init_db(db_path)
+    with sqlite3.connect(db_path) as conn:
+        conn.execute("DELETE FROM app_sessions WHERE session_token = ?", (token,))
 
 
 def currency(value: int) -> str:
@@ -278,6 +434,29 @@ def render_create_listing(values: dict[str, str] | None = None, error: str = "")
         .replace("{{DEALER_SELECTED}}", "selected" if seller_type == "DEALER" else "")
         .replace("{{ACTIVE_SELECTED}}", "selected" if status == "ACTIVE" else "")
         .replace("{{PAUSED_SELECTED}}", "selected" if status == "PAUSED" else "")
+    )
+
+
+def render_login(values: dict[str, str] | None = None, error: str = "") -> str:
+    values = values or {}
+    template = LOGIN_TEMPLATE_PATH.read_text(encoding="utf-8")
+    error_html = f'<p class="form-error">{html.escape(error)}</p>' if error else ""
+    return (
+        template.replace("{{ERROR_HTML}}", error_html)
+        .replace("{{EMAIL}}", html.escape(values.get("email", "")))
+        .replace("{{NEXT}}", html.escape(values.get("next", "/")))
+    )
+
+
+def render_register(values: dict[str, str] | None = None, error: str = "") -> str:
+    values = values or {}
+    template = REGISTER_TEMPLATE_PATH.read_text(encoding="utf-8")
+    error_html = f'<p class="form-error">{html.escape(error)}</p>' if error else ""
+    return (
+        template.replace("{{ERROR_HTML}}", error_html)
+        .replace("{{FULL_NAME}}", html.escape(values.get("full_name", "")))
+        .replace("{{EMAIL}}", html.escape(values.get("email", "")))
+        .replace("{{NEXT}}", html.escape(values.get("next", "/")))
     )
 
 
@@ -406,7 +585,7 @@ def render_listing_detail(data_dir: Path, listing_id: str) -> str:
     )
 
 
-def render_home(data_dir: Path) -> str:
+def render_home(data_dir: Path, current_user: dict[str, str] | None = None) -> str:
     users = load_json(data_dir / "users.json")
     listings = load_all_listings(data_dir)
     inquiries = load_json(data_dir / "inquiries.json")
@@ -456,6 +635,18 @@ def render_home(data_dir: Path) -> str:
     )
 
     template = TEMPLATE_PATH.read_text(encoding="utf-8")
+    if current_user:
+        auth_header_html = (
+            f'<span class="auth-welcome">Signed in as {html.escape(current_user.get("full_name", ""))}</span>'
+            '<a class="button secondary auth-btn" href="/create-listing">Create listing</a>'
+            '<a class="button secondary auth-btn" href="/logout">Log out</a>'
+        )
+    else:
+        auth_header_html = (
+            '<a class="button secondary auth-btn" href="/login?next=/create-listing">Log in</a>'
+            '<a class="button secondary auth-btn" href="/register?next=/create-listing">Create account</a>'
+        )
+
     return (
         template.replace("{{ACTIVE_COUNT}}", str(len(active)))
         .replace("{{LISTINGS_COUNT}}", str(len(listings)))
@@ -477,10 +668,42 @@ def render_home(data_dir: Path) -> str:
         .replace("{{FEATURED_CARDS_HTML}}", cards_html)
         .replace("{{DEALER_CARDS_HTML}}", dealer_html)
         .replace("{{PRIVATE_CARDS_HTML}}", private_html)
+        .replace("{{AUTH_HEADER_HTML}}", auth_header_html)
     )
 
 
 class AppHandler(BaseHTTPRequestHandler):
+    def _parse_cookie(self, name: str) -> str:
+        raw = self.headers.get("Cookie", "")
+        if not raw:
+            return ""
+        cookie = SimpleCookie()
+        cookie.load(raw)
+        morsel = cookie.get(name)
+        return morsel.value if morsel else ""
+
+    def _current_user(self) -> dict | None:
+        token = self._parse_cookie(SESSION_COOKIE_NAME)
+        if not token:
+            return None
+        user_id = get_user_id_for_session(db_path_for(self.data_dir), token)
+        if not user_id:
+            return None
+        return get_app_user_by_id(db_path_for(self.data_dir), user_id)
+
+    def _redirect(self, target: str, set_cookie: str = "") -> None:
+        self.send_response(HTTPStatus.SEE_OTHER)
+        self.send_header("Location", target)
+        if set_cookie:
+            self.send_header("Set-Cookie", set_cookie)
+        self.end_headers()
+
+    def _session_cookie(self, token: str, max_age: int = SESSION_MAX_AGE_SECONDS) -> str:
+        return f"{SESSION_COOKIE_NAME}={token}; Path=/; HttpOnly; SameSite=Lax; Max-Age={max_age}"
+
+    def _clear_session_cookie(self) -> str:
+        return f"{SESSION_COOKIE_NAME}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0"
+
     data_dir = Path("data")
 
     def _send_html(self, content: str, status: HTTPStatus = HTTPStatus.OK) -> None:
@@ -541,11 +764,32 @@ class AppHandler(BaseHTTPRequestHandler):
         query = urllib.parse.parse_qs(parsed.query)
 
         if parsed.path in {"/", "/index.html"}:
-            self._send_html(render_home(self.data_dir))
+            self._send_html(render_home(self.data_dir, self._current_user()))
             return
 
         if parsed.path == "/create-listing":
-            self._send_html(render_create_listing())
+            current_user = self._current_user()
+            if not current_user:
+                self._redirect("/login?next=/create-listing")
+                return
+            self._send_html(render_create_listing({"seller_name": current_user["full_name"], "seller_email": current_user["email"]}))
+            return
+
+        if parsed.path == "/login":
+            next_path = query.get("next", ["/"])[0]
+            self._send_html(render_login({"next": next_path}))
+            return
+
+        if parsed.path == "/register":
+            next_path = query.get("next", ["/"])[0]
+            self._send_html(render_register({"next": next_path}))
+            return
+
+        if parsed.path == "/logout":
+            token = self._parse_cookie(SESSION_COOKIE_NAME)
+            if token:
+                delete_app_session(db_path_for(self.data_dir), token)
+            self._redirect("/", set_cookie=self._clear_session_cookie())
             return
 
         if parsed.path == "/listing":
@@ -594,8 +838,48 @@ class AppHandler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:  # noqa: N802 (HTTP verb naming)
         parsed = urllib.parse.urlparse(self.path)
+        if parsed.path == "/register":
+            values = self._read_form_data()
+            full_name = values.get("full_name", "").strip()
+            email = values.get("email", "").strip().lower()
+            password = values.get("password", "")
+            next_path = values.get("next", "/")
+            if not full_name or not email or not password:
+                self._send_html(render_register(values, "Name, email, and password are required."), status=HTTPStatus.BAD_REQUEST)
+                return
+            if len(password) < 8:
+                self._send_html(render_register(values, "Password must be at least 8 characters."), status=HTTPStatus.BAD_REQUEST)
+                return
+            try:
+                user = create_app_user(db_path_for(self.data_dir), full_name, email, password)
+            except sqlite3.IntegrityError:
+                self._send_html(render_register(values, "An account with that email already exists."), status=HTTPStatus.BAD_REQUEST)
+                return
+
+            token = create_app_session(db_path_for(self.data_dir), str(user["user_id"]))
+            self._redirect(next_path or "/", set_cookie=self._session_cookie(token))
+            return
+
+        if parsed.path == "/login":
+            values = self._read_form_data()
+            email = values.get("email", "").strip().lower()
+            password = values.get("password", "")
+            next_path = values.get("next", "/")
+            user = get_app_user_by_email(db_path_for(self.data_dir), email) if email else None
+            if not user or not verify_password(password, str(user.get("password_hash", ""))):
+                self._send_html(render_login(values, "Invalid email or password."), status=HTTPStatus.BAD_REQUEST)
+                return
+
+            token = create_app_session(db_path_for(self.data_dir), str(user["user_id"]))
+            self._redirect(next_path or "/", set_cookie=self._session_cookie(token))
+            return
+
         if parsed.path != "/create-listing":
             self.send_error(HTTPStatus.NOT_FOUND, "Not found")
+            return
+        current_user = self._current_user()
+        if not current_user:
+            self._redirect("/login?next=/create-listing")
             return
 
         content_type = self.headers.get("Content-Type", "")
@@ -636,10 +920,12 @@ class AppHandler(BaseHTTPRequestHandler):
             merged_gallery.insert(0, values["image_url"])
         values["gallery_images"] = ",".join(merged_gallery)
 
-        required_fields = ["seller_name", "seller_email", "model", "year", "price", "mileage", "location"]
+        required_fields = ["model", "year", "price", "mileage", "location"]
         missing = [field for field in required_fields if not values.get(field, "").strip()]
         if missing:
             message = "Please fill in required fields: " + ", ".join(missing)
+            values["seller_name"] = str(current_user.get("full_name", ""))
+            values["seller_email"] = str(current_user.get("email", ""))
             self._send_html(render_create_listing(values, message), status=HTTPStatus.BAD_REQUEST)
             return
 
@@ -648,14 +934,20 @@ class AppHandler(BaseHTTPRequestHandler):
             price = int(values.get("price", "0"))
             mileage = int(values.get("mileage", "0"))
         except ValueError:
+            values["seller_name"] = str(current_user.get("full_name", ""))
+            values["seller_email"] = str(current_user.get("email", ""))
             self._send_html(render_create_listing(values, "Year, price, and mileage must be numbers."), status=HTTPStatus.BAD_REQUEST)
             return
 
         if year < 1970 or year > 2035:
+            values["seller_name"] = str(current_user.get("full_name", ""))
+            values["seller_email"] = str(current_user.get("email", ""))
             self._send_html(render_create_listing(values, "Year must be between 1970 and 2035."), status=HTTPStatus.BAD_REQUEST)
             return
 
         if price < 1000 or mileage < 0:
+            values["seller_name"] = str(current_user.get("full_name", ""))
+            values["seller_email"] = str(current_user.get("email", ""))
             self._send_html(render_create_listing(values, "Price must be at least 1000 and mileage cannot be negative."), status=HTTPStatus.BAD_REQUEST)
             return
 
@@ -663,11 +955,9 @@ class AppHandler(BaseHTTPRequestHandler):
         values["price"] = str(price)
         values["mileage"] = str(mileage)
 
-        listing_id = create_user_listing(db_path_for(self.data_dir), values)
+        listing_id = create_user_listing(db_path_for(self.data_dir), values, current_user)
         target = "/listing?listing_id=" + urllib.parse.quote(listing_id)
-        self.send_response(HTTPStatus.SEE_OTHER)
-        self.send_header("Location", target)
-        self.end_headers()
+        self._redirect(target)
 
     def log_message(self, format: str, *args: object) -> None:
         return

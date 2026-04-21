@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Create Account | BMW Marketplace</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main class="page-shell form-shell auth-shell">
+    <a class="back-link" href="/">Back to marketplace</a>
+    <section class="form-hero">
+      <p class="eyebrow">Account</p>
+      <h1>Create account</h1>
+      <p class="sub">Register to post your listings in the marketplace.</p>
+    </section>
+
+    {{ERROR_HTML}}
+
+    <form class="listing-form auth-form" action="/register" method="post">
+      <input type="hidden" name="next" value="{{NEXT}}" />
+      <label>Full name
+        <input type="text" name="full_name" value="{{FULL_NAME}}" required />
+      </label>
+      <label>Email
+        <input type="email" name="email" value="{{EMAIL}}" required />
+      </label>
+      <label>Password
+        <input type="password" name="password" minlength="8" required />
+      </label>
+      <button class="button primary" type="submit">Create account</button>
+      <p class="auth-hint">Already have an account? <a href="/login?next={{NEXT}}">Log in</a>.</p>
+    </form>
+  </main>
+</body>
+</html>
