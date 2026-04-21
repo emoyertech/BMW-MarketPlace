@@ -11,6 +11,28 @@
     <header class="top-auth-bar">
       {{AUTH_HEADER_HTML}}
     </header>
+    <section class="filter-panel">
+      <form action="/" method="get" class="filter-form">
+        <label class="sr-only" for="search">Search listings</label>
+        <input id="search" type="search" name="search" placeholder="Search model, trim, location, package..." value="{{SEARCH_VALUE}}" />
+        <label class="sr-only" for="chassis_code">Filter by chassis code</label>
+        <select id="chassis_code" name="chassis_code" aria-label="Filter by chassis code" title="Filter by chassis code">{{CHASSIS_OPTIONS_HTML}}</select>
+        <label class="sr-only" for="transmission_type">Filter by transmission</label>
+        <select id="transmission_type" name="transmission_type" aria-label="Filter by transmission" title="Filter by transmission">{{TRANSMISSION_OPTIONS_HTML}}</select>
+        <label class="sr-only" for="package_name">Filter by package</label>
+        <select id="package_name" name="package_name" aria-label="Filter by package" title="Filter by package">{{PACKAGE_OPTIONS_HTML}}</select>
+        <label class="sr-only" for="drive_type">Filter by drive type</label>
+        <select id="drive_type" name="drive_type" aria-label="Filter by drive type" title="Filter by drive type">{{DRIVE_OPTIONS_HTML}}</select>
+        <label class="sr-only" for="doors">Filter by doors</label>
+        <select id="doors" name="doors" aria-label="Filter by doors" title="Filter by doors">{{DOOR_OPTIONS_HTML}}</select>
+        <label class="sr-only" for="title_filter">Filter by title status</label>
+        <select id="title_filter" name="title_filter" aria-label="Filter by title status" title="Filter by title status">{{TITLE_OPTIONS_HTML}}</select>
+        <label class="sr-only" for="sort_by">Sort listings</label>
+        <select id="sort_by" name="sort_by" aria-label="Sort listings" title="Sort listings">{{SORT_OPTIONS_HTML}}</select>
+        <button class="button primary" type="submit">Apply</button>
+        <a class="button secondary" href="/">Reset</a>
+      </form>
+    </section>
     {{REMINDER_PANEL_HTML}}
     <section class="hero">
       <div class="hero-copy">

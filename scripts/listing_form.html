@@ -13,7 +13,7 @@
     <section class="form-hero">
       <p class="eyebrow">Seller Tools</p>
       <h1>Create your listing</h1>
-      <p class="sub">Submit a BMW listing and store it in the local app database.</p>
+      <p class="sub">Select Year, Model, and Trim, then enter the VIN you want saved on the listing. Shorter international VINs are okay.</p>
       <p class="signed-in-note">Signed in as <strong>{{SELLER_NAME}}</strong> ({{SELLER_EMAIL}})</p>
     </section>
 
@@ -36,18 +36,26 @@
       </div>
 
       <div class="form-grid">
-        <label>Model*<input type="text" name="model" placeholder="3 Series" value="{{MODEL}}" required /></label>
-        <label>Trim<input type="text" name="trim" placeholder="330i xDrive" value="{{TRIM}}" /></label>
-        <label>Year*<input type="number" name="year" min="1970" max="2035" value="{{YEAR}}" required /></label>
+        <label>Year
+          <select name="selected_year" id="selected-year" data-selected="{{SELECTED_YEAR}}">
+            <option value="">Select year</option>
+          </select>
+        </label>
+        <label>Model
+          <select name="selected_model" id="selected-model" data-selected="{{SELECTED_MODEL}}">
+            <option value="">Select model</option>
+          </select>
+        </label>
+        <label>Trim
+          <select name="selected_trim" id="selected-trim" data-selected="{{SELECTED_TRIM}}">
+            <option value="">Select trim</option>
+          </select>
+        </label>
+        <input type="hidden" name="selected_vehicle_vin" id="selected-vehicle-vin" value="{{SELECTED_VEHICLE_VIN}}" />
         <label>Price (USD)*<input type="number" name="price" min="1000" step="1" value="{{PRICE}}" required /></label>
         <label>Mileage*<input type="number" name="mileage" min="0" step="1" value="{{MILEAGE}}" required /></label>
         <label>Location*<input type="text" name="location" placeholder="San Diego, CA" value="{{LOCATION}}" required /></label>
-      </div>
-
-      <div class="form-grid">
-        <label>Body style<input type="text" name="body_style" placeholder="Sedan" value="{{BODY_STYLE}}" /></label>
-        <label>Drive type<input type="text" name="drive_type" placeholder="All Wheel Drive" value="{{DRIVE_TYPE}}" /></label>
-        <label>Title type<input type="text" name="title_type" placeholder="Clean" value="{{TITLE_TYPE}}" /></label>
+        <label>VIN*<input type="text" name="vin" placeholder="Enter VIN as it appears on the vehicle" value="{{VIN}}" maxlength="17" required /></label>
       </div>
 
       <label>Primary image file
@@ -62,6 +70,154 @@
 
       <button class="button primary" type="submit">Save listing</button>
     </form>
+    {{VIN_PREVIEW_HTML}}
   </main>
+  <script id="vehicle-catalog-data" type="application/json">{{VEHICLE_CATALOG_JSON}}</script>
+  <script>
+    (function () {
+      const vinInput = document.querySelector('input[name="vin"]');
+      const selectedVehicleVinInput = document.getElementById('selected-vehicle-vin');
+      const yearSelect = document.getElementById('selected-year');
+      const modelSelect = document.getElementById('selected-model');
+      const trimSelect = document.getElementById('selected-trim');
+      const panel = document.querySelector('.vin-preview');
+      const catalogScript = document.getElementById('vehicle-catalog-data');
+      const catalog = catalogScript ? JSON.parse(catalogScript.textContent || '[]') : [];
+      if (!vinInput || !panel || !yearSelect || !modelSelect || !trimSelect) return;
+
+      const titleEl = panel.querySelector('p strong');
+      const summaryEl = panel.querySelectorAll('p')[1] || panel.querySelector('p');
+      const linksEl = panel.querySelector('#vin-preview-links') || panel.querySelector('.vin-preview-links');
+
+      const renderEmpty = (message) => {
+        if (titleEl) titleEl.textContent = 'VIN preview';
+        if (summaryEl) summaryEl.textContent = message;
+        if (linksEl) linksEl.innerHTML = '';
+      };
+
+      const loadPreview = async () => {
+        const vin = (vinInput.value || '').replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+        if (vin.length !== 17) {
+          renderEmpty('Enter a VIN to preview matched vehicle details when a local catalog match exists. Shorter international VINs can still be saved.');
+          return;
+        }
+        try {
+          const response = await fetch('/vin-preview?vin=' + encodeURIComponent(vin));
+          const payload = await response.json();
+          if (!payload.ok) {
+            renderEmpty(payload.message || 'No vehicle found for this VIN in the local catalog.');
+            return;
+          }
+          if (titleEl) titleEl.textContent = payload.title || 'VIN preview';
+          if (summaryEl) summaryEl.textContent = payload.summary || '';
+          if (linksEl) {
+            const links = [];
+            if (payload.carfax_url) links.push('<a class="carfax-link" target="_blank" rel="noopener noreferrer" href="' + payload.carfax_url + '">Carfax report</a>');
+            if (payload.nhtsa_url) links.push('<a class="carfax-link" target="_blank" rel="noopener noreferrer" href="' + payload.nhtsa_url + '">NHTSA recalls</a>');
+            links.push('<button class="button secondary copy-vin-inline" type="button" data-vin="' + (payload.vin || vin) + '">Copy VIN</button>');
+            linksEl.innerHTML = links.join(' · ');
+            const copyBtn = linksEl.querySelector('.copy-vin-inline');
+            if (copyBtn) {
+              copyBtn.addEventListener('click', async () => {
+                const value = copyBtn.getAttribute('data-vin') || '';
+                try {
+                  await navigator.clipboard.writeText(value);
+                  copyBtn.textContent = 'VIN Copied';
+                  setTimeout(() => { copyBtn.textContent = 'Copy VIN'; }, 1800);
+                } catch (_error) {
+                  copyBtn.textContent = 'Copy failed';
+                  setTimeout(() => { copyBtn.textContent = 'Copy VIN'; }, 1800);
+                }
+              });
+            }
+          }
+        } catch (_error) {
+          renderEmpty('Unable to load VIN preview right now.');
+        }
+      };
+
+      const setOptions = (select, values, selected) => {
+        const options = ['<option value="">Select ' + select.id.replace('selected-', '') + '</option>'];
+        values.forEach((value) => {
+          const selectedAttr = value === selected ? ' selected' : '';
+          options.push('<option value="' + value + '"' + selectedAttr + '>' + value + '</option>');
+        });
+        select.innerHTML = options.join('');
+      };
+
+      const unique = (values) => Array.from(new Set(values));
+
+      const renderYears = () => {
+        const years = unique(catalog.map((v) => v.year)).sort((a, b) => Number(b) - Number(a));
+        setOptions(yearSelect, years, yearSelect.dataset.selected || '');
+      };
+
+      const renderModels = () => {
+        const year = yearSelect.value;
+        const models = unique(catalog.filter((v) => !year || v.year === year).map((v) => v.model)).sort();
+        const selected = modelSelect.dataset.selected || '';
+        setOptions(modelSelect, models, selected);
+      };
+
+      const renderTrims = () => {
+        const year = yearSelect.value;
+        const model = modelSelect.value;
+        const trims = unique(
+          catalog
+            .filter((v) => (!year || v.year === year) && (!model || v.model === model))
+            .map((v) => v.trim)
+        ).sort();
+        const selected = trimSelect.dataset.selected || '';
+        setOptions(trimSelect, trims, selected);
+      };
+
+      const syncVinFromSelection = () => {
+        const year = yearSelect.value;
+        const model = modelSelect.value;
+        const trim = trimSelect.value;
+        const match = catalog.find((v) => v.year === year && v.model === model && v.trim === trim);
+        if (match) {
+          if (selectedVehicleVinInput) selectedVehicleVinInput.value = match.vin;
+          return;
+        }
+        if (selectedVehicleVinInput) selectedVehicleVinInput.value = '';
+      };
+
+      renderYears();
+      renderModels();
+      renderTrims();
+      syncVinFromSelection();
+
+      yearSelect.addEventListener('change', () => {
+        modelSelect.dataset.selected = '';
+        trimSelect.dataset.selected = '';
+        renderModels();
+        renderTrims();
+        syncVinFromSelection();
+        loadPreview();
+      });
+
+      modelSelect.addEventListener('change', () => {
+        trimSelect.dataset.selected = '';
+        renderTrims();
+        syncVinFromSelection();
+        loadPreview();
+      });
+
+      trimSelect.addEventListener('change', () => {
+        syncVinFromSelection();
+        loadPreview();
+      });
+
+      vinInput.addEventListener('input', () => {
+        if (selectedVehicleVinInput) selectedVehicleVinInput.value = vinInput.value;
+        loadPreview();
+      });
+
+      if ((vinInput.value || '').trim()) {
+        loadPreview();
+      }
+    })();
+  </script>
 </body>
 </html>

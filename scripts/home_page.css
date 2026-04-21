@@ -17,6 +17,18 @@
   box-sizing: border-box;
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -59,6 +71,31 @@ a {
   margin-bottom: 14px;
 }
 
+.filter-panel {
+  margin-bottom: 14px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.filter-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.filter-form input,
+.filter-form select {
+  width: 100%;
+  border: 1px solid rgba(229, 238, 251, 0.2);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font: inherit;
+  color: var(--ink);
+  background: rgba(8, 17, 31, 0.56);
+}
+
 .alert-panel {
   margin-bottom: 16px;
   padding: 14px 16px;
@@ -83,6 +120,20 @@ a {
 
 .alert-panel li {
   margin-bottom: 6px;
+}
+
+.notice-panel {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(122, 233, 182, 0.45);
+  background: rgba(16, 78, 54, 0.35);
+}
+
+.notice-panel p {
+  margin: 0;
+  color: var(--ink);
+  font-weight: 600;
 }
 
 .hero {
@@ -191,6 +242,12 @@ h1 {
   color: var(--ink);
   border: 1px solid rgba(229, 238, 251, 0.2);
   background: rgba(255, 255, 255, 0.04);
+}
+
+.button.danger {
+  color: #fff2f2;
+  border: 1px solid rgba(255, 132, 132, 0.5);
+  background: rgba(128, 30, 30, 0.6);
 }
 
 .stats {
@@ -354,7 +411,7 @@ h1 {
   background: var(--card);
   border: 1px solid rgba(15, 23, 42, 0.08);
   border-radius: 22px;
-  padding: 14px;
+  padding: 12px;
   box-shadow: 0 16px 36px rgba(8, 17, 31, 0.16);
 }
 
@@ -366,10 +423,10 @@ h1 {
 
 .vehicle-image {
   width: 100%;
-  height: 200px;
+  height: 188px;
   object-fit: cover;
   border-radius: 16px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   background: #eef2f8;
 }
 
@@ -385,12 +442,12 @@ h1 {
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  align-items: baseline;
+  align-items: center;
 }
 
 h3 {
   margin: 0;
-  font-size: 19px;
+  font-size: 18px;
   line-height: 1.15;
   color: #08111f;
 }
@@ -402,9 +459,10 @@ h3 {
 }
 
 .meta {
-  margin: 8px 0;
+  margin: 5px 0;
   color: #4b5f7c;
-  font-size: 14px;
+  font-size: 13px;
+  line-height: 1.35;
 }
 
 .meta strong {
@@ -415,20 +473,60 @@ h3 {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 12px;
+  margin-top: 10px;
 }
 
 .tag {
   background: #edf7ff;
   border: 1px solid #cfe4ff;
   border-radius: 999px;
-  padding: 6px 10px;
+  padding: 4px 9px;
   font-size: 12px;
   color: #133b67;
 }
 
 .tag strong {
   font-weight: 700;
+}
+
+.carfax-link {
+  display: inline-flex;
+  margin-top: 8px;
+  font-weight: 700;
+  color: #133b67;
+}
+
+.vehicle-report-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.vin-preview {
+  margin-top: 14px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(104, 165, 255, 0.35);
+  background: rgba(43, 79, 124, 0.2);
+}
+
+.vin-preview h2 {
+  font-size: 20px;
+}
+
+.vin-preview p {
+  margin: 8px 0 0;
+  color: var(--ink-soft);
+}
+
+.vin-preview-links {
+  margin-top: 10px;
+}
+
+.copy-vin-button,
+.copy-vin-inline {
+  margin-top: 10px;
 }
 
 .detail-shell {
@@ -447,7 +545,7 @@ h3 {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
   gap: 20px;
-  padding: 20px;
+  padding: 18px;
   border: 1px solid var(--line);
   border-radius: 28px;
   background: rgba(255, 255, 255, 0.04);
@@ -484,7 +582,7 @@ h3 {
 }
 
 .detail-copy {
-  padding: 8px 6px 8px 2px;
+  padding: 4px 4px 6px 2px;
 }
 
 .detail-title {
@@ -494,13 +592,13 @@ h3 {
 }
 
 .detail-subtitle {
-  margin-top: 14px;
+  margin-top: 10px;
   color: var(--ink-soft);
   line-height: 1.65;
 }
 
 .detail-price {
-  margin-top: 18px;
+  margin-top: 14px;
   font-size: 30px;
   font-weight: 700;
   color: var(--card-strong);
@@ -510,7 +608,7 @@ h3 {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
-  margin-top: 22px;
+  margin-top: 16px;
 }
 
 .spec-card,
@@ -541,7 +639,7 @@ h3 {
 }
 
 .seller-card {
-  margin-top: 16px;
+  margin-top: 12px;
 }
 
 .seller-card strong {
@@ -559,6 +657,10 @@ h3 {
 
 .owner-controls h3 {
   color: var(--ink);
+}
+
+.owner-controls form {
+  margin-top: 10px;
 }
 
 .listing-expiry-note {
@@ -586,7 +688,7 @@ h3 {
 }
 
 .detail-tags {
-  margin-top: 16px;
+  margin-top: 12px;
 }
 
 .form-shell {
