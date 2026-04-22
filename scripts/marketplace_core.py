@@ -38,6 +38,7 @@ FORM_TEMPLATE_PATH = BASE_DIR / "listing_form.html"
 EDIT_TEMPLATE_PATH = BASE_DIR / "listing_edit.html"
 LOGIN_TEMPLATE_PATH = BASE_DIR / "login.html"
 REGISTER_TEMPLATE_PATH = BASE_DIR / "register.html"
+SETTINGS_TEMPLATE_PATH = BASE_DIR / "settings.html"
 UPLOADS_DIR_NAME = "uploads"
 SEED_IMAGES_DIR_NAME = "seed-images"
 IMAGE_PLACEHOLDER_URL = "https://placehold.co/1200x800?text=BMW+Listing"
@@ -59,6 +60,7 @@ NOTICE_MESSAGES = {
     "paused": "Listing paused.",
     "active": "Listing marked as active.",
     "deleted": "Listing deleted.",
+    "settings_saved": "Account settings updated successfully.",
     "action_failed": "We could not complete that action.",
 }
 
@@ -511,6 +513,46 @@ def get_app_user_by_id(db_path: Path, user_id: str) -> dict | None:
     return {"user_id": row[0], "full_name": row[1], "email": row[2], "password_hash": row[3], "created_at": row[4]}
 
 
+def update_app_user(db_path: Path, user_id: str, full_name: str, email: str, new_password: str = "") -> bool:
+    init_db(db_path)
+    clean_name = full_name.strip()
+    clean_email = email.strip().lower()
+    if not clean_name or not clean_email:
+        return False
+
+    with db_connect() as conn:
+        if new_password:
+            result = conn.execute(
+                """
+                UPDATE app_users
+                SET full_name = ?, email = ?, password_hash = ?
+                WHERE user_id = ?
+                """,
+                (clean_name, clean_email, hash_password(new_password), user_id),
+            )
+        else:
+            result = conn.execute(
+                """
+                UPDATE app_users
+                SET full_name = ?, email = ?
+                WHERE user_id = ?
+                """,
+                (clean_name, clean_email, user_id),
+            )
+
+        if result.rowcount > 0:
+            conn.execute(
+                """
+                UPDATE user_listings
+                SET seller_name = ?, seller_email = ?
+                WHERE seller_user_id = ?
+                """,
+                (clean_name, clean_email, user_id),
+            )
+
+    return result.rowcount > 0
+
+
 def create_user_listing(db_path: Path, values: dict[str, str], current_user: dict[str, str]) -> str:
     init_db(db_path)
     now = datetime.now(timezone.utc)
@@ -900,5 +942,3 @@ def listing_matches_search(listing: dict, search: str) -> bool:
         ]
     ).lower()
     return search.lower() in haystack
-
-

@@ -1,4 +1,7 @@
-from marketplace_core import *
+try:
+    from .marketplace_core import *
+except ImportError:
+    from marketplace_core import *
 
 def render_create_listing(data_dir: Path, values: dict[str, str] | None = None, error: str = "") -> str:
     values = values or {}
@@ -135,6 +138,21 @@ def render_register(values: dict[str, str] | None = None, error: str = "") -> st
         .replace("{{FULL_NAME}}", html.escape(values.get("full_name", "")))
         .replace("{{EMAIL}}", html.escape(values.get("email", "")))
         .replace("{{NEXT}}", html.escape(values.get("next", "/")))
+    )
+
+
+def render_settings(current_user: dict[str, str], values: dict[str, str] | None = None, error: str = "", notice_code: str = "") -> str:
+    values = values or {}
+    template = SETTINGS_TEMPLATE_PATH.read_text(encoding="utf-8")
+    error_html = f'<p class="form-error">{html.escape(error)}</p>' if error else ""
+    notice_html_value = notice_html(notice_code)
+    full_name = values.get("full_name", str(current_user.get("full_name", "")))
+    email = values.get("email", str(current_user.get("email", "")))
+    return (
+        template.replace("{{NOTICE_HTML}}", notice_html_value)
+        .replace("{{ERROR_HTML}}", error_html)
+        .replace("{{FULL_NAME}}", html.escape(full_name))
+        .replace("{{EMAIL}}", html.escape(email))
     )
 
 
@@ -357,9 +375,12 @@ def render_home(
 
     dealer_listings = [listing for listing in filtered_active if listing.get("seller_type") == "DEALER"]
     private_listings = [listing for listing in filtered_active if listing.get("seller_type") == "PRIVATE_SELLER"]
-    featured_listings = filtered_active[:6]
-    dealer_showcase = dealer_listings[:4]
-    private_showcase = private_listings[:4]
+
+    # Keep the featured strip compact, but let the inventory sections show
+    # the full filtered dealer/private results.
+    featured_listings = filtered_active[:4]
+    dealer_showcase = dealer_listings
+    private_showcase = private_listings
 
     cards = []
     for listing in featured_listings:
@@ -426,6 +447,7 @@ def render_home(
         auth_header_html = (
             f'<span class="auth-welcome">Signed in as {html.escape(current_user.get("full_name", ""))}</span>'
             '<a class="button secondary auth-btn" href="/create-listing">Create listing</a>'
+            '<a class="button secondary auth-btn" href="/settings">Settings</a>'
             '<a class="button secondary auth-btn" href="/logout">Log out</a>'
         )
     else:
@@ -500,4 +522,3 @@ def render_home(
         )
         .replace("{{SORT_OPTIONS_HTML}}", sort_html)
     )
-

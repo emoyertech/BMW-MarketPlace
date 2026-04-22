@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Settings | BMW Marketplace</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main class="page-shell form-shell auth-shell">
+    <a class="back-link" href="/">Back to marketplace</a>
+    <section class="form-hero">
+      <p class="eyebrow">Account</p>
+      <h1>User settings</h1>
+      <p class="sub">Update your profile details and optionally change your password.</p>
+    </section>
+
+    {{NOTICE_HTML}}
+    {{ERROR_HTML}}
+
+    <form class="listing-form auth-form" action="/settings" method="post">
+      <label>Full name
+        <input type="text" name="full_name" value="{{FULL_NAME}}" required />
+      </label>
+
+      <label>Email
+        <input type="email" name="email" value="{{EMAIL}}" required />
+      </label>
+
+      <label>Current password
+        <input type="password" name="current_password" required />
+      </label>
+
+      <label>New password
+        <input type="password" name="new_password" />
+      </label>
+
+      <label>Confirm new password
+        <input type="password" name="confirm_password" />
+      </label>
+
+      <button class="button primary" type="submit">Save settings</button>
+      <p class="auth-hint">Leave the new password fields blank if you only want to update your name or email.</p>
+    </form>
+  </main>
+</body>
+</html>

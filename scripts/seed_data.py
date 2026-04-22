@@ -22,7 +22,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import List
 
-RANDOM_SEED = 24
+RANDOM_SEED = 50
 CURRENT_YEAR = datetime.now(timezone.utc).year
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SOURCE_CSV_PATH = REPO_ROOT / "data" / "data_full.csv"
@@ -214,7 +214,103 @@ def possible_trims(model: str, year: int) -> list[str]:
         if year <= 2011:
             return ["325i", "328i", "330i", "335i"]
         return ["330i", "330e", "340i", "330i xDrive", "M340i xDrive"]
-
+    
+    if model == "X5":
+        if year <= 2013:
+            return ["xDrive35i", "xDrive50i"]
+        if year <= 2020:
+            return ["xDrive35i", "xDrive40e", "xDrive50i", "M50i"]
+        return ["xDrive40i", "xDrive45e", "xDrive50e", "M50i", "M60i"]
+    
+    if model == "X6":
+        if year <= 2014:
+            return ["xDrive35i", "xDrive50i"]
+        if year <= 2020:
+            return ["xDrive35i", "xDrive40e", "xDrive50i", "M50i"]
+        return ["xDrive40i", "M50i", "M60i"]
+    
+    if model == "7 Series":
+        if year <= 2012:
+            return ["740i", "750i", "760i"]
+        if year <= 2019:
+            return ["740i", "750i xDrive", "750i", "760i"]
+        return ["740i", "740i xDrive", "750i xDrive", "760i"]
+    
+    if model == "8 Series":
+        if year <= 2019:
+            return ["840i", "M850i xDrive"]
+        return ["840i", "840i xDrive", "M850i xDrive"]
+    
+    if model == "M3":
+        if year <= 2013:
+            return ["Base", "Competition"]
+        return ["Base", "Competition", "Competition xDrive"]
+    
+    if model == "M4":
+        if year <= 2013:
+            return ["Base", "Competition"]
+        return ["Base", "Competition", "Competition xDrive"]
+    
+    if model == "M5":
+        if year <= 2012:
+            return ["Base", "Competition"]
+        return ["Base", "Competition", "CS"]
+    
+    if model == "M6":
+        if year <= 2012:
+            return ["Base", "Competition"]
+        return ["Base", "Competition"]
+    
+    if model == "M8":
+        if year <= 2019:
+            return ["Competition Coupe", "Competition Gran Coupe", "Competition Convertible"]
+        return ["Competition Coupe", "Competition Gran Coupe", "Competition Convertible"]
+    
+    if model == "i3":
+        if year <= 2016:
+            return ["BEV", "REx"]
+        return ["BEV", "REx", "S"]
+    
+    if model == "i4":
+        if year <= 2022:
+            return ["eDrive35", "eDrive40"]
+        return ["eDrive35", "eDrive40", "xDrive40", "M50"]
+    
+    if model == "iX":
+        if year <= 2022:
+            return ["xDrive40", "xDrive50"]
+        return ["xDrive40", "xDrive50", "M60"]
+    
+    if model == "iX3":
+        if year <= 2021:
+            return ["M Sport"]
+        return ["M Sport", "Inspiring"]
+    
+    if model == "Z3":
+        if year <= 1999:
+            return ["2.3", "2.8", "M Roadster", "M Coupe"]
+        return ["2.8", "3.0", "M Roadster", "M Coupe"]
+    
+    if model == "Z4":
+        if year <= 2006:
+            return ["3.0i", "M Roadster", "M Coupe"]
+        return ["sDrive30i", "M40i"]
+    
+    if model == "2 Series":
+        if year <= 2015:
+            return ["230i", "M235i"]
+        return ["230i", "230i xDrive", "M240i", "M240i xDrive"]
+    
+    if model == "4 Series":
+        if year <= 2015:
+            return ["428i", "435i"]
+        return ["430i", "430i xDrive", "M440i", "M440i xDrive"]
+    
+    if model == "1 Series":
+        if year <= 2011:
+            return ["128i", "135i"]
+        return ["128i", "135i", "135is"]
+    
     return TRIMS_BY_MODEL.get(model, ["Base"])
 
 
@@ -443,9 +539,19 @@ def generate_catalog_listings(users: List[User], num_listings: int, catalog: lis
     seller_users = [u for u in users if u.role in {"DEALER", "PRIVATE_SELLER"}]
     listings: List[Listing] = []
 
+    if not seller_users or not catalog:
+        return listings
+
+    catalog_cycle = catalog[:]
+    random.shuffle(catalog_cycle)
+
     for i in range(1, num_listings + 1):
+        cycle_index = (i - 1) % len(catalog_cycle)
+        if cycle_index == 0 and i != 1:
+            random.shuffle(catalog_cycle)
+
         seller = random.choice(seller_users)
-        catalog_entry = random.choice(catalog)
+        catalog_entry = catalog_cycle[cycle_index]
         family = infer_bmw_family(catalog_entry.get("model", catalog_entry.get("title", "")))
         title_type = pick_title_type()
         model_name = catalog_display_name(catalog_entry)
@@ -494,7 +600,7 @@ def generate_catalog_listings(users: List[User], num_listings: int, catalog: lis
                 mileage=mileage,
                 price=apply_title_price_adjustment(price, title_type, year),
                 location=random.choice(LOCATIONS),
-                status=random.choice(["ACTIVE", "ACTIVE", "ACTIVE", "PAUSED"]),
+                status="ACTIVE",
                 created_at=_ts(random.randint(1, 30)),
             )
         )
@@ -719,7 +825,7 @@ def generate_listings(users: List[User], num_listings: int) -> List[Listing]:
                 mileage=mileage,
                 price=price,
                 location=random.choice(LOCATIONS),
-                status=random.choice(["ACTIVE", "ACTIVE", "ACTIVE", "PAUSED"]),
+                status="ACTIVE",
                 created_at=_ts(random.randint(1, 30)),
             )
         )
@@ -788,7 +894,7 @@ def main() -> None:
     parser.add_argument("--buyers", type=int, default=15, help="Number of buyer users")
     parser.add_argument("--dealers", type=int, default=5, help="Number of dealer users")
     parser.add_argument("--private-sellers", type=int, default=8, help="Number of private sellers")
-    parser.add_argument("--listings", type=int, default=50, help="Number of listings")
+    parser.add_argument("--listings", type=int, default=100, help="Number of listings")
     parser.add_argument("--inquiries", type=int, default=80, help="Number of inquiries")
     parser.add_argument(
         "--out-dir",

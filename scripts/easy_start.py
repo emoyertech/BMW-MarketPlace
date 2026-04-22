@@ -96,17 +96,18 @@ def main() -> None:
     maybe_migrate(root)
 
     print("\nStarting app at http://127.0.0.1:8000")
+    os.environ["BMW_MARKETPLACE_DATA_DIR"] = "data"
     os.execv(
         sys.executable,
         [
             sys.executable,
-            "scripts/home_page.py",
+            "-m",
+            "uvicorn",
+            "scripts.home_page:app",
             "--host",
             "127.0.0.1",
             "--port",
             "8000",
-            "--data-dir",
-            "data",
         ],
     )
 

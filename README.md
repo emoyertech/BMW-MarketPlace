@@ -8,6 +8,7 @@ BMW Marketplace is a hybrid automotive marketplace for dealerships and individua
 - [One-Pager](docs/BMW_Marketplace_OnePager.md)
 - [UX Model](docs/UX_Model.md)
 - [Data Model](docs/Data_Model.md)
+- [Script Architecture and Modules Guide](docs/Script_Architecture_And_Modules_Guide.md)
 
 ## Product Summary
 
@@ -35,11 +36,12 @@ python3 -m pip install -r requirements.txt
 python3 scripts/kpi_report.py
 ```
 
-1. Run local homepage with listings (requires PostgreSQL):
+1. Run local FastAPI app with listings (requires PostgreSQL):
 
 ```bash
 export DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5432/bmw_marketplace
-python3 scripts/home_page.py
+export BMW_MARKETPLACE_DATA_DIR=data
+./.venv/bin/python -m uvicorn scripts.home_page:app --host 127.0.0.1 --port 8000
 ```
 
 Then open `http://127.0.0.1:8000` in your browser.
@@ -72,7 +74,7 @@ What it does automatically:
 - Installs Python dependencies if needed
 - Starts PostgreSQL with Docker (`docker compose up -d db`) if DB is not already running
 - Migrates old SQLite data one time (if `data/marketplace.db` exists)
-- Starts the app at `http://127.0.0.1:8000`
+- Starts the FastAPI app through Uvicorn at `http://127.0.0.1:8000`
 
 ## Migrate Old SQLite Data
 
@@ -92,6 +94,6 @@ This copies data from SQLite to PostgreSQL for these tables:
 
 The homepage server was split into smaller files to make edits easier:
 
-- `scripts/home_page.py`: HTTP routes and request handling
+- `scripts/home_page.py`: FastAPI routes, ASGI app export (`app`), and request handling
 - `scripts/marketplace_core.py`: database, auth, and core helpers
 - `scripts/marketplace_render.py`: HTML/template rendering functions

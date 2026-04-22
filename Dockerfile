@@ -12,4 +12,4 @@ COPY README.md ./README.md
 
 EXPOSE 8000
 
-CMD ["python", "scripts/home_page.py", "--host", "0.0.0.0", "--port", "8000", "--data-dir", "data"]
+CMD ["python", "-m", "uvicorn", "scripts.home_page:app", "--host", "0.0.0.0", "--port", "8000"]
