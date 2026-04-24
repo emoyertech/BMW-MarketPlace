@@ -222,3 +222,66 @@ python3 scripts/migrate_sqlite_to_postgres.py
 4. Practice one change per layer (route, core, render) to build confidence.
 
 That pattern mirrors real backend development: transport layer, logic layer, and presentation layer.
+
+## 9) Dealership Authorization Layer
+
+The dealership workflow is now part of the core app design. It uses the same layered structure as the rest of the marketplace:
+
+- `marketplace_core.py`
+  - owns dealership data models, role checks, and approval rules
+  - stores dealership profiles, memberships, and verification events
+  - decides whether a user can manage a dealership or respond on behalf of one
+
+- `home_page.py`
+  - exposes dealership API routes for:
+    - submitting dealership applications
+    - listing the current user’s dealership context
+    - managing dealership members
+    - approving, rejecting, or suspending dealerships as a site admin
+  - keeps request parsing and HTTP status handling separate from business rules
+
+### Roles in the dealership model
+
+The dealership system now distinguishes between these roles:
+
+- `SITE_ADMIN`
+  - can approve, reject, and suspend dealership applications
+  - can manage dealership state across the whole site
+
+- `OWNER`
+  - owns the dealership profile
+  - can manage dealership membership
+  - can respond to messages on behalf of the dealership
+
+- `SALES_MANAGER`
+  - can manage dealership members
+  - can respond to messages for the dealership
+
+- `SALESPERSON`
+  - can respond to messages for the dealership
+  - does not get administrative approval power
+
+### Dealership statuses
+
+Dealership applications move through these states:
+
+- `PENDING`
+  - submitted by a user, waiting for site admin review
+
+- `APPROVED`
+  - approved by a site admin and eligible to operate as a dealership
+
+- `REJECTED`
+  - denied by a site admin, with an optional reason
+
+- `SUSPENDED`
+  - previously approved, but temporarily disabled by a site admin
+
+### Why this was added
+
+This gives the marketplace a proper trust and moderation model:
+
+- dealerships can be verified before they start responding to leads
+- staff permissions are explicit instead of implied
+- admins have a single place to review and control dealership access
+- future UI work can build on stable API and role rules instead of inventing them later

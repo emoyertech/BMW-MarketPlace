@@ -11,27 +11,13 @@
     <header class="top-auth-bar">
       {{AUTH_HEADER_HTML}}
     </header>
-    <section class="filter-panel">
-      <form action="/" method="get" class="filter-form">
+    <section class="search-panel">
+      <form action="/listings" method="get" class="search-form">
         <label class="sr-only" for="search">Search listings</label>
-        <input id="search" type="search" name="search" placeholder="Search model, trim, location, package..." value="{{SEARCH_VALUE}}" />
-        <label class="sr-only" for="chassis_code">Filter by chassis code</label>
-        <select id="chassis_code" name="chassis_code" aria-label="Filter by chassis code" title="Filter by chassis code">{{CHASSIS_OPTIONS_HTML}}</select>
-        <label class="sr-only" for="transmission_type">Filter by transmission</label>
-        <select id="transmission_type" name="transmission_type" aria-label="Filter by transmission" title="Filter by transmission">{{TRANSMISSION_OPTIONS_HTML}}</select>
-        <label class="sr-only" for="package_name">Filter by package</label>
-        <select id="package_name" name="package_name" aria-label="Filter by package" title="Filter by package">{{PACKAGE_OPTIONS_HTML}}</select>
-        <label class="sr-only" for="drive_type">Filter by drive type</label>
-        <select id="drive_type" name="drive_type" aria-label="Filter by drive type" title="Filter by drive type">{{DRIVE_OPTIONS_HTML}}</select>
-        <label class="sr-only" for="doors">Filter by doors</label>
-        <select id="doors" name="doors" aria-label="Filter by doors" title="Filter by doors">{{DOOR_OPTIONS_HTML}}</select>
-        <label class="sr-only" for="title_filter">Filter by title status</label>
-        <select id="title_filter" name="title_filter" aria-label="Filter by title status" title="Filter by title status">{{TITLE_OPTIONS_HTML}}</select>
-        <label class="sr-only" for="sort_by">Sort listings</label>
-        <select id="sort_by" name="sort_by" aria-label="Sort listings" title="Sort listings">{{SORT_OPTIONS_HTML}}</select>
-        <button class="button primary" type="submit">Apply</button>
-        <a class="button secondary" href="/">Reset</a>
+        <input id="search" type="search" name="search" placeholder="Search BMW model, trim, location, dealer, or package..." value="{{SEARCH_VALUE}}" />
+        <button class="button primary" type="submit">Search all listings</button>
       </form>
+      <p class="search-panel__hint">Browse the full inventory, then refine results on the listings page.</p>
     </section>
     {{REMINDER_PANEL_HTML}}
     <section class="hero">
@@ -40,8 +26,8 @@
         <h1>{{HERO_TITLE}}</h1>
         <p class="sub">{{HERO_SUBTITLE}}</p>
         <div class="hero-actions">
-          <a class="button primary" href="#featured">Browse featured</a>
-          <a class="button secondary" href="#inventory">View inventory</a>
+          <a class="button primary" href="/listings">Browse all listings</a>
+          <a class="button secondary" href="/dealerships">Browse dealerships</a>
         </div>
         <div class="stats">
           <div class="stat"><small>Active listings</small><strong>{{ACTIVE_COUNT}}</strong></div>
@@ -53,15 +39,23 @@
       <aside class="hero-panel">
         <div class="hero-card">
           <span class="panel-label">Featured Listing</span>
-          <img src="{{FEATURED_IMAGE}}" alt="{{FEATURED_YEAR}} BMW {{FEATURED_MODEL}}" class="hero-image" loading="eager" />
+          <img
+            src="{{FEATURED_IMAGE}}"
+            alt="{{FEATURED_YEAR}} BMW {{FEATURED_MODEL}}"
+            class="hero-image"
+            loading="eager"
+            onerror="this.onerror=null;this.src='{{FEATURED_IMAGE_FALLBACK_URL}}';"
+          />
           <div class="hero-card-copy">
             <h2>{{FEATURED_YEAR}} BMW {{FEATURED_MODEL}}</h2>
-            <p>{{FEATURED_TRIM}}</p>
             <div class="hero-row">
               <strong>{{FEATURED_PRICE}}</strong>
-              <span>{{FEATURED_STATUS}}</span>
             </div>
-            <p class="hero-meta">{{FEATURED_LOCATION}} · {{FEATURED_TITLE_TYPE}}</p>
+            <p class="hero-meta"><strong>Trim:</strong> {{FEATURED_TRIM}}</p>
+            <p class="hero-meta"><strong>Body Style:</strong> {{FEATURED_BODY_STYLE}}</p>
+            <p class="hero-meta"><strong>Drive Type:</strong> {{FEATURED_DRIVE_TYPE}}</p>
+            <p class="hero-meta">{{FEATURED_LOCATION}} | {{FEATURED_MILEAGE}} miles</p>
+            <p class="hero-meta">Seller: {{FEATURED_SELLER_NAME}} {{FEATURED_SELLER_BADGE_HTML}} <span class="seller-type">({{FEATURED_SELLER_TYPE}})</span></p>
           </div>
         </div>
         <div class="mini-stats">

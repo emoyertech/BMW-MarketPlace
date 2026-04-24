@@ -674,6 +674,67 @@ h3 {
   font-size: 18px;
 }
 
+.seller-card__name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.seller-card__name-row strong {
+  display: inline;
+  margin-top: 0;
+}
+
+.hero-meta .seller-badge,
+.meta .seller-badge {
+  margin-left: 6px;
+}
+
+.seller-type {
+  white-space: nowrap;
+}
+
+.seller-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(122, 233, 182, 0.45);
+  background: rgba(16, 78, 54, 0.35);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.seller-badge--compact {
+  padding: 3px 8px;
+  font-size: 11px;
+}
+
+.seller-badge__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #06111f;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.seller-badge__text {
+  line-height: 1;
+}
+
 .owner-controls {
   margin-top: 16px;
   padding: 14px 16px;

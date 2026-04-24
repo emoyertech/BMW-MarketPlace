@@ -29,7 +29,10 @@
 
         <div class="seller-card">
           <span class="panel-label">Seller</span>
-          <strong>{{SELLER_NAME}}</strong>
+          <div class="seller-card__name-row">
+            <strong>{{SELLER_NAME}}</strong>
+            {{SELLER_BADGE_HTML}}
+          </div>
           <span>{{SELLER_EMAIL}}</span>
         </div>
 
@@ -40,6 +43,7 @@
         </div>
         <button class="button secondary copy-vin-button" type="button" data-vin="{{VIN}}">Copy VIN</button>
         <div class="vehicle-report-links">{{VEHICLE_REPORTS_HTML}}</div>
+        {{INQUIRY_HTML}}
         {{OWNER_CONTROLS_HTML}}
       </div>
     </section>

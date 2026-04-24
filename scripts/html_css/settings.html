@@ -19,6 +19,8 @@
     {{ERROR_HTML}}
 
     <form class="listing-form auth-form" action="/settings" method="post">
+      <input type="hidden" name="action" value="update_profile" />
+
       <label>Full name
         <input type="text" name="full_name" value="{{FULL_NAME}}" required />
       </label>
@@ -42,6 +44,8 @@
       <button class="button primary" type="submit">Save settings</button>
       <p class="auth-hint">Leave the new password fields blank if you only want to update your name or email.</p>
     </form>
+
+    {{DEALERSHIP_HTML}}
   </main>
 </body>
 </html>
