@@ -89,6 +89,10 @@ NOTICE_MESSAGES = {
     "dealer_suspended": "Dealer suspended.",
     "dealer_member_added": "Dealer member added.",
     "dealer_reply_sent": "Reply sent to the buyer.",
+    "dealer_assignment_saved": "Inquiry assignment updated.",
+    "inquiry_viewed": "Conversation marked as read.",
+    "buyer_inbox_opened": "Buyer inbox updated.",
+    "auto_assignment_applied": "Inquiry auto-assigned.",
     "inquiry_submitted": "Your message was sent to the seller.",
     "action_failed": "We could not complete that action.",
 }
@@ -107,6 +111,842 @@ def load_inquiries(data_dir: Path) -> list[dict]:
 
 def load_messages(data_dir: Path) -> list[dict]:
     return load_json(data_dir / "messages.json")
+
+
+def _buyer_inbox_state_from_row(row: tuple | None) -> dict | None:
+    if not row:
+        return None
+    return {
+        "inquiry_id": row[0],
+        "buyer_user_id": row[1],
+        "last_viewed_at": row[2] or "",
+        "last_notified_at": row[3] or "",
+        "updated_at": row[4],
+    }
+
+
+def _dealer_inbox_event_from_row(row: tuple | None) -> dict | None:
+    if not row:
+        return None
+    return {
+        "event_id": row[0],
+        "inquiry_id": row[1],
+        "dealer_id": row[2],
+        "actor_user_id": row[3] or "",
+        "event_type": row[4],
+        "previous_assigned_user_id": row[5] or "",
+        "new_assigned_user_id": row[6] or "",
+        "details": row[7] or "",
+        "created_at": row[8],
+    }
+
+
+def load_buyer_inbox_states(data_dir: Path) -> list[dict]:
+    db_path = db_path_for(data_dir)
+    init_db(db_path)
+    with db_connect() as conn:
+        rows = conn.execute(
+            """
+            SELECT inquiry_id, buyer_user_id, last_viewed_at, last_notified_at, updated_at
+            FROM buyer_inbox_state
+            ORDER BY updated_at DESC
+            """
+        ).fetchall()
+    return [_buyer_inbox_state_from_row(row) for row in rows if row]
+
+
+def get_dealer_inbox_state(data_dir: Path, inquiry_id: str) -> dict | None:
+    clean_inquiry_id = inquiry_id.strip()
+    if not clean_inquiry_id:
+        return None
+    db_path = db_path_for(data_dir)
+    init_db(db_path)
+    with db_connect() as conn:
+        row = conn.execute(
+            """
+            SELECT
+                inquiry_id,
+                dealer_id,
+                assigned_user_id,
+                last_viewed_by_user_id,
+                last_viewed_at,
+                last_responded_by_user_id,
+                last_responded_at,
+                updated_at
+            FROM dealer_inbox_state
+            WHERE inquiry_id = ?
+            """,
+            (clean_inquiry_id,),
+        ).fetchone()
+    return _dealer_inbox_state_from_row(row)
+
+
+def get_buyer_inbox_state(data_dir: Path, inquiry_id: str, buyer_user_id: str) -> dict | None:
+    clean_inquiry_id = inquiry_id.strip()
+    clean_buyer_user_id = buyer_user_id.strip()
+    if not clean_inquiry_id or not clean_buyer_user_id:
+        return None
+    db_path = db_path_for(data_dir)
+    init_db(db_path)
+    with db_connect() as conn:
+        row = conn.execute(
+            """
+            SELECT inquiry_id, buyer_user_id, last_viewed_at, last_notified_at, updated_at
+            FROM buyer_inbox_state
+            WHERE inquiry_id = ? AND buyer_user_id = ?
+            """,
+            (clean_inquiry_id, clean_buyer_user_id),
+        ).fetchone()
+    return _buyer_inbox_state_from_row(row)
+
+
+def ensure_buyer_inbox_state(data_dir: Path, inquiry_id: str, buyer_user_id: str) -> dict:
+    clean_inquiry_id = inquiry_id.strip()
+    clean_buyer_user_id = buyer_user_id.strip()
+    if not clean_inquiry_id:
+        raise ValueError("Missing inquiry_id")
+    if not clean_buyer_user_id:
+        raise ValueError("Missing buyer_user_id")
+    db_path = db_path_for(data_dir)
+    init_db(db_path)
+    now = _iso_now()
+    with db_connect() as conn:
+        row = conn.execute(
+            """
+            INSERT INTO buyer_inbox_state (
+                inquiry_id, buyer_user_id, last_viewed_at, last_notified_at, updated_at
+            ) VALUES (?, ?, '', '', ?)
+            ON CONFLICT(inquiry_id) DO UPDATE SET
+                buyer_user_id = excluded.buyer_user_id,
+                updated_at = excluded.updated_at
+            RETURNING inquiry_id, buyer_user_id, last_viewed_at, last_notified_at, updated_at
+            """,
+            (clean_inquiry_id, clean_buyer_user_id, now),
+        ).fetchone()
+    return _buyer_inbox_state_from_row(row) or {
+        "inquiry_id": clean_inquiry_id,
+        "buyer_user_id": clean_buyer_user_id,
+        "last_viewed_at": "",
+        "last_notified_at": "",
+        "updated_at": now,
+    }
+
+
+def mark_dealer_inbox_viewed(data_dir: Path, inquiry_id: str, dealer_id: str, viewer_user_id: str) -> dict:
+    state = ensure_dealer_inbox_state(data_dir, inquiry_id, dealer_id)
+    clean_viewer_user_id = viewer_user_id.strip()
+    clean_inquiry_id = inquiry_id.strip()
+    now = _iso_now()
+    db_path = db_path_for(data_dir)
+    with db_connect() as conn:
+        row = conn.execute(
+            """
+            UPDATE dealer_inbox_state
+            SET last_viewed_by_user_id = ?, last_viewed_at = ?, updated_at = ?
+            WHERE inquiry_id = ?
+            RETURNING inquiry_id, dealer_id, assigned_user_id, last_viewed_by_user_id,
+                      last_viewed_at, last_responded_by_user_id, last_responded_at, updated_at
+            """,
+            (clean_viewer_user_id, now, now, clean_inquiry_id),
+        ).fetchone()
+    record_inquiry_event(
+        data_dir,
+        clean_inquiry_id,
+        str(state.get("dealer_id", dealer_id)).strip(),
+        "dealer_viewed",
+        actor_user_id=clean_viewer_user_id,
+        details="Dealer inbox thread opened",
+    )
+    return _dealer_inbox_state_from_row(row) or state
+
+
+def mark_buyer_inbox_viewed(data_dir: Path, inquiry_id: str, buyer_user_id: str) -> dict:
+    state = ensure_buyer_inbox_state(data_dir, inquiry_id, buyer_user_id)
+    now = _iso_now()
+    clean_inquiry_id = inquiry_id.strip()
+    clean_buyer_user_id = buyer_user_id.strip()
+    with db_connect() as conn:
+        row = conn.execute(
+            """
+            UPDATE buyer_inbox_state
+            SET last_viewed_at = ?, updated_at = ?
+            WHERE inquiry_id = ? AND buyer_user_id = ?
+            RETURNING inquiry_id, buyer_user_id, last_viewed_at, last_notified_at, updated_at
+            """,
+            (now, now, clean_inquiry_id, clean_buyer_user_id),
+        ).fetchone()
+    record_inquiry_event(
+        data_dir,
+        clean_inquiry_id,
+        "",
+        "buyer_viewed",
+        actor_user_id=clean_buyer_user_id,
+        details="Buyer inbox thread opened",
+    )
+    return _buyer_inbox_state_from_row(row) or state
+
+
+def record_inquiry_event(
+    data_dir: Path,
+    inquiry_id: str,
+    dealer_id: str,
+    event_type: str,
+    actor_user_id: str = "",
+    previous_assigned_user_id: str = "",
+    new_assigned_user_id: str = "",
+    details: str = "",
+) -> dict:
+    clean_inquiry_id = inquiry_id.strip()
+    if not clean_inquiry_id:
+        raise ValueError("Missing inquiry_id")
+    db_path = db_path_for(data_dir)
+    init_db(db_path)
+    clean_details = str(details or "").strip()
+    now = _iso_now()
+    with db_connect() as conn:
+        row = conn.execute(
+            """
+            INSERT INTO dealer_inbox_events (
+                event_id, inquiry_id, dealer_id, actor_user_id, event_type,
+                previous_assigned_user_id, new_assigned_user_id, details, created_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            RETURNING event_id, inquiry_id, dealer_id, actor_user_id, event_type,
+                      previous_assigned_user_id, new_assigned_user_id, details, created_at
+            """,
+            (
+                f"event-{uuid.uuid4().hex}",
+                clean_inquiry_id,
+                dealer_id.strip(),
+                actor_user_id.strip(),
+                event_type.strip(),
+                previous_assigned_user_id.strip(),
+                new_assigned_user_id.strip(),
+                clean_details,
+                now,
+            ),
+        ).fetchone()
+    return _dealer_inbox_event_from_row(row) or {
+        "event_id": f"event-{uuid.uuid4().hex}",
+        "inquiry_id": clean_inquiry_id,
+        "dealer_id": dealer_id.strip(),
+        "actor_user_id": actor_user_id.strip(),
+        "event_type": event_type.strip(),
+        "previous_assigned_user_id": previous_assigned_user_id.strip(),
+        "new_assigned_user_id": new_assigned_user_id.strip(),
+        "details": clean_details,
+        "created_at": now,
+    }
+
+
+def list_inquiry_events(data_dir: Path, inquiry_id: str) -> list[dict]:
+    clean_inquiry_id = inquiry_id.strip()
+    if not clean_inquiry_id:
+        return []
+    db_path = db_path_for(data_dir)
+    init_db(db_path)
+    with db_connect() as conn:
+        rows = conn.execute(
+            """
+            SELECT event_id, inquiry_id, dealer_id, actor_user_id, event_type,
+                   previous_assigned_user_id, new_assigned_user_id, details, created_at
+            FROM dealer_inbox_events
+            WHERE inquiry_id = ?
+            ORDER BY created_at ASC
+            """,
+            (clean_inquiry_id,),
+        ).fetchall()
+    return [_dealer_inbox_event_from_row(row) for row in rows if row]
+
+
+def _count_unread_messages(messages: list[dict], last_viewed_at: str, viewer_user_id: str) -> int:
+    cutoff = _parse_iso_utc(last_viewed_at)
+    clean_viewer_user_id = viewer_user_id.strip()
+    unread = 0
+    for message in messages:
+        sent_at = _parse_iso_utc(str(message.get("sent_at", "")))
+        if cutoff and sent_at and sent_at <= cutoff:
+            continue
+        if clean_viewer_user_id and str(message.get("sender_user_id", "")).strip() == clean_viewer_user_id:
+            continue
+        unread += 1
+    return unread
+
+
+def _auto_assign_dealer_inquiry(data_dir: Path, inquiry: dict, listing: dict) -> str:
+    dealer_id = str(inquiry.get("dealer_id", "")).strip() or str(listing.get("dealer_id", "")).strip()
+    if not dealer_id:
+        return ""
+    db_path = db_path_for(data_dir)
+    dealer_profile = get_dealer_profile_by_id(db_path, dealer_id)
+    if not dealer_profile:
+        return ""
+    candidates: list[tuple[int, str, str]] = []
+    for member in list_dealer_members(db_path, dealer_id):
+        if str(member.get("member_status", "")).strip().upper() != "ACTIVE":
+            continue
+        role = str(member.get("member_role", "")).strip().upper()
+        if role not in {"OWNER", "SALES_MANAGER", "SALESPERSON"}:
+            continue
+        weight = 0 if role == "SALES_MANAGER" else 1 if role == "SALESPERSON" else 2
+        candidates.append((weight, str(member.get("created_at", "")), str(member.get("user_id", ""))))
+    candidates.sort(key=lambda item: (item[0], item[1], item[2]))
+    if candidates:
+        return candidates[0][2]
+    owner_user_id = str(dealer_profile.get("owner_user_id", "")).strip()
+    return owner_user_id
+
+
+def list_buyer_inquiries(data_dir: Path, buyer_user_id: str) -> list[dict]:
+    clean_buyer_user_id = buyer_user_id.strip()
+    if not clean_buyer_user_id:
+        return []
+    listings_by_id = {str(listing.get("listing_id", "")): listing for listing in load_all_listings(data_dir)}
+    states_by_id = {str(state.get("inquiry_id", "")): state for state in load_buyer_inbox_states(data_dir)}
+    dealer_states_by_id = {str(state.get("inquiry_id", "")): state for state in load_dealer_inbox_states(data_dir)}
+    users_by_id = {str(user.get("user_id", "")): user for user in list_app_users(db_path_for(data_dir))}
+    messages = load_messages(data_dir)
+    message_counts: dict[str, int] = {}
+    latest_messages: dict[str, dict] = {}
+    messages_by_inquiry: dict[str, list[dict]] = {}
+    for message in messages:
+        inquiry_key = str(message.get("inquiry_id", "")).strip()
+        if not inquiry_key:
+            continue
+        message_counts[inquiry_key] = message_counts.get(inquiry_key, 0) + 1
+        latest_messages[inquiry_key] = message
+        messages_by_inquiry.setdefault(inquiry_key, []).append(message)
+
+    results: list[dict] = []
+    for inquiry in load_inquiries(data_dir):
+        if str(inquiry.get("buyer_user_id", "")).strip() != clean_buyer_user_id:
+            continue
+        inquiry_id = str(inquiry.get("inquiry_id", ""))
+        listing = listings_by_id.get(str(inquiry.get("listing_id", "")), {})
+        dealer_state = dealer_states_by_id.get(inquiry_id, {})
+        buyer_state = states_by_id.get(inquiry_id, {})
+        inquiry_copy = _decorate_inquiry_record(data_dir, inquiry, listing, dealer_state, users_by_id)
+        inquiry_copy["buyer_inbox_state"] = buyer_state
+        inquiry_copy["message_count"] = message_counts.get(inquiry_id, 0)
+        inquiry_copy["latest_message"] = latest_messages.get(inquiry_id, {})
+        inquiry_copy["unread_count"] = _count_unread_messages(
+            messages_by_inquiry.get(inquiry_id, []),
+            str(buyer_state.get("last_viewed_at", "")),
+            clean_buyer_user_id,
+        )
+        results.append(inquiry_copy)
+    return sorted(results, key=lambda item: str(item.get("updated_at", item.get("created_at", ""))), reverse=True)
+def load_messages(data_dir: Path) -> list[dict]:
+    return load_json(data_dir / "messages.json")
+
+
+def _buyer_inbox_state_from_row(row: tuple | None) -> dict | None:
+    if not row:
+        return None
+    return {
+        "inquiry_id": row[0],
+        "buyer_user_id": row[1],
+        "last_viewed_at": row[2] or "",
+        "last_notified_at": row[3] or "",
+        "updated_at": row[4],
+    }
+
+
+def _dealer_inbox_event_from_row(row: tuple | None) -> dict | None:
+    if not row:
+        return None
+    return {
+        "event_id": row[0],
+        "inquiry_id": row[1],
+        "dealer_id": row[2],
+        "actor_user_id": row[3] or "",
+        "event_type": row[4],
+        "previous_assigned_user_id": row[5] or "",
+        "new_assigned_user_id": row[6] or "",
+        "details": row[7] or "",
+        "created_at": row[8],
+    }
+
+
+def load_buyer_inbox_states(data_dir: Path) -> list[dict]:
+    db_path = db_path_for(data_dir)
+    init_db(db_path)
+    with db_connect() as conn:
+        rows = conn.execute(
+            """
+            SELECT inquiry_id, buyer_user_id, last_viewed_at, last_notified_at, updated_at
+            FROM buyer_inbox_state
+            ORDER BY updated_at DESC
+            """
+        ).fetchall()
+    return [_buyer_inbox_state_from_row(row) for row in rows if row]
+
+
+def get_dealer_inbox_state(data_dir: Path, inquiry_id: str) -> dict | None:
+    clean_inquiry_id = inquiry_id.strip()
+    if not clean_inquiry_id:
+        return None
+    db_path = db_path_for(data_dir)
+    init_db(db_path)
+    with db_connect() as conn:
+        row = conn.execute(
+            """
+            SELECT
+                inquiry_id,
+                dealer_id,
+                assigned_user_id,
+                last_viewed_by_user_id,
+                last_viewed_at,
+                last_responded_by_user_id,
+                last_responded_at,
+                updated_at
+            FROM dealer_inbox_state
+            WHERE inquiry_id = ?
+            """,
+            (clean_inquiry_id,),
+        ).fetchone()
+    return _dealer_inbox_state_from_row(row)
+
+
+def get_buyer_inbox_state(data_dir: Path, inquiry_id: str, buyer_user_id: str) -> dict | None:
+    clean_inquiry_id = inquiry_id.strip()
+    clean_buyer_user_id = buyer_user_id.strip()
+    if not clean_inquiry_id or not clean_buyer_user_id:
+        return None
+    db_path = db_path_for(data_dir)
+    init_db(db_path)
+    with db_connect() as conn:
+        row = conn.execute(
+            """
+            SELECT inquiry_id, buyer_user_id, last_viewed_at, last_notified_at, updated_at
+            FROM buyer_inbox_state
+            WHERE inquiry_id = ? AND buyer_user_id = ?
+            """,
+            (clean_inquiry_id, clean_buyer_user_id),
+        ).fetchone()
+    return _buyer_inbox_state_from_row(row)
+
+
+def ensure_buyer_inbox_state(data_dir: Path, inquiry_id: str, buyer_user_id: str) -> dict:
+    clean_inquiry_id = inquiry_id.strip()
+    clean_buyer_user_id = buyer_user_id.strip()
+    if not clean_inquiry_id:
+        raise ValueError("Missing inquiry_id")
+    if not clean_buyer_user_id:
+        raise ValueError("Missing buyer_user_id")
+    db_path = db_path_for(data_dir)
+    init_db(db_path)
+    now = _iso_now()
+    with db_connect() as conn:
+        row = conn.execute(
+            """
+            INSERT INTO buyer_inbox_state (
+                inquiry_id, buyer_user_id, last_viewed_at, last_notified_at, updated_at
+            ) VALUES (?, ?, '', '', ?)
+            ON CONFLICT(inquiry_id) DO UPDATE SET
+                buyer_user_id = excluded.buyer_user_id,
+                updated_at = excluded.updated_at
+            RETURNING inquiry_id, buyer_user_id, last_viewed_at, last_notified_at, updated_at
+            """,
+            (clean_inquiry_id, clean_buyer_user_id, now),
+        ).fetchone()
+    return _buyer_inbox_state_from_row(row) or {
+        "inquiry_id": clean_inquiry_id,
+        "buyer_user_id": clean_buyer_user_id,
+        "last_viewed_at": "",
+        "last_notified_at": "",
+        "updated_at": now,
+    }
+
+
+def mark_dealer_inbox_viewed(data_dir: Path, inquiry_id: str, dealer_id: str, viewer_user_id: str) -> dict:
+    state = ensure_dealer_inbox_state(data_dir, inquiry_id, dealer_id)
+    clean_viewer_user_id = viewer_user_id.strip()
+    clean_inquiry_id = inquiry_id.strip()
+    now = _iso_now()
+    db_path = db_path_for(data_dir)
+    with db_connect() as conn:
+        row = conn.execute(
+            """
+            UPDATE dealer_inbox_state
+            SET last_viewed_by_user_id = ?, last_viewed_at = ?, updated_at = ?
+            WHERE inquiry_id = ?
+            RETURNING inquiry_id, dealer_id, assigned_user_id, last_viewed_by_user_id,
+                      last_viewed_at, last_responded_by_user_id, last_responded_at, updated_at
+            """,
+            (clean_viewer_user_id, now, now, clean_inquiry_id),
+        ).fetchone()
+    record_inquiry_event(
+        data_dir,
+        clean_inquiry_id,
+        str(state.get("dealer_id", dealer_id)).strip(),
+        "dealer_viewed",
+        actor_user_id=clean_viewer_user_id,
+        details="Dealer inbox thread opened",
+    )
+    return _dealer_inbox_state_from_row(row) or state
+
+
+def mark_buyer_inbox_viewed(data_dir: Path, inquiry_id: str, buyer_user_id: str) -> dict:
+    state = ensure_buyer_inbox_state(data_dir, inquiry_id, buyer_user_id)
+    now = _iso_now()
+    clean_inquiry_id = inquiry_id.strip()
+    clean_buyer_user_id = buyer_user_id.strip()
+    with db_connect() as conn:
+        row = conn.execute(
+            """
+            UPDATE buyer_inbox_state
+            SET last_viewed_at = ?, updated_at = ?
+            WHERE inquiry_id = ? AND buyer_user_id = ?
+            RETURNING inquiry_id, buyer_user_id, last_viewed_at, last_notified_at, updated_at
+            """,
+            (now, now, clean_inquiry_id, clean_buyer_user_id),
+        ).fetchone()
+    record_inquiry_event(
+        data_dir,
+        clean_inquiry_id,
+        "",
+        "buyer_viewed",
+        actor_user_id=clean_buyer_user_id,
+        details="Buyer inbox thread opened",
+    )
+    return _buyer_inbox_state_from_row(row) or state
+
+
+def record_inquiry_event(
+    data_dir: Path,
+    inquiry_id: str,
+    dealer_id: str,
+    event_type: str,
+    actor_user_id: str = "",
+    previous_assigned_user_id: str = "",
+    new_assigned_user_id: str = "",
+    details: str = "",
+) -> dict:
+    clean_inquiry_id = inquiry_id.strip()
+    if not clean_inquiry_id:
+        raise ValueError("Missing inquiry_id")
+    db_path = db_path_for(data_dir)
+    init_db(db_path)
+    clean_details = str(details or "").strip()
+    now = _iso_now()
+    with db_connect() as conn:
+        row = conn.execute(
+            """
+            INSERT INTO dealer_inbox_events (
+                event_id, inquiry_id, dealer_id, actor_user_id, event_type,
+                previous_assigned_user_id, new_assigned_user_id, details, created_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            RETURNING event_id, inquiry_id, dealer_id, actor_user_id, event_type,
+                      previous_assigned_user_id, new_assigned_user_id, details, created_at
+            """,
+            (
+                f"event-{uuid.uuid4().hex}",
+                clean_inquiry_id,
+                dealer_id.strip(),
+                actor_user_id.strip(),
+                event_type.strip(),
+                previous_assigned_user_id.strip(),
+                new_assigned_user_id.strip(),
+                clean_details,
+                now,
+            ),
+        ).fetchone()
+    return _dealer_inbox_event_from_row(row) or {
+        "event_id": f"event-{uuid.uuid4().hex}",
+        "inquiry_id": clean_inquiry_id,
+        "dealer_id": dealer_id.strip(),
+        "actor_user_id": actor_user_id.strip(),
+        "event_type": event_type.strip(),
+        "previous_assigned_user_id": previous_assigned_user_id.strip(),
+        "new_assigned_user_id": new_assigned_user_id.strip(),
+        "details": clean_details,
+        "created_at": now,
+    }
+
+
+def list_inquiry_events(data_dir: Path, inquiry_id: str) -> list[dict]:
+    clean_inquiry_id = inquiry_id.strip()
+    if not clean_inquiry_id:
+        return []
+    db_path = db_path_for(data_dir)
+    init_db(db_path)
+    with db_connect() as conn:
+        rows = conn.execute(
+            """
+            SELECT event_id, inquiry_id, dealer_id, actor_user_id, event_type,
+                   previous_assigned_user_id, new_assigned_user_id, details, created_at
+            FROM dealer_inbox_events
+            WHERE inquiry_id = ?
+            ORDER BY created_at ASC
+            """,
+            (clean_inquiry_id,),
+        ).fetchall()
+    return [_dealer_inbox_event_from_row(row) for row in rows if row]
+
+
+def _count_unread_messages(messages: list[dict], last_viewed_at: str, viewer_user_id: str) -> int:
+    cutoff = _parse_iso_utc(last_viewed_at)
+    clean_viewer_user_id = viewer_user_id.strip()
+    unread = 0
+    for message in messages:
+        sent_at = _parse_iso_utc(str(message.get("sent_at", "")))
+        if cutoff and sent_at and sent_at <= cutoff:
+            continue
+        if clean_viewer_user_id and str(message.get("sender_user_id", "")).strip() == clean_viewer_user_id:
+            continue
+        unread += 1
+    return unread
+
+
+def _auto_assign_dealer_inquiry(data_dir: Path, inquiry: dict, listing: dict) -> str:
+    dealer_id = str(inquiry.get("dealer_id", "")).strip() or str(listing.get("dealer_id", "")).strip()
+    if not dealer_id:
+        return ""
+    db_path = db_path_for(data_dir)
+    dealer_profile = get_dealer_profile_by_id(db_path, dealer_id)
+    if not dealer_profile:
+        return ""
+    candidates: list[tuple[int, str, str]] = []
+    for member in list_dealer_members(db_path, dealer_id):
+        if str(member.get("member_status", "")).strip().upper() != "ACTIVE":
+            continue
+        role = str(member.get("member_role", "")).strip().upper()
+        if role not in {"OWNER", "SALES_MANAGER", "SALESPERSON"}:
+            continue
+        weight = 0 if role == "SALES_MANAGER" else 1 if role == "SALESPERSON" else 2
+        candidates.append((weight, str(member.get("created_at", "")), str(member.get("user_id", ""))))
+    candidates.sort(key=lambda item: (item[0], item[1], item[2]))
+    if candidates:
+        return candidates[0][2]
+    owner_user_id = str(dealer_profile.get("owner_user_id", "")).strip()
+    return owner_user_id
+
+
+def list_buyer_inquiries(data_dir: Path, buyer_user_id: str) -> list[dict]:
+    clean_buyer_user_id = buyer_user_id.strip()
+    if not clean_buyer_user_id:
+        return []
+    listings_by_id = {str(listing.get("listing_id", "")): listing for listing in load_all_listings(data_dir)}
+    states_by_id = {str(state.get("inquiry_id", "")): state for state in load_buyer_inbox_states(data_dir)}
+    dealer_states_by_id = {str(state.get("inquiry_id", "")): state for state in load_dealer_inbox_states(data_dir)}
+    users_by_id = {str(user.get("user_id", "")): user for user in list_app_users(db_path_for(data_dir))}
+    messages = load_messages(data_dir)
+    message_counts: dict[str, int] = {}
+    latest_messages: dict[str, dict] = {}
+    messages_by_inquiry: dict[str, list[dict]] = {}
+    for message in messages:
+        inquiry_key = str(message.get("inquiry_id", "")).strip()
+        if not inquiry_key:
+            continue
+        message_counts[inquiry_key] = message_counts.get(inquiry_key, 0) + 1
+        latest_messages[inquiry_key] = message
+        messages_by_inquiry.setdefault(inquiry_key, []).append(message)
+
+    results: list[dict] = []
+    for inquiry in load_inquiries(data_dir):
+        if str(inquiry.get("buyer_user_id", "")).strip() != clean_buyer_user_id:
+            continue
+        inquiry_id = str(inquiry.get("inquiry_id", ""))
+        listing = listings_by_id.get(str(inquiry.get("listing_id", "")), {})
+        dealer_state = dealer_states_by_id.get(inquiry_id, {})
+        buyer_state = states_by_id.get(inquiry_id, {})
+        inquiry_copy = _decorate_inquiry_record(data_dir, inquiry, listing, dealer_state, users_by_id)
+        inquiry_copy["buyer_inbox_state"] = buyer_state
+        inquiry_copy["message_count"] = message_counts.get(inquiry_id, 0)
+        inquiry_copy["latest_message"] = latest_messages.get(inquiry_id, {})
+        inquiry_copy["unread_count"] = _count_unread_messages(
+            messages_by_inquiry.get(inquiry_id, []),
+            str(buyer_state.get("last_viewed_at", "")),
+            clean_buyer_user_id,
+        )
+        results.append(inquiry_copy)
+    return sorted(results, key=lambda item: str(item.get("updated_at", item.get("created_at", ""))), reverse=True)
+
+
+def _dealer_inbox_state_from_row(row: tuple | None) -> dict | None:
+    if not row:
+        return None
+    return {
+        "inquiry_id": row[0],
+        "dealer_id": row[1],
+        "assigned_user_id": row[2] or "",
+        "last_viewed_by_user_id": row[3] or "",
+        "last_viewed_at": row[4] or "",
+        "last_responded_by_user_id": row[5] or "",
+        "last_responded_at": row[6] or "",
+        "updated_at": row[7],
+    }
+
+
+def load_dealer_inbox_states(data_dir: Path) -> list[dict]:
+    db_path = db_path_for(data_dir)
+    init_db(db_path)
+    with db_connect() as conn:
+        rows = conn.execute(
+            """
+            SELECT
+                inquiry_id,
+                dealer_id,
+                assigned_user_id,
+                last_viewed_by_user_id,
+                last_viewed_at,
+                last_responded_by_user_id,
+                last_responded_at,
+                updated_at
+            FROM dealer_inbox_state
+            ORDER BY updated_at DESC
+            """
+        ).fetchall()
+    return [_dealer_inbox_state_from_row(row) for row in rows if row]
+
+
+def ensure_dealer_inbox_state(data_dir: Path, inquiry_id: str, dealer_id: str) -> dict:
+    clean_inquiry_id = inquiry_id.strip()
+    clean_dealer_id = dealer_id.strip()
+    if not clean_inquiry_id:
+        raise ValueError("Missing inquiry_id")
+    if not clean_dealer_id:
+        raise ValueError("Missing dealer_id")
+    db_path = db_path_for(data_dir)
+    init_db(db_path)
+    now = _iso_now()
+    with db_connect() as conn:
+        row = conn.execute(
+            """
+            INSERT INTO dealer_inbox_state (
+                inquiry_id, dealer_id, assigned_user_id, last_viewed_by_user_id, last_viewed_at,
+                last_responded_by_user_id, last_responded_at, updated_at
+            ) VALUES (?, ?, '', '', '', '', '', ?)
+            ON CONFLICT(inquiry_id) DO UPDATE SET
+                dealer_id = excluded.dealer_id,
+                updated_at = excluded.updated_at
+            RETURNING inquiry_id, dealer_id, assigned_user_id, last_viewed_by_user_id,
+                      last_viewed_at, last_responded_by_user_id, last_responded_at, updated_at
+            """,
+            (clean_inquiry_id, clean_dealer_id, now),
+        ).fetchone()
+    return _dealer_inbox_state_from_row(row) or {
+        "inquiry_id": clean_inquiry_id,
+        "dealer_id": clean_dealer_id,
+        "assigned_user_id": "",
+        "last_viewed_by_user_id": "",
+        "last_viewed_at": "",
+        "last_responded_by_user_id": "",
+        "last_responded_at": "",
+        "updated_at": now,
+    }
+
+
+def set_dealer_inquiry_assignment(data_dir: Path, inquiry_id: str, dealer_id: str, assigned_user_id: str) -> dict:
+    clean_inquiry_id = inquiry_id.strip()
+    clean_dealer_id = dealer_id.strip()
+    clean_assigned_user_id = assigned_user_id.strip()
+    if not clean_inquiry_id:
+        raise ValueError("Missing inquiry_id")
+    if not clean_dealer_id:
+        raise ValueError("Missing dealer_id")
+    db_path = db_path_for(data_dir)
+    init_db(db_path)
+    now = _iso_now()
+    with db_connect() as conn:
+        row = conn.execute(
+            """
+            INSERT INTO dealer_inbox_state (
+                inquiry_id, dealer_id, assigned_user_id, last_viewed_by_user_id, last_viewed_at,
+                last_responded_by_user_id, last_responded_at, updated_at
+            ) VALUES (?, ?, ?, '', '', '', '', ?)
+            ON CONFLICT(inquiry_id) DO UPDATE SET
+                dealer_id = excluded.dealer_id,
+                assigned_user_id = excluded.assigned_user_id,
+                updated_at = excluded.updated_at
+            RETURNING inquiry_id, dealer_id, assigned_user_id, last_viewed_by_user_id,
+                      last_viewed_at, last_responded_by_user_id, last_responded_at, updated_at
+            """,
+            (clean_inquiry_id, clean_dealer_id, clean_assigned_user_id, now),
+        ).fetchone()
+    return _dealer_inbox_state_from_row(row) or {
+        "inquiry_id": clean_inquiry_id,
+        "dealer_id": clean_dealer_id,
+        "assigned_user_id": clean_assigned_user_id,
+        "last_viewed_by_user_id": "",
+        "last_viewed_at": "",
+        "last_responded_by_user_id": "",
+        "last_responded_at": "",
+        "updated_at": now,
+    }
+
+
+def mark_dealer_inquiry_responded(data_dir: Path, inquiry_id: str, dealer_id: str, responder_user_id: str) -> dict:
+    clean_inquiry_id = inquiry_id.strip()
+    clean_dealer_id = dealer_id.strip()
+    clean_responder_user_id = responder_user_id.strip()
+    if not clean_inquiry_id:
+        raise ValueError("Missing inquiry_id")
+    if not clean_dealer_id:
+        raise ValueError("Missing dealer_id")
+    if not clean_responder_user_id:
+        raise ValueError("Missing responder_user_id")
+    db_path = db_path_for(data_dir)
+    init_db(db_path)
+    now = _iso_now()
+    with db_connect() as conn:
+        row = conn.execute(
+            """
+            INSERT INTO dealer_inbox_state (
+                inquiry_id, dealer_id, assigned_user_id, last_viewed_by_user_id, last_viewed_at,
+                last_responded_by_user_id, last_responded_at, updated_at
+            ) VALUES (?, ?, '', '', '', ?, ?, ?)
+            ON CONFLICT(inquiry_id) DO UPDATE SET
+                dealer_id = excluded.dealer_id,
+                last_responded_by_user_id = excluded.last_responded_by_user_id,
+                last_responded_at = excluded.last_responded_at,
+                updated_at = excluded.updated_at
+            RETURNING inquiry_id, dealer_id, assigned_user_id, last_viewed_by_user_id,
+                      last_viewed_at, last_responded_by_user_id, last_responded_at, updated_at
+            """,
+            (clean_inquiry_id, clean_dealer_id, clean_responder_user_id, now, now),
+        ).fetchone()
+    return _dealer_inbox_state_from_row(row) or {
+        "inquiry_id": clean_inquiry_id,
+        "dealer_id": clean_dealer_id,
+        "assigned_user_id": "",
+        "last_viewed_by_user_id": "",
+        "last_viewed_at": "",
+        "last_responded_by_user_id": clean_responder_user_id,
+        "last_responded_at": now,
+        "updated_at": now,
+    }
+
+
+def _decorate_inquiry_record(
+    data_dir: Path,
+    inquiry: dict,
+    listing: dict | None = None,
+    state: dict | None = None,
+    users_by_id: dict[str, dict] | None = None,
+) -> dict:
+    listing = listing or {}
+    state = state or {}
+    if users_by_id is None:
+        users_by_id = {str(user.get("user_id", "")): user for user in list_app_users(db_path_for(data_dir))}
+    buyer_user = users_by_id.get(str(inquiry.get("buyer_user_id", "")), {})
+    seller_user = users_by_id.get(str(inquiry.get("seller_user_id", "")), {})
+    assigned_user_id = str(state.get("assigned_user_id", inquiry.get("assigned_user_id", ""))).strip()
+    assigned_user = users_by_id.get(assigned_user_id, {}) if assigned_user_id else {}
+    inquiry_copy = dict(inquiry)
+    inquiry_copy["listing"] = listing
+    inquiry_copy["buyer_name"] = str(buyer_user.get("full_name", "")).strip() or "Unknown buyer"
+    inquiry_copy["buyer_email"] = str(buyer_user.get("email", "")).strip()
+    inquiry_copy["buyer_user"] = buyer_user
+    inquiry_copy["seller_name"] = str(seller_user.get("full_name", "")).strip() or "Unknown seller"
+    inquiry_copy["seller_email"] = str(seller_user.get("email", "")).strip()
+    inquiry_copy["seller_user"] = seller_user
+    inquiry_copy["assigned_user_id"] = assigned_user_id
+    inquiry_copy["assigned_user_name"] = str(assigned_user.get("full_name", "")).strip() if assigned_user_id else ""
+    inquiry_copy["assigned_user_email"] = str(assigned_user.get("email", "")).strip() if assigned_user_id else ""
+    inquiry_copy["assigned_user"] = assigned_user if assigned_user_id else {}
+    inquiry_copy["dealer_inbox_state"] = state
+    return inquiry_copy
 
 
 def write_json(path: Path, rows: list[dict]) -> None:
@@ -338,6 +1178,33 @@ def init_db(db_path: Path) -> None:
                 FOREIGN KEY(dealer_id) REFERENCES dealer_profiles(dealer_id) ON DELETE CASCADE
             )
             """)
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS buyer_inbox_state (
+                inquiry_id TEXT PRIMARY KEY,
+                buyer_user_id TEXT NOT NULL,
+                last_viewed_at TEXT NOT NULL DEFAULT '',
+                last_notified_at TEXT NOT NULL DEFAULT '',
+                updated_at TEXT NOT NULL,
+                FOREIGN KEY(inquiry_id) REFERENCES dealer_inbox_state(inquiry_id) ON DELETE CASCADE
+            )
+            """
+        )
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS dealer_inbox_events (
+                event_id TEXT PRIMARY KEY,
+                inquiry_id TEXT NOT NULL,
+                dealer_id TEXT NOT NULL,
+                actor_user_id TEXT NOT NULL DEFAULT '',
+                event_type TEXT NOT NULL,
+                previous_assigned_user_id TEXT NOT NULL DEFAULT '',
+                new_assigned_user_id TEXT NOT NULL DEFAULT '',
+                details TEXT NOT NULL DEFAULT '',
+                created_at TEXT NOT NULL
+            )
+            """
+        )
 
 
 def _parse_iso_utc(value: str) -> datetime | None:
@@ -1058,6 +1925,7 @@ def create_listing_inquiry(data_dir: Path, listing_id: str, buyer_user: dict, bo
         dealer_profile = get_active_dealer_profile_for_user(db_path_for(data_dir), seller_user_id)
         if dealer_profile:
             dealer_id = str(dealer_profile.get("dealer_id", "")).strip()
+
     inquiries = load_inquiries(data_dir)
     messages = load_messages(data_dir)
     now = _iso_now()
@@ -1084,6 +1952,8 @@ def create_listing_inquiry(data_dir: Path, listing_id: str, buyer_user: dict, bo
     messages.append(message)
     write_json(data_dir / "inquiries.json", inquiries)
     write_json(data_dir / "messages.json", messages)
+    if dealer_id:
+        ensure_dealer_inbox_state(data_dir, inquiry["inquiry_id"], dealer_id)
     return {"inquiry": inquiry, "message": message, "listing": listing}
 
 
@@ -1091,9 +1961,14 @@ def get_inquiry_by_id(data_dir: Path, inquiry_id: str) -> dict | None:
     target_id = inquiry_id.strip()
     if not target_id:
         return None
+    listings_by_id = {str(listing.get("listing_id", "")): listing for listing in load_all_listings(data_dir)}
+    states_by_id = {str(state.get("inquiry_id", "")): state for state in load_dealer_inbox_states(data_dir)}
+    users_by_id = {str(user.get("user_id", "")): user for user in list_app_users(db_path_for(data_dir))}
     for inquiry in load_inquiries(data_dir):
         if str(inquiry.get("inquiry_id", "")) == target_id:
-            return inquiry
+            listing = listings_by_id.get(str(inquiry.get("listing_id", "")), {})
+            state = states_by_id.get(target_id, {})
+            return _decorate_inquiry_record(data_dir, inquiry, listing, state, users_by_id)
     return None
 
 
@@ -1102,6 +1977,8 @@ def list_dealer_inquiries(data_dir: Path, dealer_id: str) -> list[dict]:
     if not clean_dealer_id:
         return []
     listings_by_id = {str(listing.get("listing_id", "")): listing for listing in load_all_listings(data_dir)}
+    states_by_id = {str(state.get("inquiry_id", "")): state for state in load_dealer_inbox_states(data_dir)}
+    users_by_id = {str(user.get("user_id", "")): user for user in list_app_users(db_path_for(data_dir))}
     messages = load_messages(data_dir)
     message_counts: dict[str, int] = {}
     latest_messages: dict[str, dict] = {}
@@ -1120,11 +1997,12 @@ def list_dealer_inquiries(data_dir: Path, dealer_id: str) -> list[dict]:
             inquiry_dealer_id = str(listing.get("dealer_id", "")).strip()
         if inquiry_dealer_id != clean_dealer_id:
             continue
-        inquiry_copy = dict(inquiry)
+        inquiry_id = str(inquiry.get("inquiry_id", ""))
+        state = states_by_id.get(inquiry_id, {})
+        inquiry_copy = _decorate_inquiry_record(data_dir, inquiry, listing, state, users_by_id)
         inquiry_copy["dealer_id"] = inquiry_dealer_id
-        inquiry_copy["message_count"] = message_counts.get(str(inquiry.get("inquiry_id", "")), 0)
-        inquiry_copy["latest_message"] = latest_messages.get(str(inquiry.get("inquiry_id", "")), {})
-        inquiry_copy["listing"] = listing
+        inquiry_copy["message_count"] = message_counts.get(inquiry_id, 0)
+        inquiry_copy["latest_message"] = latest_messages.get(inquiry_id, {})
         results.append(inquiry_copy)
 
     return sorted(results, key=lambda item: str(item.get("updated_at", item.get("created_at", ""))), reverse=True)
@@ -1171,6 +2049,7 @@ def add_inquiry_reply(data_dir: Path, inquiry_id: str, sender_user: dict, body: 
     messages.append(message)
     write_json(data_dir / "inquiries.json", inquiries)
     write_json(data_dir / "messages.json", messages)
+    mark_dealer_inquiry_responded(data_dir, clean_inquiry_id, dealer_id, sender_user_id)
     return {"inquiry": inquiries[inquiry_index], "message": message, "listing": listing}
 
 
@@ -1924,6 +2803,8 @@ def upsert_dealer_member_record(
 
 def seed_demo_dealerships(db_path: Path) -> list[dict]:
     init_db(db_path)
+    admin_user = ensure_default_admin(db_path)
+    admin_user_id = str(admin_user.get("user_id", "")).strip()
 
     demo_dealerships = [
         {
@@ -1964,6 +2845,7 @@ def seed_demo_dealerships(db_path: Path) -> list[dict]:
             "website_url": "https://baybmw.example.com",
             "license_number": "BAY-BMW-7781",
             "members": [
+                ("dealer-3-manager", "Bay BMW Manager", "bay.manager@bmw-marketplace.local", "SALES_MANAGER", "ACTIVE"),
                 ("dealer-3-sales", "Bay BMW Sales", "bay.sales@bmw-marketplace.local", "SALESPERSON", "ACTIVE"),
             ],
         },
@@ -1976,7 +2858,10 @@ def seed_demo_dealerships(db_path: Path) -> list[dict]:
             "display_name": "Valley BMW",
             "website_url": "https://valleybmw.example.com",
             "license_number": "VAL-BMW-4422",
-            "members": [],
+            "members": [
+                ("dealer-4-manager", "Valley BMW Manager", "valley.manager@bmw-marketplace.local", "SALES_MANAGER", "ACTIVE"),
+                ("dealer-4-sales", "Valley BMW Sales", "valley.sales@bmw-marketplace.local", "SALESPERSON", "ACTIVE"),
+            ],
         },
         {
             "owner_user_id": "dealer-5",
@@ -1987,7 +2872,10 @@ def seed_demo_dealerships(db_path: Path) -> list[dict]:
             "display_name": "Lakeside BMW",
             "website_url": "https://lakesidebmw.example.com",
             "license_number": "LAKE-BMW-9012",
-            "members": [],
+            "members": [
+                ("dealer-5-manager", "Lakeside BMW Manager", "lakeside.manager@bmw-marketplace.local", "SALES_MANAGER", "ACTIVE"),
+                ("dealer-5-sales", "Lakeside BMW Sales", "lakeside.sales@bmw-marketplace.local", "SALESPERSON", "ACTIVE"),
+            ],
         },
     ]
 
@@ -2010,7 +2898,8 @@ def seed_demo_dealerships(db_path: Path) -> list[dict]:
             dealership["license_number"],
         )
         if profile:
-            approve_dealer_profile(db_path, str(profile.get("dealer_id", "")), dealership["owner_user_id"])
+            if admin_user_id:
+                approve_dealer_profile(db_path, str(profile.get("dealer_id", "")), admin_user_id)
             for member_user_id, member_name, member_email, member_role, member_status in dealership["members"]:
                 create_app_user_with_id(db_path, member_user_id, member_name, member_email, "Dealer123!", "DEALER")
                 upsert_dealer_member_record(

@@ -10,65 +10,138 @@
   <main class="page-shell form-shell">
     <a class="back-link" href="/">Back to marketplace</a>
 
-    <section class="form-hero">
-      <p class="eyebrow">Seller Tools</p>
+    <section class="form-hero detail-panel">
+      <p class="eyebrow">Seller tools</p>
       <h1>Create your listing</h1>
       <p class="sub">Select Year, Model, and Trim, then enter the VIN you want saved on the listing. Shorter international VINs are okay.</p>
+      <div class="form-hero__steps">
+        <div class="form-hero__step"><strong>1</strong><span>Choose vehicle details</span></div>
+        <div class="form-hero__step"><strong>2</strong><span>Add pricing and media</span></div>
+        <div class="form-hero__step"><strong>3</strong><span>Publish and start receiving inquiries</span></div>
+      </div>
       <p class="signed-in-note">Signed in as <strong>{{SELLER_NAME}}</strong> ({{SELLER_EMAIL}})</p>
     </section>
 
     {{ERROR_HTML}}
 
-    <form class="listing-form" action="/create-listing" method="post" enctype="multipart/form-data">
-      <div class="form-grid">
-        <label>Seller type
-          <select name="seller_type">
-            <option value="PRIVATE_SELLER" {{PRIVATE_SELECTED}}>Private Seller</option>
-            <option value="DEALER" {{DEALER_SELECTED}}>Dealer</option>
-          </select>
+    <form class="listing-form detail-panel" action="/create-listing" method="post" enctype="multipart/form-data">
+      <section class="form-section">
+        <div class="section-heading compact">
+          <div>
+            <p class="section-kicker">Listing settings</p>
+            <h2>Choose seller context</h2>
+          </div>
+        </div>
+        <div class="form-grid">
+          <label>Seller type
+            <select name="seller_type">
+              <option value="PRIVATE_SELLER" {{PRIVATE_SELECTED}}>Private Seller</option>
+              <option value="DEALER" {{DEALER_SELECTED}}>Dealer</option>
+            </select>
+          </label>
+          <label>Status
+            <select name="status">
+              <option value="ACTIVE" {{ACTIVE_SELECTED}}>Active</option>
+              <option value="PAUSED" {{PAUSED_SELECTED}}>Paused</option>
+            </select>
+          </label>
+        </div>
+      </section>
+
+      <section class="form-section">
+        <div class="section-heading compact">
+          <div>
+            <p class="section-kicker">Vehicle details</p>
+            <h2>Select the BMW configuration</h2>
+          </div>
+        </div>
+        <div class="form-grid">
+          <label>Year
+            <select name="selected_year" id="selected-year" data-selected="{{SELECTED_YEAR}}">
+              <option value="">Select year</option>
+            </select>
+          </label>
+          <label>Model
+            <select name="selected_model" id="selected-model" data-selected="{{SELECTED_MODEL}}">
+              <option value="">Select model</option>
+            </select>
+          </label>
+          <label>Trim
+            <select name="selected_trim" id="selected-trim" data-selected="{{SELECTED_TRIM}}">
+              <option value="">Select trim</option>
+            </select>
+          </label>
+          <input type="hidden" name="selected_vehicle_vin" id="selected-vehicle-vin" value="{{SELECTED_VEHICLE_VIN}}" />
+          <label>VIN*
+            <input type="text" name="vin" placeholder="Enter VIN as it appears on the vehicle" value="{{VIN}}" maxlength="17" required />
+          </label>
+        </div>
+        <p class="form-helper">The VIN field can be matched against local seed data to help auto-fill body style, drive type, title status, and preview links.</p>
+      </section>
+
+      <section class="form-section">
+        <div class="section-heading compact">
+          <div>
+            <p class="section-kicker">Pricing and location</p>
+            <h2>Add the commercial details</h2>
+          </div>
+        </div>
+        <div class="form-grid">
+          <label>Price (USD)*
+            <input type="number" name="price" min="1000" step="1" value="{{PRICE}}" required />
+          </label>
+          <label>Mileage*
+            <input type="number" name="mileage" min="0" step="1" value="{{MILEAGE}}" required />
+          </label>
+          <label>Location*
+            <input type="text" name="location" placeholder="San Diego, CA" value="{{LOCATION}}" required />
+          </label>
+          <label>Title status
+            <input type="text" name="title_type" placeholder="Clean" value="{{TITLE_TYPE}}" />
+          </label>
+          <label>Body style
+            <input type="text" name="body_style" placeholder="Sedan" value="{{BODY_STYLE}}" />
+          </label>
+          <label>Drive type
+            <input type="text" name="drive_type" placeholder="AWD" value="{{DRIVE_TYPE}}" />
+          </label>
+        </div>
+      </section>
+
+      <section class="form-section">
+        <div class="section-heading compact">
+          <div>
+            <p class="section-kicker">Photos</p>
+            <h2>Upload listing media</h2>
+          </div>
+        </div>
+        <div class="form-grid">
+          <label>Primary image file
+            <input type="file" name="primary_image" accept="image/*" />
+          </label>
+          <label>Gallery image files (optional, multiple)
+            <input type="file" name="gallery_images_files" accept="image/*" multiple />
+          </label>
+        </div>
+        <p class="form-helper">A primary image helps your listing stand out in search results. Add gallery photos for the exterior, interior, and key options.</p>
+      </section>
+
+      <section class="form-section">
+        <div class="section-heading compact">
+          <div>
+            <p class="section-kicker">Description</p>
+            <h2>Tell buyers what makes this car special</h2>
+          </div>
+        </div>
+        <label class="form-textarea">
+          <span>Description</span>
+          <textarea name="description" rows="6" placeholder="Tell buyers about the car.">{{DESCRIPTION}}</textarea>
         </label>
-        <label>Status
-          <select name="status">
-            <option value="ACTIVE" {{ACTIVE_SELECTED}}>Active</option>
-            <option value="PAUSED" {{PAUSED_SELECTED}}>Paused</option>
-          </select>
-        </label>
+      </section>
+
+      <div class="form-actions">
+        <button class="button primary" type="submit">Save listing</button>
       </div>
-
-      <div class="form-grid">
-        <label>Year
-          <select name="selected_year" id="selected-year" data-selected="{{SELECTED_YEAR}}">
-            <option value="">Select year</option>
-          </select>
-        </label>
-        <label>Model
-          <select name="selected_model" id="selected-model" data-selected="{{SELECTED_MODEL}}">
-            <option value="">Select model</option>
-          </select>
-        </label>
-        <label>Trim
-          <select name="selected_trim" id="selected-trim" data-selected="{{SELECTED_TRIM}}">
-            <option value="">Select trim</option>
-          </select>
-        </label>
-        <input type="hidden" name="selected_vehicle_vin" id="selected-vehicle-vin" value="{{SELECTED_VEHICLE_VIN}}" />
-        <label>Price (USD)*<input type="number" name="price" min="1000" step="1" value="{{PRICE}}" required /></label>
-        <label>Mileage*<input type="number" name="mileage" min="0" step="1" value="{{MILEAGE}}" required /></label>
-        <label>Location*<input type="text" name="location" placeholder="San Diego, CA" value="{{LOCATION}}" required /></label>
-        <label>VIN*<input type="text" name="vin" placeholder="Enter VIN as it appears on the vehicle" value="{{VIN}}" maxlength="17" required /></label>
-      </div>
-
-      <label>Primary image file
-        <input type="file" name="primary_image" accept="image/*" />
-      </label>
-      <label>Gallery image files (optional, multiple)
-        <input type="file" name="gallery_images_files" accept="image/*" multiple />
-      </label>
-      <label>Description
-        <textarea name="description" rows="6" placeholder="Tell buyers about the car.">{{DESCRIPTION}}</textarea>
-      </label>
-
-      <button class="button primary" type="submit">Save listing</button>
     </form>
     {{VIN_PREVIEW_HTML}}
   </main>

@@ -1,198 +1,242 @@
 [
   {
-    "user_id": "buyer-1",
-    "role": "BUYER",
-    "full_name": "Buyer 1",
-    "email": "buyer1@example.com",
-    "created_at": "2026-04-06T19:27:32.697974+00:00"
+    "user_id": "user-001",
+    "name": "Alex M3Touring",
+    "display_name": "M3Touring",
+    "email": "m3touring@example.com",
+    "role": "buyer",
+    "location": "Portland, OR",
+    "avatar_url": "https://images.example.com/avatars/bmw-01.png",
+    "bio": "Keeps a close eye on maintenance, updates, and clean OEM+ builds."
   },
   {
-    "user_id": "buyer-2",
-    "role": "BUYER",
-    "full_name": "Buyer 2",
-    "email": "buyer2@example.com",
-    "created_at": "2026-03-25T19:27:32.698030+00:00"
+    "user_id": "user-002",
+    "name": "Brandon ///M TrackRat",
+    "display_name": "///M TrackRat",
+    "email": "m-trackrat@example.com",
+    "role": "seller",
+    "location": "Seattle, WA",
+    "avatar_url": "https://images.example.com/avatars/bmw-02.png",
+    "bio": "Likes track prep, road trips, and comparing service notes."
   },
   {
-    "user_id": "buyer-3",
-    "role": "BUYER",
-    "full_name": "Buyer 3",
-    "email": "buyer3@example.com",
-    "created_at": "2026-04-13T19:27:32.698043+00:00"
+    "user_id": "user-003",
+    "name": "Chris F30Daily",
+    "display_name": "F30Daily",
+    "email": "f30daily@example.com",
+    "role": "dealer",
+    "location": "San Diego, CA",
+    "avatar_url": "https://images.example.com/avatars/bmw-03.png",
+    "bio": "Buys, sells, and restores BMW parts one garage project at a time."
   },
   {
-    "user_id": "buyer-4",
-    "role": "BUYER",
-    "full_name": "Buyer 4",
-    "email": "buyer4@example.com",
-    "created_at": "2026-04-10T19:27:32.698102+00:00"
+    "user_id": "user-004",
+    "name": "Dylan E92Collector",
+    "display_name": "E92Collector",
+    "email": "e92collector@example.com",
+    "role": "mechanic",
+    "location": "Denver, CO",
+    "avatar_url": "https://images.example.com/avatars/bmw-04.png",
+    "bio": "Prefers well-documented cars and honest seller communication."
   },
   {
-    "user_id": "buyer-5",
-    "role": "BUYER",
-    "full_name": "Buyer 5",
-    "email": "buyer5@example.com",
-    "created_at": "2026-04-01T19:27:32.698110+00:00"
+    "user_id": "user-005",
+    "name": "Evan N54Tuner",
+    "display_name": "N54Tuner",
+    "email": "n54tuner@example.com",
+    "role": "collector",
+    "location": "Austin, TX",
+    "avatar_url": "https://images.example.com/avatars/bmw-05.png",
+    "bio": "Enjoys swap ideas, forum threads, and weekend wrenching."
   },
   {
-    "user_id": "buyer-6",
-    "role": "BUYER",
-    "full_name": "Buyer 6",
-    "email": "buyer6@example.com",
-    "created_at": "2026-03-24T19:27:32.698113+00:00"
+    "user_id": "user-006",
+    "name": "Felix LCI Club",
+    "display_name": "LCI Club",
+    "email": "lci-club@example.com",
+    "role": "enthusiast",
+    "location": "Atlanta, GA",
+    "avatar_url": "https://images.example.com/avatars/bmw-06.png",
+    "bio": "Always looking for the right spec, the right color, and the right history."
   },
   {
-    "user_id": "buyer-7",
-    "role": "BUYER",
-    "full_name": "Buyer 7",
-    "email": "buyer7@example.com",
-    "created_at": "2026-04-14T19:27:32.698115+00:00"
+    "user_id": "user-007",
+    "name": "Gabe PartsBench",
+    "display_name": "PartsBench",
+    "email": "partsbench@example.com",
+    "role": "buyer",
+    "location": "Chicago, IL",
+    "avatar_url": "https://images.example.com/avatars/bmw-01.png",
+    "bio": "Keeps a close eye on maintenance, updates, and clean OEM+ builds."
   },
   {
-    "user_id": "buyer-8",
-    "role": "BUYER",
-    "full_name": "Buyer 8",
-    "email": "buyer8@example.com",
-    "created_at": "2026-03-30T19:27:32.698143+00:00"
+    "user_id": "user-008",
+    "name": "Henry DriveTrainGuy",
+    "display_name": "DriveTrainGuy",
+    "email": "drivetrainguy@example.com",
+    "role": "seller",
+    "location": "Boston, MA",
+    "avatar_url": "https://images.example.com/avatars/bmw-02.png",
+    "bio": "Likes track prep, road trips, and comparing service notes."
   },
   {
-    "user_id": "buyer-9",
-    "role": "BUYER",
-    "full_name": "Buyer 9",
-    "email": "buyer9@example.com",
-    "created_at": "2026-04-06T19:27:32.698150+00:00"
+    "user_id": "user-009",
+    "name": "Ian RoadTrip330",
+    "display_name": "RoadTrip330",
+    "email": "roadtrip330@example.com",
+    "role": "dealer",
+    "location": "Charlotte, NC",
+    "avatar_url": "https://images.example.com/avatars/bmw-03.png",
+    "bio": "Buys, sells, and restores BMW parts one garage project at a time."
   },
   {
-    "user_id": "buyer-10",
-    "role": "BUYER",
-    "full_name": "Buyer 10",
-    "email": "buyer10@example.com",
-    "created_at": "2026-03-28T19:27:32.698153+00:00"
+    "user_id": "user-010",
+    "name": "Jared GarageJournal",
+    "display_name": "GarageJournal",
+    "email": "garagejournal@example.com",
+    "role": "mechanic",
+    "location": "Phoenix, AZ",
+    "avatar_url": "https://images.example.com/avatars/bmw-04.png",
+    "bio": "Prefers well-documented cars and honest seller communication."
   },
   {
-    "user_id": "buyer-11",
-    "role": "BUYER",
-    "full_name": "Buyer 11",
-    "email": "buyer11@example.com",
-    "created_at": "2026-04-11T19:27:32.698156+00:00"
+    "user_id": "user-011",
+    "name": "Kevin M54Swap",
+    "display_name": "M54Swap",
+    "email": "m54swap@example.com",
+    "role": "collector",
+    "location": "Nashville, TN",
+    "avatar_url": "https://images.example.com/avatars/bmw-05.png",
+    "bio": "Enjoys swap ideas, forum threads, and weekend wrenching."
   },
   {
-    "user_id": "buyer-12",
-    "role": "BUYER",
-    "full_name": "Buyer 12",
-    "email": "buyer12@example.com",
-    "created_at": "2026-04-19T19:27:32.698159+00:00"
+    "user_id": "user-012",
+    "name": "Liam BlackSapphire",
+    "display_name": "BlackSapphire",
+    "email": "blacksapphire@example.com",
+    "role": "enthusiast",
+    "location": "Tampa, FL",
+    "avatar_url": "https://images.example.com/avatars/bmw-06.png",
+    "bio": "Always looking for the right spec, the right color, and the right history."
   },
   {
-    "user_id": "buyer-13",
-    "role": "BUYER",
-    "full_name": "Buyer 13",
-    "email": "buyer13@example.com",
-    "created_at": "2026-04-04T19:27:32.698161+00:00"
+    "user_id": "user-013",
+    "name": "Marcus ServiceBay",
+    "display_name": "ServiceBay",
+    "email": "servicebay@example.com",
+    "role": "buyer",
+    "location": "Portland, OR",
+    "avatar_url": "https://images.example.com/avatars/bmw-01.png",
+    "bio": "Keeps a close eye on maintenance, updates, and clean OEM+ builds."
   },
   {
-    "user_id": "buyer-14",
-    "role": "BUYER",
-    "full_name": "Buyer 14",
-    "email": "buyer14@example.com",
-    "created_at": "2026-04-11T19:27:32.698164+00:00"
+    "user_id": "user-014",
+    "name": "Noah DetailDays",
+    "display_name": "DetailDays",
+    "email": "detaildays@example.com",
+    "role": "seller",
+    "location": "Seattle, WA",
+    "avatar_url": "https://images.example.com/avatars/bmw-02.png",
+    "bio": "Likes track prep, road trips, and comparing service notes."
   },
   {
-    "user_id": "buyer-15",
-    "role": "BUYER",
-    "full_name": "Buyer 15",
-    "email": "buyer15@example.com",
-    "created_at": "2026-04-14T19:27:32.698166+00:00"
+    "user_id": "user-015",
+    "name": "Owen TrackSpec",
+    "display_name": "TrackSpec",
+    "email": "trackspec@example.com",
+    "role": "dealer",
+    "location": "San Diego, CA",
+    "avatar_url": "https://images.example.com/avatars/bmw-03.png",
+    "bio": "Buys, sells, and restores BMW parts one garage project at a time."
   },
   {
-    "user_id": "dealer-1",
-    "role": "DEALER",
-    "full_name": "Dealer 1",
-    "email": "dealer1@example.com",
-    "created_at": "2026-03-31T19:27:32.698206+00:00"
+    "user_id": "user-016",
+    "name": "Peter WeekendWrench",
+    "display_name": "WeekendWrench",
+    "email": "weekendwrench@example.com",
+    "role": "mechanic",
+    "location": "Denver, CO",
+    "avatar_url": "https://images.example.com/avatars/bmw-04.png",
+    "bio": "Prefers well-documented cars and honest seller communication."
   },
   {
-    "user_id": "dealer-2",
-    "role": "DEALER",
-    "full_name": "Dealer 2",
-    "email": "dealer2@example.com",
-    "created_at": "2026-04-04T19:27:32.698211+00:00"
+    "user_id": "user-017",
+    "name": "Quinn BayAreaBMW",
+    "display_name": "BayAreaBMW",
+    "email": "bayareabmw@example.com",
+    "role": "collector",
+    "location": "Austin, TX",
+    "avatar_url": "https://images.example.com/avatars/bmw-05.png",
+    "bio": "Enjoys swap ideas, forum threads, and weekend wrenching."
   },
   {
-    "user_id": "dealer-3",
-    "role": "DEALER",
-    "full_name": "Dealer 3",
-    "email": "dealer3@example.com",
-    "created_at": "2026-04-19T19:27:32.698216+00:00"
+    "user_id": "user-018",
+    "name": "Ryan BlueBookBuyer",
+    "display_name": "BlueBookBuyer",
+    "email": "bluebookbuyer@example.com",
+    "role": "enthusiast",
+    "location": "Atlanta, GA",
+    "avatar_url": "https://images.example.com/avatars/bmw-06.png",
+    "bio": "Always looking for the right spec, the right color, and the right history."
   },
   {
-    "user_id": "dealer-4",
-    "role": "DEALER",
-    "full_name": "Dealer 4",
-    "email": "dealer4@example.com",
-    "created_at": "2026-03-23T19:27:32.698218+00:00"
+    "user_id": "user-019",
+    "name": "Sean EuroSpec",
+    "display_name": "EuroSpec",
+    "email": "eurospec@example.com",
+    "role": "buyer",
+    "location": "Chicago, IL",
+    "avatar_url": "https://images.example.com/avatars/bmw-01.png",
+    "bio": "Keeps a close eye on maintenance, updates, and clean OEM+ builds."
   },
   {
-    "user_id": "dealer-5",
-    "role": "DEALER",
-    "full_name": "Dealer 5",
-    "email": "dealer5@example.com",
-    "created_at": "2026-04-17T19:27:32.698221+00:00"
+    "user_id": "user-020",
+    "name": "Tyler TurbosAndTires",
+    "display_name": "TurbosAndTires",
+    "email": "turbosandtires@example.com",
+    "role": "seller",
+    "location": "Boston, MA",
+    "avatar_url": "https://images.example.com/avatars/bmw-02.png",
+    "bio": "Likes track prep, road trips, and comparing service notes."
   },
   {
-    "user_id": "seller-1",
-    "role": "PRIVATE_SELLER",
-    "full_name": "Private Seller 1",
-    "email": "seller1@example.com",
-    "created_at": "2026-04-10T19:27:32.698224+00:00"
+    "user_id": "user-021",
+    "name": "Victor VINHunter",
+    "display_name": "VINHunter",
+    "email": "vinhunter@example.com",
+    "role": "dealer",
+    "location": "Charlotte, NC",
+    "avatar_url": "https://images.example.com/avatars/bmw-03.png",
+    "bio": "Buys, sells, and restores BMW parts one garage project at a time."
   },
   {
-    "user_id": "seller-2",
-    "role": "PRIVATE_SELLER",
-    "full_name": "Private Seller 2",
-    "email": "seller2@example.com",
-    "created_at": "2026-03-26T19:27:32.698227+00:00"
+    "user_id": "user-022",
+    "name": "Wyatt WinterReady",
+    "display_name": "WinterReady",
+    "email": "winterready@example.com",
+    "role": "mechanic",
+    "location": "Phoenix, AZ",
+    "avatar_url": "https://images.example.com/avatars/bmw-04.png",
+    "bio": "Prefers well-documented cars and honest seller communication."
   },
   {
-    "user_id": "seller-3",
-    "role": "PRIVATE_SELLER",
-    "full_name": "Private Seller 3",
-    "email": "seller3@example.com",
-    "created_at": "2026-04-18T19:27:32.698229+00:00"
+    "user_id": "user-023",
+    "name": "Alex M3Touring",
+    "display_name": "M3Touring",
+    "email": "m3touring@example.com",
+    "role": "collector",
+    "location": "Nashville, TN",
+    "avatar_url": "https://images.example.com/avatars/bmw-05.png",
+    "bio": "Enjoys swap ideas, forum threads, and weekend wrenching."
   },
   {
-    "user_id": "seller-4",
-    "role": "PRIVATE_SELLER",
-    "full_name": "Private Seller 4",
-    "email": "seller4@example.com",
-    "created_at": "2026-04-10T19:27:32.698232+00:00"
-  },
-  {
-    "user_id": "seller-5",
-    "role": "PRIVATE_SELLER",
-    "full_name": "Private Seller 5",
-    "email": "seller5@example.com",
-    "created_at": "2026-04-11T19:27:32.698299+00:00"
-  },
-  {
-    "user_id": "seller-6",
-    "role": "PRIVATE_SELLER",
-    "full_name": "Private Seller 6",
-    "email": "seller6@example.com",
-    "created_at": "2026-04-14T19:27:32.698305+00:00"
-  },
-  {
-    "user_id": "seller-7",
-    "role": "PRIVATE_SELLER",
-    "full_name": "Private Seller 7",
-    "email": "seller7@example.com",
-    "created_at": "2026-04-15T19:27:32.698474+00:00"
-  },
-  {
-    "user_id": "seller-8",
-    "role": "PRIVATE_SELLER",
-    "full_name": "Private Seller 8",
-    "email": "seller8@example.com",
-    "created_at": "2026-04-19T19:27:32.698481+00:00"
+    "user_id": "user-024",
+    "name": "Brandon ///M TrackRat",
+    "display_name": "///M TrackRat",
+    "email": "m-trackrat@example.com",
+    "role": "enthusiast",
+    "location": "Tampa, FL",
+    "avatar_url": "https://images.example.com/avatars/bmw-06.png",
+    "bio": "Always looking for the right spec, the right color, and the right history."
   }
 ]

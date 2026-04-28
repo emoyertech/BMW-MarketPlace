@@ -61,6 +61,24 @@ Notes:
 - App service uses `DATABASE_URL=postgresql://postgres:postgres@db:5432/bmw_marketplace`
 - Database data is persisted in a named Docker volume: `pg_data`
 
+## Default Admin Access
+
+The app seeds a default site admin automatically if one does not exist yet. This is intended so anyone cloning the repo can immediately use the admin controls without manual setup.
+
+Default credentials:
+
+- Email: `admin@bmw-marketplace.local`
+- Password: `ChangeMe123!`
+- Name: `Site Admin`
+
+Environment overrides:
+
+- `BMW_MARKETPLACE_DEFAULT_ADMIN_EMAIL`
+- `BMW_MARKETPLACE_DEFAULT_ADMIN_PASSWORD`
+- `BMW_MARKETPLACE_DEFAULT_ADMIN_NAME`
+
+If you change these values in your environment, the seeded admin account will use the new values on startup.
+
 ## Easiest Way To Run (Beginner)
 
 Use the one-command launcher:

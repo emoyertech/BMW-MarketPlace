@@ -1,975 +1,434 @@
 [
   {
-    "message_id": "message-1",
-    "inquiry_id": "inquiry-1",
-    "sender_user_id": "buyer-14",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-16T19:28:14.296811+00:00"
-  },
-  {
-    "message_id": "message-2",
-    "inquiry_id": "inquiry-1",
-    "sender_user_id": "dealer-2",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-18T19:28:14.296823+00:00"
-  },
-  {
-    "message_id": "message-3",
-    "inquiry_id": "inquiry-2",
-    "sender_user_id": "buyer-14",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-13T19:28:14.296828+00:00"
-  },
-  {
-    "message_id": "message-4",
-    "inquiry_id": "inquiry-2",
-    "sender_user_id": "seller-7",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-16T19:28:14.296832+00:00"
-  },
-  {
-    "message_id": "message-5",
-    "inquiry_id": "inquiry-3",
-    "sender_user_id": "buyer-12",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-15T19:28:14.296836+00:00"
-  },
-  {
-    "message_id": "message-7",
-    "inquiry_id": "inquiry-4",
-    "sender_user_id": "buyer-13",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-22T19:28:14.296839+00:00"
-  },
-  {
-    "message_id": "message-8",
-    "inquiry_id": "inquiry-4",
-    "sender_user_id": "seller-5",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-12T19:28:14.296842+00:00"
-  },
-  {
-    "message_id": "message-9",
-    "inquiry_id": "inquiry-5",
-    "sender_user_id": "buyer-11",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-22T19:28:14.296845+00:00"
-  },
-  {
-    "message_id": "message-10",
-    "inquiry_id": "inquiry-5",
-    "sender_user_id": "dealer-2",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-16T19:28:14.296849+00:00"
-  },
-  {
-    "message_id": "message-11",
-    "inquiry_id": "inquiry-6",
-    "sender_user_id": "buyer-9",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-15T19:28:14.296852+00:00"
-  },
-  {
-    "message_id": "message-12",
-    "inquiry_id": "inquiry-6",
-    "sender_user_id": "seller-1",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-22T19:28:14.296855+00:00"
-  },
-  {
-    "message_id": "message-13",
-    "inquiry_id": "inquiry-7",
-    "sender_user_id": "buyer-2",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-16T19:28:14.296858+00:00"
-  },
-  {
-    "message_id": "message-14",
-    "inquiry_id": "inquiry-7",
-    "sender_user_id": "seller-2",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-12T19:28:14.296862+00:00"
-  },
-  {
-    "message_id": "message-15",
-    "inquiry_id": "inquiry-8",
-    "sender_user_id": "buyer-6",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-20T19:28:14.296865+00:00"
-  },
-  {
-    "message_id": "message-16",
-    "inquiry_id": "inquiry-8",
-    "sender_user_id": "seller-5",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-22T19:28:14.296868+00:00"
-  },
-  {
-    "message_id": "message-17",
-    "inquiry_id": "inquiry-9",
-    "sender_user_id": "buyer-3",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-21T19:28:14.296871+00:00"
-  },
-  {
-    "message_id": "message-19",
-    "inquiry_id": "inquiry-10",
-    "sender_user_id": "buyer-5",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-13T19:28:14.296874+00:00"
-  },
-  {
-    "message_id": "message-20",
-    "inquiry_id": "inquiry-10",
-    "sender_user_id": "dealer-2",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-18T19:28:14.296877+00:00"
-  },
-  {
-    "message_id": "message-21",
-    "inquiry_id": "inquiry-11",
-    "sender_user_id": "buyer-2",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-19T19:28:14.296880+00:00"
-  },
-  {
-    "message_id": "message-23",
-    "inquiry_id": "inquiry-12",
-    "sender_user_id": "buyer-2",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-17T19:28:14.296883+00:00"
-  },
-  {
-    "message_id": "message-24",
-    "inquiry_id": "inquiry-12",
-    "sender_user_id": "seller-2",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-14T19:28:14.296891+00:00"
-  },
-  {
-    "message_id": "message-25",
-    "inquiry_id": "inquiry-13",
-    "sender_user_id": "buyer-15",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-15T19:28:14.296894+00:00"
-  },
-  {
-    "message_id": "message-26",
-    "inquiry_id": "inquiry-13",
-    "sender_user_id": "dealer-3",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-21T19:28:14.296898+00:00"
-  },
-  {
-    "message_id": "message-27",
-    "inquiry_id": "inquiry-14",
-    "sender_user_id": "buyer-15",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-17T19:28:14.296901+00:00"
-  },
-  {
-    "message_id": "message-28",
-    "inquiry_id": "inquiry-14",
-    "sender_user_id": "dealer-2",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-20T19:28:14.296904+00:00"
-  },
-  {
-    "message_id": "message-29",
-    "inquiry_id": "inquiry-15",
-    "sender_user_id": "buyer-14",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-18T19:28:14.296907+00:00"
-  },
-  {
-    "message_id": "message-30",
-    "inquiry_id": "inquiry-15",
-    "sender_user_id": "dealer-4",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-20T19:28:14.296910+00:00"
-  },
-  {
-    "message_id": "message-31",
-    "inquiry_id": "inquiry-16",
-    "sender_user_id": "buyer-12",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-18T19:28:14.296918+00:00"
-  },
-  {
-    "message_id": "message-32",
-    "inquiry_id": "inquiry-16",
-    "sender_user_id": "seller-7",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-18T19:28:14.296921+00:00"
-  },
-  {
-    "message_id": "message-33",
-    "inquiry_id": "inquiry-17",
-    "sender_user_id": "buyer-14",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-20T19:28:14.296924+00:00"
-  },
-  {
-    "message_id": "message-34",
-    "inquiry_id": "inquiry-17",
-    "sender_user_id": "seller-3",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-22T19:28:14.296928+00:00"
-  },
-  {
-    "message_id": "message-35",
-    "inquiry_id": "inquiry-18",
-    "sender_user_id": "buyer-7",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-13T19:28:14.296931+00:00"
-  },
-  {
-    "message_id": "message-36",
-    "inquiry_id": "inquiry-18",
-    "sender_user_id": "seller-3",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-22T19:28:14.296934+00:00"
-  },
-  {
-    "message_id": "message-37",
-    "inquiry_id": "inquiry-19",
-    "sender_user_id": "buyer-6",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-15T19:28:14.296937+00:00"
-  },
-  {
-    "message_id": "message-38",
-    "inquiry_id": "inquiry-19",
-    "sender_user_id": "seller-7",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-15T19:28:14.296940+00:00"
-  },
-  {
-    "message_id": "message-39",
-    "inquiry_id": "inquiry-20",
-    "sender_user_id": "buyer-1",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-14T19:28:14.296943+00:00"
-  },
-  {
-    "message_id": "message-40",
-    "inquiry_id": "inquiry-20",
-    "sender_user_id": "dealer-3",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-20T19:28:14.296946+00:00"
-  },
-  {
-    "message_id": "message-41",
-    "inquiry_id": "inquiry-21",
-    "sender_user_id": "buyer-2",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-18T19:28:14.296949+00:00"
-  },
-  {
-    "message_id": "message-42",
-    "inquiry_id": "inquiry-21",
-    "sender_user_id": "seller-7",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-15T19:28:14.296952+00:00"
-  },
-  {
-    "message_id": "message-43",
-    "inquiry_id": "inquiry-22",
-    "sender_user_id": "buyer-1",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-17T19:28:14.296956+00:00"
-  },
-  {
-    "message_id": "message-45",
-    "inquiry_id": "inquiry-23",
-    "sender_user_id": "buyer-6",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-21T19:28:14.296959+00:00"
-  },
-  {
-    "message_id": "message-46",
-    "inquiry_id": "inquiry-23",
-    "sender_user_id": "seller-7",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-19T19:28:14.296962+00:00"
-  },
-  {
-    "message_id": "message-47",
-    "inquiry_id": "inquiry-24",
-    "sender_user_id": "buyer-2",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-19T19:28:14.296965+00:00"
-  },
-  {
-    "message_id": "message-48",
-    "inquiry_id": "inquiry-24",
-    "sender_user_id": "seller-7",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-13T19:28:14.296968+00:00"
-  },
-  {
-    "message_id": "message-49",
-    "inquiry_id": "inquiry-25",
-    "sender_user_id": "buyer-13",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-19T19:28:14.296971+00:00"
-  },
-  {
-    "message_id": "message-50",
-    "inquiry_id": "inquiry-25",
-    "sender_user_id": "seller-3",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-22T19:28:14.296974+00:00"
-  },
-  {
-    "message_id": "message-51",
-    "inquiry_id": "inquiry-26",
-    "sender_user_id": "buyer-14",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-14T19:28:14.296977+00:00"
-  },
-  {
-    "message_id": "message-52",
-    "inquiry_id": "inquiry-26",
-    "sender_user_id": "seller-4",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-20T19:28:14.296980+00:00"
-  },
-  {
-    "message_id": "message-53",
-    "inquiry_id": "inquiry-27",
-    "sender_user_id": "buyer-1",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-19T19:28:14.296988+00:00"
-  },
-  {
-    "message_id": "message-54",
-    "inquiry_id": "inquiry-27",
-    "sender_user_id": "dealer-2",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-14T19:28:14.296991+00:00"
-  },
-  {
-    "message_id": "message-55",
-    "inquiry_id": "inquiry-28",
-    "sender_user_id": "buyer-15",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-18T19:28:14.296994+00:00"
-  },
-  {
-    "message_id": "message-56",
-    "inquiry_id": "inquiry-28",
-    "sender_user_id": "seller-3",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-16T19:28:14.296997+00:00"
-  },
-  {
-    "message_id": "message-57",
-    "inquiry_id": "inquiry-29",
-    "sender_user_id": "buyer-5",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-15T19:28:14.297000+00:00"
-  },
-  {
-    "message_id": "message-59",
-    "inquiry_id": "inquiry-30",
-    "sender_user_id": "buyer-3",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-22T19:28:14.297003+00:00"
-  },
-  {
-    "message_id": "message-61",
-    "inquiry_id": "inquiry-31",
-    "sender_user_id": "buyer-4",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-20T19:28:14.297006+00:00"
-  },
-  {
-    "message_id": "message-62",
-    "inquiry_id": "inquiry-31",
-    "sender_user_id": "seller-4",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-21T19:28:14.297010+00:00"
-  },
-  {
-    "message_id": "message-63",
-    "inquiry_id": "inquiry-32",
-    "sender_user_id": "buyer-4",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-18T19:28:14.297013+00:00"
-  },
-  {
-    "message_id": "message-64",
-    "inquiry_id": "inquiry-32",
-    "sender_user_id": "seller-2",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-16T19:28:14.297016+00:00"
-  },
-  {
-    "message_id": "message-65",
-    "inquiry_id": "inquiry-33",
-    "sender_user_id": "buyer-12",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-15T19:28:14.297019+00:00"
-  },
-  {
-    "message_id": "message-66",
-    "inquiry_id": "inquiry-33",
-    "sender_user_id": "dealer-3",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-21T19:28:14.297022+00:00"
-  },
-  {
-    "message_id": "message-67",
-    "inquiry_id": "inquiry-34",
-    "sender_user_id": "buyer-14",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-15T19:28:14.297025+00:00"
-  },
-  {
-    "message_id": "message-68",
-    "inquiry_id": "inquiry-34",
-    "sender_user_id": "seller-8",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-17T19:28:14.297028+00:00"
-  },
-  {
-    "message_id": "message-69",
-    "inquiry_id": "inquiry-35",
-    "sender_user_id": "buyer-8",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-14T19:28:14.297031+00:00"
-  },
-  {
-    "message_id": "message-70",
-    "inquiry_id": "inquiry-35",
-    "sender_user_id": "dealer-2",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-13T19:28:14.297034+00:00"
-  },
-  {
-    "message_id": "message-71",
-    "inquiry_id": "inquiry-36",
-    "sender_user_id": "buyer-15",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-17T19:28:14.297037+00:00"
-  },
-  {
-    "message_id": "message-72",
-    "inquiry_id": "inquiry-36",
-    "sender_user_id": "seller-5",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-14T19:28:14.297041+00:00"
-  },
-  {
-    "message_id": "message-73",
-    "inquiry_id": "inquiry-37",
-    "sender_user_id": "buyer-13",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-15T19:28:14.297044+00:00"
-  },
-  {
-    "message_id": "message-74",
-    "inquiry_id": "inquiry-37",
-    "sender_user_id": "seller-1",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-18T19:28:14.297047+00:00"
-  },
-  {
-    "message_id": "message-75",
-    "inquiry_id": "inquiry-38",
-    "sender_user_id": "buyer-4",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-18T19:28:14.297050+00:00"
-  },
-  {
-    "message_id": "message-76",
-    "inquiry_id": "inquiry-38",
-    "sender_user_id": "dealer-3",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-14T19:28:14.297053+00:00"
-  },
-  {
-    "message_id": "message-77",
-    "inquiry_id": "inquiry-39",
-    "sender_user_id": "buyer-13",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-20T19:28:14.297056+00:00"
-  },
-  {
-    "message_id": "message-78",
-    "inquiry_id": "inquiry-39",
-    "sender_user_id": "dealer-1",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-16T19:28:14.297059+00:00"
-  },
-  {
-    "message_id": "message-79",
-    "inquiry_id": "inquiry-40",
-    "sender_user_id": "buyer-10",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-20T19:28:14.297062+00:00"
-  },
-  {
-    "message_id": "message-81",
-    "inquiry_id": "inquiry-41",
-    "sender_user_id": "buyer-11",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-21T19:28:14.297065+00:00"
-  },
-  {
-    "message_id": "message-82",
-    "inquiry_id": "inquiry-41",
-    "sender_user_id": "seller-3",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-15T19:28:14.297068+00:00"
-  },
-  {
-    "message_id": "message-83",
-    "inquiry_id": "inquiry-42",
-    "sender_user_id": "buyer-12",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-18T19:28:14.297071+00:00"
-  },
-  {
-    "message_id": "message-85",
-    "inquiry_id": "inquiry-43",
-    "sender_user_id": "buyer-5",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-18T19:28:14.297074+00:00"
-  },
-  {
-    "message_id": "message-86",
-    "inquiry_id": "inquiry-43",
-    "sender_user_id": "seller-7",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-13T19:28:14.297078+00:00"
-  },
-  {
-    "message_id": "message-87",
-    "inquiry_id": "inquiry-44",
-    "sender_user_id": "buyer-10",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-14T19:28:14.297081+00:00"
-  },
-  {
-    "message_id": "message-89",
-    "inquiry_id": "inquiry-45",
-    "sender_user_id": "buyer-3",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-12T19:28:14.297084+00:00"
-  },
-  {
-    "message_id": "message-91",
-    "inquiry_id": "inquiry-46",
-    "sender_user_id": "buyer-14",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-14T19:28:14.297087+00:00"
-  },
-  {
-    "message_id": "message-92",
-    "inquiry_id": "inquiry-46",
-    "sender_user_id": "seller-4",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-16T19:28:14.297090+00:00"
-  },
-  {
-    "message_id": "message-93",
-    "inquiry_id": "inquiry-47",
-    "sender_user_id": "buyer-11",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-14T19:28:14.297093+00:00"
-  },
-  {
-    "message_id": "message-95",
-    "inquiry_id": "inquiry-48",
-    "sender_user_id": "buyer-11",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-12T19:28:14.297096+00:00"
-  },
-  {
-    "message_id": "message-96",
-    "inquiry_id": "inquiry-48",
-    "sender_user_id": "seller-6",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-19T19:28:14.297099+00:00"
-  },
-  {
-    "message_id": "message-97",
-    "inquiry_id": "inquiry-49",
-    "sender_user_id": "buyer-9",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-18T19:28:14.297102+00:00"
-  },
-  {
-    "message_id": "message-98",
-    "inquiry_id": "inquiry-49",
-    "sender_user_id": "seller-4",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-22T19:28:14.297105+00:00"
-  },
-  {
-    "message_id": "message-99",
-    "inquiry_id": "inquiry-50",
-    "sender_user_id": "buyer-10",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-16T19:28:14.297108+00:00"
-  },
-  {
-    "message_id": "message-100",
-    "inquiry_id": "inquiry-50",
-    "sender_user_id": "seller-7",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-21T19:28:14.297111+00:00"
-  },
-  {
-    "message_id": "message-101",
-    "inquiry_id": "inquiry-51",
-    "sender_user_id": "buyer-6",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-20T19:28:14.297114+00:00"
-  },
-  {
-    "message_id": "message-103",
-    "inquiry_id": "inquiry-52",
-    "sender_user_id": "buyer-6",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-19T19:28:14.297117+00:00"
-  },
-  {
-    "message_id": "message-105",
-    "inquiry_id": "inquiry-53",
-    "sender_user_id": "buyer-10",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-22T19:28:14.297120+00:00"
-  },
-  {
-    "message_id": "message-106",
-    "inquiry_id": "inquiry-53",
-    "sender_user_id": "seller-1",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-20T19:28:14.297123+00:00"
-  },
-  {
-    "message_id": "message-107",
-    "inquiry_id": "inquiry-54",
-    "sender_user_id": "buyer-8",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-20T19:28:14.297126+00:00"
-  },
-  {
-    "message_id": "message-108",
-    "inquiry_id": "inquiry-54",
-    "sender_user_id": "dealer-2",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-15T19:28:14.297129+00:00"
-  },
-  {
-    "message_id": "message-109",
-    "inquiry_id": "inquiry-55",
-    "sender_user_id": "buyer-3",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-12T19:28:14.297132+00:00"
-  },
-  {
-    "message_id": "message-110",
-    "inquiry_id": "inquiry-55",
-    "sender_user_id": "seller-5",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-20T19:28:14.297135+00:00"
-  },
-  {
-    "message_id": "message-111",
-    "inquiry_id": "inquiry-56",
-    "sender_user_id": "buyer-8",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-17T19:28:14.297139+00:00"
-  },
-  {
-    "message_id": "message-112",
-    "inquiry_id": "inquiry-56",
-    "sender_user_id": "seller-3",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-18T19:28:14.297142+00:00"
-  },
-  {
-    "message_id": "message-113",
-    "inquiry_id": "inquiry-57",
-    "sender_user_id": "buyer-11",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-16T19:28:14.297145+00:00"
-  },
-  {
-    "message_id": "message-114",
-    "inquiry_id": "inquiry-57",
-    "sender_user_id": "seller-5",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-22T19:28:14.297148+00:00"
-  },
-  {
-    "message_id": "message-115",
-    "inquiry_id": "inquiry-58",
-    "sender_user_id": "buyer-14",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-17T19:28:14.297151+00:00"
-  },
-  {
-    "message_id": "message-116",
-    "inquiry_id": "inquiry-58",
-    "sender_user_id": "seller-6",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-18T19:28:14.297154+00:00"
-  },
-  {
-    "message_id": "message-117",
-    "inquiry_id": "inquiry-59",
-    "sender_user_id": "buyer-2",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-14T19:28:14.297158+00:00"
-  },
-  {
-    "message_id": "message-119",
-    "inquiry_id": "inquiry-60",
-    "sender_user_id": "buyer-3",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-12T19:28:14.297161+00:00"
-  },
-  {
-    "message_id": "message-121",
-    "inquiry_id": "inquiry-61",
-    "sender_user_id": "buyer-5",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-18T19:28:14.297164+00:00"
-  },
-  {
-    "message_id": "message-122",
-    "inquiry_id": "inquiry-61",
-    "sender_user_id": "dealer-2",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-12T19:28:14.297172+00:00"
-  },
-  {
-    "message_id": "message-123",
-    "inquiry_id": "inquiry-62",
-    "sender_user_id": "buyer-6",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-14T19:28:14.297175+00:00"
-  },
-  {
-    "message_id": "message-125",
-    "inquiry_id": "inquiry-63",
-    "sender_user_id": "buyer-12",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-13T19:28:14.297178+00:00"
-  },
-  {
-    "message_id": "message-126",
-    "inquiry_id": "inquiry-63",
-    "sender_user_id": "dealer-4",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-15T19:28:14.297181+00:00"
-  },
-  {
-    "message_id": "message-127",
-    "inquiry_id": "inquiry-64",
-    "sender_user_id": "buyer-1",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-14T19:28:14.297185+00:00"
-  },
-  {
-    "message_id": "message-129",
-    "inquiry_id": "inquiry-65",
-    "sender_user_id": "buyer-10",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-13T19:28:14.297188+00:00"
-  },
-  {
-    "message_id": "message-131",
-    "inquiry_id": "inquiry-66",
-    "sender_user_id": "buyer-4",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-16T19:28:14.297191+00:00"
-  },
-  {
-    "message_id": "message-133",
-    "inquiry_id": "inquiry-67",
-    "sender_user_id": "buyer-5",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-16T19:28:14.297194+00:00"
-  },
-  {
-    "message_id": "message-135",
-    "inquiry_id": "inquiry-68",
-    "sender_user_id": "buyer-5",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-12T19:28:14.297197+00:00"
-  },
-  {
-    "message_id": "message-136",
-    "inquiry_id": "inquiry-68",
-    "sender_user_id": "dealer-2",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-22T19:28:14.297200+00:00"
-  },
-  {
-    "message_id": "message-137",
-    "inquiry_id": "inquiry-69",
-    "sender_user_id": "buyer-14",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-16T19:28:14.297203+00:00"
-  },
-  {
-    "message_id": "message-138",
-    "inquiry_id": "inquiry-69",
-    "sender_user_id": "seller-3",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-13T19:28:14.297208+00:00"
-  },
-  {
-    "message_id": "message-139",
-    "inquiry_id": "inquiry-70",
-    "sender_user_id": "buyer-9",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-20T19:28:14.297212+00:00"
-  },
-  {
-    "message_id": "message-140",
-    "inquiry_id": "inquiry-70",
-    "sender_user_id": "seller-2",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-21T19:28:14.297215+00:00"
-  },
-  {
-    "message_id": "message-141",
-    "inquiry_id": "inquiry-71",
-    "sender_user_id": "buyer-8",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-20T19:28:14.297218+00:00"
-  },
-  {
-    "message_id": "message-142",
-    "inquiry_id": "inquiry-71",
-    "sender_user_id": "dealer-4",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-20T19:28:14.297221+00:00"
-  },
-  {
-    "message_id": "message-143",
-    "inquiry_id": "inquiry-72",
-    "sender_user_id": "buyer-1",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-15T19:28:14.297224+00:00"
-  },
-  {
-    "message_id": "message-145",
-    "inquiry_id": "inquiry-73",
-    "sender_user_id": "buyer-10",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-16T19:28:14.297227+00:00"
-  },
-  {
-    "message_id": "message-146",
-    "inquiry_id": "inquiry-73",
-    "sender_user_id": "seller-5",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-15T19:28:14.297230+00:00"
-  },
-  {
-    "message_id": "message-147",
-    "inquiry_id": "inquiry-74",
-    "sender_user_id": "buyer-12",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-17T19:28:14.297233+00:00"
-  },
-  {
-    "message_id": "message-148",
-    "inquiry_id": "inquiry-74",
-    "sender_user_id": "seller-7",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-12T19:28:14.297236+00:00"
-  },
-  {
-    "message_id": "message-149",
-    "inquiry_id": "inquiry-75",
-    "sender_user_id": "buyer-14",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-19T19:28:14.297239+00:00"
-  },
-  {
-    "message_id": "message-150",
-    "inquiry_id": "inquiry-75",
-    "sender_user_id": "dealer-3",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-13T19:28:14.297242+00:00"
-  },
-  {
-    "message_id": "message-151",
-    "inquiry_id": "inquiry-76",
-    "sender_user_id": "buyer-11",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-22T19:28:14.297245+00:00"
-  },
-  {
-    "message_id": "message-152",
-    "inquiry_id": "inquiry-76",
-    "sender_user_id": "seller-8",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-20T19:28:14.297248+00:00"
-  },
-  {
-    "message_id": "message-153",
-    "inquiry_id": "inquiry-77",
-    "sender_user_id": "buyer-10",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-17T19:28:14.297251+00:00"
-  },
-  {
-    "message_id": "message-154",
-    "inquiry_id": "inquiry-77",
-    "sender_user_id": "seller-1",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-21T19:28:14.297254+00:00"
-  },
-  {
-    "message_id": "message-155",
-    "inquiry_id": "inquiry-78",
-    "sender_user_id": "buyer-13",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-15T19:28:14.297258+00:00"
-  },
-  {
-    "message_id": "message-156",
-    "inquiry_id": "inquiry-78",
-    "sender_user_id": "seller-7",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-13T19:28:14.297261+00:00"
-  },
-  {
-    "message_id": "message-157",
-    "inquiry_id": "inquiry-79",
-    "sender_user_id": "buyer-14",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-20T19:28:14.297264+00:00"
-  },
-  {
-    "message_id": "message-158",
-    "inquiry_id": "inquiry-79",
-    "sender_user_id": "dealer-2",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-15T19:28:14.297267+00:00"
-  },
-  {
-    "message_id": "message-159",
-    "inquiry_id": "inquiry-80",
-    "sender_user_id": "buyer-2",
-    "body": "Hi, is this BMW still available?",
-    "sent_at": "2026-04-17T19:28:14.297269+00:00"
-  },
-  {
-    "message_id": "message-160",
-    "inquiry_id": "inquiry-80",
-    "sender_user_id": "dealer-4",
-    "body": "Yes, it is available. Let me know if you want to schedule a viewing.",
-    "sent_at": "2026-04-14T19:28:14.297272+00:00"
+    "message_id": "message-001",
+    "conversation_id": "conversation-001",
+    "sender_user_id": "user-001",
+    "sender_name": "M3Touring",
+    "recipient_user_id": "user-008",
+    "recipient_name": "DriveTrainGuy",
+    "subject": "BMW listing follow-up",
+    "body": "Thanks for the quick reply. The details help a lot while I decide whether to move forward.",
+    "created_at": "2024-04-01T00:00:00Z",
+    "read_at": null
+  },
+  {
+    "message_id": "message-002",
+    "conversation_id": "conversation-001",
+    "sender_user_id": "user-002",
+    "sender_name": "///M TrackRat",
+    "recipient_user_id": "user-009",
+    "recipient_name": "RoadTrip330",
+    "subject": "More info on the service history",
+    "body": "I appreciate the photos and the extra notes. The car sounds like a strong fit for what I want.",
+    "created_at": "2024-04-01T01:00:00Z",
+    "read_at": "2024-04-01T07:00:00Z"
+  },
+  {
+    "message_id": "message-003",
+    "conversation_id": "conversation-002",
+    "sender_user_id": "user-003",
+    "sender_name": "F30Daily",
+    "recipient_user_id": "user-010",
+    "recipient_name": "GarageJournal",
+    "subject": "Quick question about the part",
+    "body": "If the part is still available, I’d like to arrange payment and shipping details.",
+    "created_at": "2024-04-02T02:00:00Z",
+    "read_at": "2024-04-02T08:00:00Z"
+  },
+  {
+    "message_id": "message-004",
+    "conversation_id": "conversation-002",
+    "sender_user_id": "user-004",
+    "sender_name": "E92Collector",
+    "recipient_user_id": "user-011",
+    "recipient_name": "M54Swap",
+    "subject": "Ready to schedule a viewing",
+    "body": "That makes sense. Please keep me posted if anything changes with availability.",
+    "created_at": "2024-04-02T03:00:00Z",
+    "read_at": null
+  },
+  {
+    "message_id": "message-005",
+    "conversation_id": "conversation-003",
+    "sender_user_id": "user-005",
+    "sender_name": "N54Tuner",
+    "recipient_user_id": "user-012",
+    "recipient_name": "BlackSapphire",
+    "subject": "Thanks for the update",
+    "body": "Thanks for the quick reply. The details help a lot while I decide whether to move forward.",
+    "created_at": "2024-04-03T04:00:00Z",
+    "read_at": "2024-04-03T10:00:00Z"
+  },
+  {
+    "message_id": "message-006",
+    "conversation_id": "conversation-003",
+    "sender_user_id": "user-006",
+    "sender_name": "LCI Club",
+    "recipient_user_id": "user-013",
+    "recipient_name": "ServiceBay",
+    "subject": "BMW listing follow-up",
+    "body": "I appreciate the photos and the extra notes. The car sounds like a strong fit for what I want.",
+    "created_at": "2024-04-03T05:00:00Z",
+    "read_at": "2024-04-03T11:00:00Z"
+  },
+  {
+    "message_id": "message-007",
+    "conversation_id": "conversation-004",
+    "sender_user_id": "user-007",
+    "sender_name": "PartsBench",
+    "recipient_user_id": "user-014",
+    "recipient_name": "DetailDays",
+    "subject": "More info on the service history",
+    "body": "If the part is still available, I’d like to arrange payment and shipping details.",
+    "created_at": "2024-04-04T06:00:00Z",
+    "read_at": null
+  },
+  {
+    "message_id": "message-008",
+    "conversation_id": "conversation-004",
+    "sender_user_id": "user-008",
+    "sender_name": "DriveTrainGuy",
+    "recipient_user_id": "user-015",
+    "recipient_name": "TrackSpec",
+    "subject": "Quick question about the part",
+    "body": "That makes sense. Please keep me posted if anything changes with availability.",
+    "created_at": "2024-04-04T07:00:00Z",
+    "read_at": "2024-04-04T13:00:00Z"
+  },
+  {
+    "message_id": "message-009",
+    "conversation_id": "conversation-005",
+    "sender_user_id": "user-009",
+    "sender_name": "RoadTrip330",
+    "recipient_user_id": "user-016",
+    "recipient_name": "WeekendWrench",
+    "subject": "Ready to schedule a viewing",
+    "body": "Thanks for the quick reply. The details help a lot while I decide whether to move forward.",
+    "created_at": "2024-04-05T08:00:00Z",
+    "read_at": "2024-04-05T14:00:00Z"
+  },
+  {
+    "message_id": "message-010",
+    "conversation_id": "conversation-005",
+    "sender_user_id": "user-010",
+    "sender_name": "GarageJournal",
+    "recipient_user_id": "user-017",
+    "recipient_name": "BayAreaBMW",
+    "subject": "Thanks for the update",
+    "body": "I appreciate the photos and the extra notes. The car sounds like a strong fit for what I want.",
+    "created_at": "2024-04-05T09:00:00Z",
+    "read_at": null
+  },
+  {
+    "message_id": "message-011",
+    "conversation_id": "conversation-006",
+    "sender_user_id": "user-011",
+    "sender_name": "M54Swap",
+    "recipient_user_id": "user-018",
+    "recipient_name": "BlueBookBuyer",
+    "subject": "BMW listing follow-up",
+    "body": "If the part is still available, I’d like to arrange payment and shipping details.",
+    "created_at": "2024-04-06T10:00:00Z",
+    "read_at": "2024-04-06T16:00:00Z"
+  },
+  {
+    "message_id": "message-012",
+    "conversation_id": "conversation-006",
+    "sender_user_id": "user-012",
+    "sender_name": "BlackSapphire",
+    "recipient_user_id": "user-019",
+    "recipient_name": "EuroSpec",
+    "subject": "More info on the service history",
+    "body": "That makes sense. Please keep me posted if anything changes with availability.",
+    "created_at": "2024-04-06T11:00:00Z",
+    "read_at": "2024-04-06T17:00:00Z"
+  },
+  {
+    "message_id": "message-013",
+    "conversation_id": "conversation-007",
+    "sender_user_id": "user-013",
+    "sender_name": "ServiceBay",
+    "recipient_user_id": "user-020",
+    "recipient_name": "TurbosAndTires",
+    "subject": "Quick question about the part",
+    "body": "Thanks for the quick reply. The details help a lot while I decide whether to move forward.",
+    "created_at": "2024-04-07T00:00:00Z",
+    "read_at": null
+  },
+  {
+    "message_id": "message-014",
+    "conversation_id": "conversation-007",
+    "sender_user_id": "user-014",
+    "sender_name": "DetailDays",
+    "recipient_user_id": "user-021",
+    "recipient_name": "VINHunter",
+    "subject": "Ready to schedule a viewing",
+    "body": "I appreciate the photos and the extra notes. The car sounds like a strong fit for what I want.",
+    "created_at": "2024-04-07T01:00:00Z",
+    "read_at": "2024-04-07T07:00:00Z"
+  },
+  {
+    "message_id": "message-015",
+    "conversation_id": "conversation-008",
+    "sender_user_id": "user-015",
+    "sender_name": "TrackSpec",
+    "recipient_user_id": "user-022",
+    "recipient_name": "WinterReady",
+    "subject": "Thanks for the update",
+    "body": "If the part is still available, I’d like to arrange payment and shipping details.",
+    "created_at": "2024-04-08T02:00:00Z",
+    "read_at": "2024-04-08T08:00:00Z"
+  },
+  {
+    "message_id": "message-016",
+    "conversation_id": "conversation-008",
+    "sender_user_id": "user-016",
+    "sender_name": "WeekendWrench",
+    "recipient_user_id": "user-023",
+    "recipient_name": "M3Touring",
+    "subject": "BMW listing follow-up",
+    "body": "That makes sense. Please keep me posted if anything changes with availability.",
+    "created_at": "2024-04-08T03:00:00Z",
+    "read_at": null
+  },
+  {
+    "message_id": "message-017",
+    "conversation_id": "conversation-009",
+    "sender_user_id": "user-017",
+    "sender_name": "BayAreaBMW",
+    "recipient_user_id": "user-024",
+    "recipient_name": "///M TrackRat",
+    "subject": "More info on the service history",
+    "body": "Thanks for the quick reply. The details help a lot while I decide whether to move forward.",
+    "created_at": "2024-04-09T04:00:00Z",
+    "read_at": "2024-04-09T10:00:00Z"
+  },
+  {
+    "message_id": "message-018",
+    "conversation_id": "conversation-009",
+    "sender_user_id": "user-018",
+    "sender_name": "BlueBookBuyer",
+    "recipient_user_id": "user-001",
+    "recipient_name": "M3Touring",
+    "subject": "Quick question about the part",
+    "body": "I appreciate the photos and the extra notes. The car sounds like a strong fit for what I want.",
+    "created_at": "2024-04-09T05:00:00Z",
+    "read_at": "2024-04-09T11:00:00Z"
+  },
+  {
+    "message_id": "message-019",
+    "conversation_id": "conversation-010",
+    "sender_user_id": "user-019",
+    "sender_name": "EuroSpec",
+    "recipient_user_id": "user-002",
+    "recipient_name": "///M TrackRat",
+    "subject": "Ready to schedule a viewing",
+    "body": "If the part is still available, I’d like to arrange payment and shipping details.",
+    "created_at": "2024-04-10T06:00:00Z",
+    "read_at": null
+  },
+  {
+    "message_id": "message-020",
+    "conversation_id": "conversation-010",
+    "sender_user_id": "user-020",
+    "sender_name": "TurbosAndTires",
+    "recipient_user_id": "user-003",
+    "recipient_name": "F30Daily",
+    "subject": "Thanks for the update",
+    "body": "That makes sense. Please keep me posted if anything changes with availability.",
+    "created_at": "2024-04-10T07:00:00Z",
+    "read_at": "2024-04-10T13:00:00Z"
+  },
+  {
+    "message_id": "message-021",
+    "conversation_id": "conversation-011",
+    "sender_user_id": "user-021",
+    "sender_name": "VINHunter",
+    "recipient_user_id": "user-004",
+    "recipient_name": "E92Collector",
+    "subject": "BMW listing follow-up",
+    "body": "Thanks for the quick reply. The details help a lot while I decide whether to move forward.",
+    "created_at": "2024-04-11T08:00:00Z",
+    "read_at": "2024-04-11T14:00:00Z"
+  },
+  {
+    "message_id": "message-022",
+    "conversation_id": "conversation-011",
+    "sender_user_id": "user-022",
+    "sender_name": "WinterReady",
+    "recipient_user_id": "user-005",
+    "recipient_name": "N54Tuner",
+    "subject": "More info on the service history",
+    "body": "I appreciate the photos and the extra notes. The car sounds like a strong fit for what I want.",
+    "created_at": "2024-04-11T09:00:00Z",
+    "read_at": null
+  },
+  {
+    "message_id": "message-023",
+    "conversation_id": "conversation-012",
+    "sender_user_id": "user-023",
+    "sender_name": "M3Touring",
+    "recipient_user_id": "user-006",
+    "recipient_name": "LCI Club",
+    "subject": "Quick question about the part",
+    "body": "If the part is still available, I’d like to arrange payment and shipping details.",
+    "created_at": "2024-04-12T10:00:00Z",
+    "read_at": "2024-04-12T16:00:00Z"
+  },
+  {
+    "message_id": "message-024",
+    "conversation_id": "conversation-012",
+    "sender_user_id": "user-024",
+    "sender_name": "///M TrackRat",
+    "recipient_user_id": "user-007",
+    "recipient_name": "PartsBench",
+    "subject": "Ready to schedule a viewing",
+    "body": "That makes sense. Please keep me posted if anything changes with availability.",
+    "created_at": "2024-04-12T11:00:00Z",
+    "read_at": "2024-04-12T17:00:00Z"
+  },
+  {
+    "message_id": "message-025",
+    "conversation_id": "conversation-013",
+    "sender_user_id": "user-001",
+    "sender_name": "M3Touring",
+    "recipient_user_id": "user-008",
+    "recipient_name": "DriveTrainGuy",
+    "subject": "Thanks for the update",
+    "body": "Thanks for the quick reply. The details help a lot while I decide whether to move forward.",
+    "created_at": "2024-04-13T00:00:00Z",
+    "read_at": null
+  },
+  {
+    "message_id": "message-026",
+    "conversation_id": "conversation-013",
+    "sender_user_id": "user-002",
+    "sender_name": "///M TrackRat",
+    "recipient_user_id": "user-009",
+    "recipient_name": "RoadTrip330",
+    "subject": "BMW listing follow-up",
+    "body": "I appreciate the photos and the extra notes. The car sounds like a strong fit for what I want.",
+    "created_at": "2024-04-13T01:00:00Z",
+    "read_at": "2024-04-13T07:00:00Z"
+  },
+  {
+    "message_id": "message-027",
+    "conversation_id": "conversation-014",
+    "sender_user_id": "user-003",
+    "sender_name": "F30Daily",
+    "recipient_user_id": "user-010",
+    "recipient_name": "GarageJournal",
+    "subject": "More info on the service history",
+    "body": "If the part is still available, I’d like to arrange payment and shipping details.",
+    "created_at": "2024-04-14T02:00:00Z",
+    "read_at": "2024-04-14T08:00:00Z"
+  },
+  {
+    "message_id": "message-028",
+    "conversation_id": "conversation-014",
+    "sender_user_id": "user-004",
+    "sender_name": "E92Collector",
+    "recipient_user_id": "user-011",
+    "recipient_name": "M54Swap",
+    "subject": "Quick question about the part",
+    "body": "That makes sense. Please keep me posted if anything changes with availability.",
+    "created_at": "2024-04-14T03:00:00Z",
+    "read_at": null
+  },
+  {
+    "message_id": "message-029",
+    "conversation_id": "conversation-015",
+    "sender_user_id": "user-005",
+    "sender_name": "N54Tuner",
+    "recipient_user_id": "user-012",
+    "recipient_name": "BlackSapphire",
+    "subject": "Ready to schedule a viewing",
+    "body": "Thanks for the quick reply. The details help a lot while I decide whether to move forward.",
+    "created_at": "2024-04-15T04:00:00Z",
+    "read_at": "2024-04-15T10:00:00Z"
+  },
+  {
+    "message_id": "message-030",
+    "conversation_id": "conversation-015",
+    "sender_user_id": "user-006",
+    "sender_name": "LCI Club",
+    "recipient_user_id": "user-013",
+    "recipient_name": "ServiceBay",
+    "subject": "Thanks for the update",
+    "body": "I appreciate the photos and the extra notes. The car sounds like a strong fit for what I want.",
+    "created_at": "2024-04-15T05:00:00Z",
+    "read_at": "2024-04-15T11:00:00Z"
+  },
+  {
+    "message_id": "message-031",
+    "conversation_id": "conversation-016",
+    "sender_user_id": "user-007",
+    "sender_name": "PartsBench",
+    "recipient_user_id": "user-014",
+    "recipient_name": "DetailDays",
+    "subject": "BMW listing follow-up",
+    "body": "If the part is still available, I’d like to arrange payment and shipping details.",
+    "created_at": "2024-04-16T06:00:00Z",
+    "read_at": null
+  },
+  {
+    "message_id": "message-032",
+    "conversation_id": "conversation-016",
+    "sender_user_id": "user-008",
+    "sender_name": "DriveTrainGuy",
+    "recipient_user_id": "user-015",
+    "recipient_name": "TrackSpec",
+    "subject": "More info on the service history",
+    "body": "That makes sense. Please keep me posted if anything changes with availability.",
+    "created_at": "2024-04-16T07:00:00Z",
+    "read_at": "2024-04-16T13:00:00Z"
+  },
+  {
+    "message_id": "message-033",
+    "conversation_id": "conversation-017",
+    "sender_user_id": "user-009",
+    "sender_name": "RoadTrip330",
+    "recipient_user_id": "user-016",
+    "recipient_name": "WeekendWrench",
+    "subject": "Quick question about the part",
+    "body": "Thanks for the quick reply. The details help a lot while I decide whether to move forward.",
+    "created_at": "2024-04-17T08:00:00Z",
+    "read_at": "2024-04-17T14:00:00Z"
+  },
+  {
+    "message_id": "message-034",
+    "conversation_id": "conversation-017",
+    "sender_user_id": "user-010",
+    "sender_name": "GarageJournal",
+    "recipient_user_id": "user-017",
+    "recipient_name": "BayAreaBMW",
+    "subject": "Ready to schedule a viewing",
+    "body": "I appreciate the photos and the extra notes. The car sounds like a strong fit for what I want.",
+    "created_at": "2024-04-17T09:00:00Z",
+    "read_at": null
+  },
+  {
+    "message_id": "message-035",
+    "conversation_id": "conversation-018",
+    "sender_user_id": "user-011",
+    "sender_name": "M54Swap",
+    "recipient_user_id": "user-018",
+    "recipient_name": "BlueBookBuyer",
+    "subject": "Thanks for the update",
+    "body": "If the part is still available, I’d like to arrange payment and shipping details.",
+    "created_at": "2024-04-18T10:00:00Z",
+    "read_at": "2024-04-18T16:00:00Z"
+  },
+  {
+    "message_id": "message-036",
+    "conversation_id": "conversation-018",
+    "sender_user_id": "user-012",
+    "sender_name": "BlackSapphire",
+    "recipient_user_id": "user-019",
+    "recipient_name": "EuroSpec",
+    "subject": "BMW listing follow-up",
+    "body": "That makes sense. Please keep me posted if anything changes with availability.",
+    "created_at": "2024-04-18T11:00:00Z",
+    "read_at": "2024-04-18T17:00:00Z"
   }
 ]

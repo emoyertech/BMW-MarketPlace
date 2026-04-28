@@ -1,0 +1,380 @@
+[
+  {
+    "reply_id": "forum-reply-0001",
+    "thread_id": "forum-thread-0001",
+    "author_user_id": "user-005",
+    "author_name": "N54Tuner",
+    "author_role": "collector",
+    "body": "That looks like a solid starting point. I’d prioritize fluids, belts, and a full inspection so you know exactly what you’re working with. I would also check the maintenance log before making any decisions.",
+    "created_at": "2024-04-02T00:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0002",
+    "thread_id": "forum-thread-0002",
+    "author_user_id": "user-008",
+    "author_name": "DriveTrainGuy",
+    "author_role": "seller",
+    "body": "For a clean example, the price can make sense if the records are real and the wear items have already been handled.",
+    "created_at": "2024-04-02T01:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0003",
+    "thread_id": "forum-thread-0003",
+    "author_user_id": "user-011",
+    "author_name": "M54Swap",
+    "author_role": "collector",
+    "body": "I ran the same setup on mine and the fit was fine. If you stay conservative on tire size, you should be in good shape.",
+    "created_at": "2024-04-02T02:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0004",
+    "thread_id": "forum-thread-0004",
+    "author_user_id": "user-014",
+    "author_name": "DetailDays",
+    "author_role": "seller",
+    "body": "Nice progress. The car already looks balanced, and I think the tasteful direction is the right one for this chassis.",
+    "created_at": "2024-04-03T03:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0005",
+    "thread_id": "forum-thread-0005",
+    "author_user_id": "user-017",
+    "author_name": "BayAreaBMW",
+    "author_role": "collector",
+    "body": "If the history checks out, I would not hesitate too long. Good cars are still the easiest ones to justify later.",
+    "created_at": "2024-04-03T04:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0006",
+    "thread_id": "forum-thread-0006",
+    "author_user_id": "user-020",
+    "author_name": "TurbosAndTires",
+    "author_role": "seller",
+    "body": "I’d stay OEM on anything safety-related and save the aftermarket budget for parts that are easy to swap later. I would also check the maintenance log before making any decisions.",
+    "created_at": "2024-04-03T05:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0007",
+    "thread_id": "forum-thread-0007",
+    "author_user_id": "user-023",
+    "author_name": "M3Touring",
+    "author_role": "collector",
+    "body": "Mine had a similar issue and it turned out to be a small maintenance item rather than a major repair. Worth checking the basics first.",
+    "created_at": "2024-04-04T06:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0008",
+    "thread_id": "forum-thread-0008",
+    "author_user_id": "user-002",
+    "author_name": "///M TrackRat",
+    "author_role": "seller",
+    "body": "This is exactly the kind of project update people like to see. It is clean, straightforward, and clearly headed in the right direction.",
+    "created_at": "2024-04-04T00:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0009",
+    "thread_id": "forum-thread-0009",
+    "author_user_id": "user-005",
+    "author_name": "N54Tuner",
+    "author_role": "collector",
+    "body": "That looks like a solid starting point. I’d prioritize fluids, belts, and a full inspection so you know exactly what you’re working with.",
+    "created_at": "2024-04-04T01:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0010",
+    "thread_id": "forum-thread-0010",
+    "author_user_id": "user-008",
+    "author_name": "DriveTrainGuy",
+    "author_role": "seller",
+    "body": "For a clean example, the price can make sense if the records are real and the wear items have already been handled.",
+    "created_at": "2024-04-05T02:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0011",
+    "thread_id": "forum-thread-0011",
+    "author_user_id": "user-011",
+    "author_name": "M54Swap",
+    "author_role": "collector",
+    "body": "I ran the same setup on mine and the fit was fine. If you stay conservative on tire size, you should be in good shape. I would also check the maintenance log before making any decisions.",
+    "created_at": "2024-04-05T03:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0012",
+    "thread_id": "forum-thread-0012",
+    "author_user_id": "user-014",
+    "author_name": "DetailDays",
+    "author_role": "seller",
+    "body": "Nice progress. The car already looks balanced, and I think the tasteful direction is the right one for this chassis.",
+    "created_at": "2024-04-05T04:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0013",
+    "thread_id": "forum-thread-0013",
+    "author_user_id": "user-017",
+    "author_name": "BayAreaBMW",
+    "author_role": "collector",
+    "body": "If the history checks out, I would not hesitate too long. Good cars are still the easiest ones to justify later.",
+    "created_at": "2024-04-06T05:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0014",
+    "thread_id": "forum-thread-0014",
+    "author_user_id": "user-020",
+    "author_name": "TurbosAndTires",
+    "author_role": "seller",
+    "body": "I’d stay OEM on anything safety-related and save the aftermarket budget for parts that are easy to swap later.",
+    "created_at": "2024-04-06T06:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0015",
+    "thread_id": "forum-thread-0015",
+    "author_user_id": "user-023",
+    "author_name": "M3Touring",
+    "author_role": "collector",
+    "body": "Mine had a similar issue and it turned out to be a small maintenance item rather than a major repair. Worth checking the basics first.",
+    "created_at": "2024-04-06T00:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0016",
+    "thread_id": "forum-thread-0016",
+    "author_user_id": "user-002",
+    "author_name": "///M TrackRat",
+    "author_role": "seller",
+    "body": "This is exactly the kind of project update people like to see. It is clean, straightforward, and clearly headed in the right direction. I would also check the maintenance log before making any decisions.",
+    "created_at": "2024-04-07T01:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0017",
+    "thread_id": "forum-thread-0017",
+    "author_user_id": "user-005",
+    "author_name": "N54Tuner",
+    "author_role": "collector",
+    "body": "That looks like a solid starting point. I’d prioritize fluids, belts, and a full inspection so you know exactly what you’re working with.",
+    "created_at": "2024-04-07T02:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0018",
+    "thread_id": "forum-thread-0018",
+    "author_user_id": "user-008",
+    "author_name": "DriveTrainGuy",
+    "author_role": "seller",
+    "body": "For a clean example, the price can make sense if the records are real and the wear items have already been handled.",
+    "created_at": "2024-04-07T03:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0019",
+    "thread_id": "forum-thread-0001",
+    "author_user_id": "user-011",
+    "author_name": "M54Swap",
+    "author_role": "collector",
+    "body": "I ran the same setup on mine and the fit was fine. If you stay conservative on tire size, you should be in good shape.",
+    "created_at": "2024-04-08T04:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0020",
+    "thread_id": "forum-thread-0002",
+    "author_user_id": "user-014",
+    "author_name": "DetailDays",
+    "author_role": "seller",
+    "body": "Nice progress. The car already looks balanced, and I think the tasteful direction is the right one for this chassis.",
+    "created_at": "2024-04-08T05:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0021",
+    "thread_id": "forum-thread-0003",
+    "author_user_id": "user-017",
+    "author_name": "BayAreaBMW",
+    "author_role": "collector",
+    "body": "If the history checks out, I would not hesitate too long. Good cars are still the easiest ones to justify later. I would also check the maintenance log before making any decisions.",
+    "created_at": "2024-04-08T06:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0022",
+    "thread_id": "forum-thread-0004",
+    "author_user_id": "user-020",
+    "author_name": "TurbosAndTires",
+    "author_role": "seller",
+    "body": "I’d stay OEM on anything safety-related and save the aftermarket budget for parts that are easy to swap later.",
+    "created_at": "2024-04-09T00:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0023",
+    "thread_id": "forum-thread-0005",
+    "author_user_id": "user-023",
+    "author_name": "M3Touring",
+    "author_role": "collector",
+    "body": "Mine had a similar issue and it turned out to be a small maintenance item rather than a major repair. Worth checking the basics first.",
+    "created_at": "2024-04-09T01:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0024",
+    "thread_id": "forum-thread-0006",
+    "author_user_id": "user-002",
+    "author_name": "///M TrackRat",
+    "author_role": "seller",
+    "body": "This is exactly the kind of project update people like to see. It is clean, straightforward, and clearly headed in the right direction.",
+    "created_at": "2024-04-09T02:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0025",
+    "thread_id": "forum-thread-0007",
+    "author_user_id": "user-005",
+    "author_name": "N54Tuner",
+    "author_role": "collector",
+    "body": "That looks like a solid starting point. I’d prioritize fluids, belts, and a full inspection so you know exactly what you’re working with.",
+    "created_at": "2024-04-10T03:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0026",
+    "thread_id": "forum-thread-0008",
+    "author_user_id": "user-008",
+    "author_name": "DriveTrainGuy",
+    "author_role": "seller",
+    "body": "For a clean example, the price can make sense if the records are real and the wear items have already been handled. I would also check the maintenance log before making any decisions.",
+    "created_at": "2024-04-10T04:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0027",
+    "thread_id": "forum-thread-0009",
+    "author_user_id": "user-011",
+    "author_name": "M54Swap",
+    "author_role": "collector",
+    "body": "I ran the same setup on mine and the fit was fine. If you stay conservative on tire size, you should be in good shape.",
+    "created_at": "2024-04-10T05:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0028",
+    "thread_id": "forum-thread-0010",
+    "author_user_id": "user-014",
+    "author_name": "DetailDays",
+    "author_role": "seller",
+    "body": "Nice progress. The car already looks balanced, and I think the tasteful direction is the right one for this chassis.",
+    "created_at": "2024-04-11T06:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0029",
+    "thread_id": "forum-thread-0011",
+    "author_user_id": "user-017",
+    "author_name": "BayAreaBMW",
+    "author_role": "collector",
+    "body": "If the history checks out, I would not hesitate too long. Good cars are still the easiest ones to justify later.",
+    "created_at": "2024-04-11T00:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0030",
+    "thread_id": "forum-thread-0012",
+    "author_user_id": "user-020",
+    "author_name": "TurbosAndTires",
+    "author_role": "seller",
+    "body": "I’d stay OEM on anything safety-related and save the aftermarket budget for parts that are easy to swap later.",
+    "created_at": "2024-04-11T01:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0031",
+    "thread_id": "forum-thread-0013",
+    "author_user_id": "user-023",
+    "author_name": "M3Touring",
+    "author_role": "collector",
+    "body": "Mine had a similar issue and it turned out to be a small maintenance item rather than a major repair. Worth checking the basics first. I would also check the maintenance log before making any decisions.",
+    "created_at": "2024-04-12T02:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0032",
+    "thread_id": "forum-thread-0014",
+    "author_user_id": "user-002",
+    "author_name": "///M TrackRat",
+    "author_role": "seller",
+    "body": "This is exactly the kind of project update people like to see. It is clean, straightforward, and clearly headed in the right direction.",
+    "created_at": "2024-04-12T03:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0033",
+    "thread_id": "forum-thread-0015",
+    "author_user_id": "user-005",
+    "author_name": "N54Tuner",
+    "author_role": "collector",
+    "body": "That looks like a solid starting point. I’d prioritize fluids, belts, and a full inspection so you know exactly what you’re working with.",
+    "created_at": "2024-04-12T04:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0034",
+    "thread_id": "forum-thread-0016",
+    "author_user_id": "user-008",
+    "author_name": "DriveTrainGuy",
+    "author_role": "seller",
+    "body": "For a clean example, the price can make sense if the records are real and the wear items have already been handled.",
+    "created_at": "2024-04-13T05:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0035",
+    "thread_id": "forum-thread-0017",
+    "author_user_id": "user-011",
+    "author_name": "M54Swap",
+    "author_role": "collector",
+    "body": "I ran the same setup on mine and the fit was fine. If you stay conservative on tire size, you should be in good shape.",
+    "created_at": "2024-04-13T06:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0036",
+    "thread_id": "forum-thread-0018",
+    "author_user_id": "user-014",
+    "author_name": "DetailDays",
+    "author_role": "seller",
+    "body": "Nice progress. The car already looks balanced, and I think the tasteful direction is the right one for this chassis. I would also check the maintenance log before making any decisions.",
+    "created_at": "2024-04-13T00:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0037",
+    "thread_id": "forum-thread-0001",
+    "author_user_id": "user-017",
+    "author_name": "BayAreaBMW",
+    "author_role": "collector",
+    "body": "If the history checks out, I would not hesitate too long. Good cars are still the easiest ones to justify later.",
+    "created_at": "2024-04-14T01:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0038",
+    "thread_id": "forum-thread-0002",
+    "author_user_id": "user-020",
+    "author_name": "TurbosAndTires",
+    "author_role": "seller",
+    "body": "I’d stay OEM on anything safety-related and save the aftermarket budget for parts that are easy to swap later.",
+    "created_at": "2024-04-14T02:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0039",
+    "thread_id": "forum-thread-0003",
+    "author_user_id": "user-023",
+    "author_name": "M3Touring",
+    "author_role": "collector",
+    "body": "Mine had a similar issue and it turned out to be a small maintenance item rather than a major repair. Worth checking the basics first.",
+    "created_at": "2024-04-14T03:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0040",
+    "thread_id": "forum-thread-0004",
+    "author_user_id": "user-002",
+    "author_name": "///M TrackRat",
+    "author_role": "seller",
+    "body": "This is exactly the kind of project update people like to see. It is clean, straightforward, and clearly headed in the right direction.",
+    "created_at": "2024-04-15T04:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0041",
+    "thread_id": "forum-thread-0005",
+    "author_user_id": "user-005",
+    "author_name": "N54Tuner",
+    "author_role": "collector",
+    "body": "That looks like a solid starting point. I’d prioritize fluids, belts, and a full inspection so you know exactly what you’re working with. I would also check the maintenance log before making any decisions.",
+    "created_at": "2024-04-15T05:00:00Z"
+  },
+  {
+    "reply_id": "forum-reply-0042",
+    "thread_id": "forum-thread-0006",
+    "author_user_id": "user-008",
+    "author_name": "DriveTrainGuy",
+    "author_role": "seller",
+    "body": "For a clean example, the price can make sense if the records are real and the wear items have already been handled.",
+    "created_at": "2024-04-15T06:00:00Z"
+  }
+]

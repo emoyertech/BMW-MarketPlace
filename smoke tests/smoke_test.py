@@ -449,6 +449,31 @@ def test_dealer_database_helpers():
         assert_true(len(captured_events) >= 2)
 
 
+def test_homepage_community_links():
+    if hp is None:
+        raise AssertionError(f"home_page import failed: {HOME_PAGE_IMPORT_ERROR}")
+
+    html_output = hp.render_home(
+        Path("data"),
+        None,
+        {
+            "search": "",
+            "chassis_code": "",
+            "transmission_type": "",
+            "package_name": "",
+            "drive_type": "",
+            "doors": "",
+            "title_filter": "",
+            "sort_by": "newest",
+        },
+        "",
+    )
+    assert_true('href="/forums"' in html_output, "homepage should link to /forums")
+    assert_true('href="/parts"' in html_output, "homepage should link to /parts")
+    assert_true("Open forums" in html_output, "homepage should label the forums CTA")
+    assert_true("Browse parts marketplace" in html_output, "homepage should label the parts CTA")
+
+
 def test_route_registration():
     if hp is None:
         raise AssertionError(f"home_page import failed: {HOME_PAGE_IMPORT_ERROR}")
@@ -461,11 +486,21 @@ def test_route_registration():
         "/api/dealership/me",
         "/api/dealership/apply",
         "/api/dealership/members",
+        "/api/dealership/inquiries",
+        "/api/dealership/reply",
         "/api/admin/dealerships/pending",
         "/api/admin/dealerships/approve",
         "/api/admin/dealerships/reject",
         "/api/admin/dealerships/suspend",
         "/admin/users/role",
+        "/dealerships/{dealer_id}",
+        "/dealerships/{dealer_id}/inbox",
+        "/dealerships/{dealer_id}/inbox/reply",
+        "/dealerships/{dealer_id}/inbox/assign",
+        "/forums",
+        "/parts",
+        "/inbox",
+        "/inbox/reply",
         "/logout",
     }
     missing = sorted(expected_routes - routes)

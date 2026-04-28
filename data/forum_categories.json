@@ -1,0 +1,44 @@
+[
+  {
+    "category_id": "forum-category-001",
+    "slug": "general-discussion",
+    "name": "General Discussion",
+    "description": "Daily BMW talk, ownership stories, and anything else that does not fit a more specific board.",
+    "sort_order": 10
+  },
+  {
+    "category_id": "forum-category-002",
+    "slug": "maintenance-repair",
+    "name": "Maintenance & Repair",
+    "description": "Service schedules, troubleshooting, and repair advice for all BMW generations.",
+    "sort_order": 20
+  },
+  {
+    "category_id": "forum-category-003",
+    "slug": "build-projects",
+    "name": "Build Projects",
+    "description": "Progress updates, photos, parts lists, and project planning for enthusiast builds.",
+    "sort_order": 30
+  },
+  {
+    "category_id": "forum-category-004",
+    "slug": "parts-market",
+    "name": "Parts & Accessories",
+    "description": "OEM, aftermarket, fitment questions, and parts buying or selling discussions.",
+    "sort_order": 40
+  },
+  {
+    "category_id": "forum-category-005",
+    "slug": "dealer-buyer",
+    "name": "Dealer & Buyer Talk",
+    "description": "Pricing, buying advice, and dealer experiences shared by shoppers and sellers.",
+    "sort_order": 50
+  },
+  {
+    "category_id": "forum-category-006",
+    "slug": "track-autocross",
+    "name": "Track & Autocross",
+    "description": "Lap-day prep, tire choices, suspension setup, and motorsport discussion.",
+    "sort_order": 60
+  }
+]

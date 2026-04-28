@@ -147,11 +147,34 @@ def render_settings(
     error: str = "",
     notice_code: str = "",
     dealership_html: str = "",
+    data_dir: Path | None = None,
 ) -> str:
     values = values or {}
     template = SETTINGS_TEMPLATE_PATH.read_text(encoding="utf-8")
     error_html = f'<p class="form-error">{html.escape(error)}</p>' if error else ""
     notice_html_value = notice_html(notice_code)
+    user_id = str(current_user.get("user_id", "")).strip()
+    buyer_inbox_count = 0
+    if data_dir is not None and user_id:
+        buyer_inbox_count = sum(
+            int(inquiry.get("unread_count", 0) or 0)
+            for inquiry in list_buyer_inquiries(data_dir, user_id)
+        )
+    buyer_inbox_html = ""
+    if data_dir is not None and user_id:
+        inbox_summary = "Review every buyer conversation in one place."
+        if buyer_inbox_count:
+            inbox_summary = f"You have {buyer_inbox_count} unread message(s) across your conversations."
+        buyer_inbox_html = "".join(
+            [
+                '<section class="settings-section inbox-panel">',
+                '<p class="eyebrow">Messages</p>',
+                '<h2>Buyer inbox</h2>',
+                f'<p>{html.escape(inbox_summary)}</p>',
+                '<p><a class="button primary" href="/inbox">Open buyer inbox</a></p>',
+                '</section>',
+            ]
+        )
     full_name = values.get("full_name", str(current_user.get("full_name", "")))
     email = values.get("email", str(current_user.get("email", "")))
     return (
@@ -159,7 +182,7 @@ def render_settings(
         .replace("{{ERROR_HTML}}", error_html)
         .replace("{{FULL_NAME}}", html.escape(full_name))
         .replace("{{EMAIL}}", html.escape(email))
-        .replace("{{DEALERSHIP_HTML}}", dealership_html)
+        .replace("{{DEALERSHIP_HTML}}", buyer_inbox_html + dealership_html)
     )
 
 
@@ -231,6 +254,8 @@ def render_dealership_settings(data_dir: Path, current_user: dict[str, str], val
             f'<p class="auth-hint">Pending dealership approvals: {pending_count}</p>'
         )
 
+    inbox_count = len(list_dealer_inquiries(data_dir, dealer_id)) if dealer_id else 0
+
     application_form_html = "".join(
         [
             '<section class="settings-section dealership-panel">',
@@ -282,6 +307,8 @@ def render_dealership_settings(data_dir: Path, current_user: dict[str, str], val
                 f'<li><strong>License:</strong> {html.escape(license_number or "—")}</li>',
                 f'<li><strong>Your role:</strong> {html.escape(current_role_text)}</li>',
                 '</ul>',
+                f'<p><a class="button primary" href="/dealerships/{urllib.parse.quote(dealer_id)}/inbox">Open dealer inbox</a></p>',
+                f'<p class="auth-hint">{inbox_count} inquiry thread(s) are waiting in this inbox.</p>',
                 '<p class="auth-hint">Only approved dealerships with active owner, sales manager, or salesperson memberships can respond to buyer messages.</p>',
                 admin_notice_html,
                 '</section>',
@@ -358,6 +385,334 @@ def render_dealership_settings(data_dir: Path, current_user: dict[str, str], val
     return application_block + application_form_html
 
 
+
+
+def render_dealership_inbox(data_dir: Path, dealer_id: str, current_user: dict[str, str] | None = None, notice_code: str = "") -> str:
+    db = db_path_for(data_dir)
+    users = load_json(data_dir / "users.json")
+    users_by_id = {str(user.get("user_id", "")): user for user in users}
+    dealer = get_dealer_profile_by_id(db, dealer_id)
+
+    if not dealer or str(dealer.get("status", "")).strip().upper() != "APPROVED":
+        return (
+            '<!doctype html><html lang="en"><head><meta charset="utf-8" />'
+            '<meta name="viewport" content="width=device-width, initial-scale=1" />'
+            '<title>Inbox not found</title><link rel="stylesheet" href="/styles.css" />'
+            '</head><body><main class="page-shell"><p class="empty-state">This dealership inbox is not available.</p>'
+            '<p><a class="button secondary" href="/dealerships">Return to dealerships</a></p></main></body></html>'
+        )
+
+    user_id = str(current_user.get("user_id", "")) if current_user else ""
+    can_manage = bool(current_user and user_can_manage_dealer(db, user_id, dealer_id))
+    can_respond = bool(current_user and user_can_respond_for_dealer(db, user_id, dealer_id))
+    if not (can_manage or can_respond):
+        return (
+            '<!doctype html><html lang="en"><head><meta charset="utf-8" />'
+            '<meta name="viewport" content="width=device-width, initial-scale=1" />'
+            '<title>Inbox access denied</title><link rel="stylesheet" href="/styles.css" />'
+            '</head><body><main class="page-shell"><p class="empty-state">You are not authorized to view this dealership inbox.</p>'
+            '<p><a class="button secondary" href="/settings">Return to settings</a></p></main></body></html>'
+        )
+
+    inquiries = list_dealer_inquiries(data_dir, dealer_id)
+    members = list_dealer_members(db, dealer_id) if can_manage else []
+    messages = load_messages(data_dir)
+    messages_by_inquiry: dict[str, list[dict]] = {}
+    for message in messages:
+        inquiry_key = str(message.get("inquiry_id", "")).strip()
+        if not inquiry_key:
+            continue
+        messages_by_inquiry.setdefault(inquiry_key, []).append(message)
+
+    for thread in messages_by_inquiry.values():
+        thread.sort(key=lambda item: str(item.get("sent_at", "")))
+
+    display_name = str(dealer.get("display_name", "")).strip() or "Approved dealership"
+    legal_name = str(dealer.get("legal_name", "")).strip()
+    website_url = str(dealer.get("website_url", "")).strip()
+    license_number = str(dealer.get("license_number", "")).strip()
+    website_link = (
+        f'<a href="{html.escape(website_url)}" target="_blank" rel="noreferrer">{html.escape(website_url)}</a>'
+        if website_url
+        else "—"
+    )
+
+    inquiry_cards: list[str] = []
+    member_options_html = "".join(
+        [
+            '<option value="">Unassigned</option>',
+            *[
+                f'<option value="{html.escape(str(member.get("user_id", "")))}">{html.escape(str(users_by_id.get(str(member.get("user_id", "")), {}).get("full_name", "Unknown user")))} · {html.escape(str(member.get("member_role", "Member")).replace("_", " ").title())}</option>'
+                for member in members
+            ],
+        ]
+    )
+    for inquiry in inquiries:
+        inquiry_id = str(inquiry.get("inquiry_id", "")).strip()
+        listing = inquiry.get("listing", {}) if isinstance(inquiry.get("listing", {}), dict) else {}
+        listing_title = f'{html.escape(str(listing.get("year", "")))} BMW {html.escape(str(listing.get("model", "")))} {html.escape(str(listing.get("trim", "")))}'.strip()
+        buyer = users_by_id.get(str(inquiry.get("buyer_user_id", "")), {})
+        latest_message = inquiry.get("latest_message", {}) if isinstance(inquiry.get("latest_message", {}), dict) else {}
+        thread = messages_by_inquiry.get(inquiry_id, [])
+        thread_html_parts: list[str] = []
+        for message in thread:
+            sender = users_by_id.get(str(message.get("sender_user_id", "")), {})
+            sender_name = str(sender.get("full_name", "Unknown user")).strip() or "Unknown user"
+            thread_html_parts.append(
+                "".join(
+                    [
+                        '<li class="inbox-thread__message">',
+                        f'<strong>{html.escape(sender_name)}</strong>',
+                        f'<span class="inbox-thread__timestamp">{html.escape(str(message.get("sent_at", "")))}</span>',
+                        f'<p>{html.escape(str(message.get("body", "")))}</p>',
+                        "</li>",
+                    ]
+                )
+            )
+        thread_html = "".join(thread_html_parts) or '<li class="empty-state">No messages available.</li>'
+        reply_form_html = ""
+        assign_form_html = ""
+        assigned_user_id = str(inquiry.get("assigned_user_id", "")).strip()
+        assigned_user_name = str(inquiry.get("assigned_user_name", "")).strip()
+        if can_manage:
+            assign_form_html = "".join(
+                [
+                    '<form class="listing-form inbox-assign-form" method="post" action="/dealerships/',
+                    html.escape(urllib.parse.quote(dealer_id)),
+                    '/inbox/assign">',
+                    f'<input type="hidden" name="dealer_id" value="{html.escape(dealer_id)}" />',
+                    f'<input type="hidden" name="inquiry_id" value="{html.escape(inquiry_id)}" />',
+                    '<label>Assign to<select name="assigned_user_id">',
+                    member_options_html.replace(
+                        f'<option value="{html.escape(assigned_user_id)}"',
+                        f'<option value="{html.escape(assigned_user_id)}" selected'
+                    ) if assigned_user_id else member_options_html,
+                    '</select></label>',
+                    '<button class="button secondary" type="submit">Save assignment</button>',
+                    '</form>',
+                ]
+            )
+        if can_respond:
+            reply_form_html = "".join(
+                [
+                    '<form class="listing-form inbox-reply-form" method="post" action="/dealerships/',
+                    html.escape(urllib.parse.quote(dealer_id)),
+                    '/inbox/reply">',
+                    f'<input type="hidden" name="dealer_id" value="{html.escape(dealer_id)}" />',
+                    f'<input type="hidden" name="inquiry_id" value="{html.escape(inquiry_id)}" />',
+                    '<label>Reply<textarea name="body" rows="4" placeholder="Type your reply here..." required></textarea></label>',
+                    '<button class="button primary" type="submit">Send reply</button>',
+                    '</form>',
+                ]
+            )
+        inquiry_cards.append(
+            "".join(
+                [
+                    '<article class="inbox-card">',
+                    f'<h2>{html.escape(listing_title) if listing_title.strip() else "Listing inquiry"}</h2>',
+                    '<ul class="detail-list">',
+                    f'<li><strong>Buyer:</strong> {html.escape(str(buyer.get("full_name", "Unknown buyer")))}</li>',
+                    f'<li><strong>Email:</strong> {html.escape(str(buyer.get("email", "")) or "—")}</li>',
+                    f'<li><strong>Status:</strong> {html.escape(str(inquiry.get("status", "NEW")))} · {html.escape(str(inquiry.get("message_count", 0)))} message(s)</li>',
+                    f'<li><strong>Latest activity:</strong> {html.escape(str(latest_message.get("sent_at", inquiry.get("updated_at", ""))))}</li>',
+                    f'<li><strong>Assigned to:</strong> {html.escape(assigned_user_name or "Unassigned")}</li>',
+                    f'<li><strong>Listing:</strong> <a href="/listing?listing_id={html.escape(urllib.parse.quote(str(inquiry.get("listing_id", ""))))}">{html.escape(listing_title or "View listing")}</a></li>',
+                    "</ul>",
+                    assign_form_html,
+                    f'<details class="inbox-thread"><summary>View conversation</summary><ul>{thread_html}</ul></details>',
+                    reply_form_html,
+                    "</article>",
+                ]
+            )
+        )
+
+    if not inquiry_cards:
+        inquiry_cards_html = '<p class="empty-state">No buyer inquiries have arrived yet.</p>'
+    else:
+        inquiry_cards_html = "".join(inquiry_cards)
+
+    current_user_html = ""
+    if current_user:
+        current_user_html = (
+            f'<span class="auth-welcome">Signed in as {html.escape(current_user.get("full_name", ""))}</span>'
+            '<a class="button secondary auth-btn" href="/settings">Settings</a>'
+            '<a class="button secondary auth-btn" href="/dealerships">Dealerships</a>'
+            '<a class="button secondary auth-btn" href="/logout">Log out</a>'
+        )
+
+    return (
+        '<!doctype html><html lang="en"><head><meta charset="utf-8" />'
+        '<meta name="viewport" content="width=device-width, initial-scale=1" />'
+        f'<title>{html.escape(display_name)} inbox</title><link rel="stylesheet" href="/styles.css" />'
+        '<style>'
+        '.dealer-inbox .page-hero{display:flex;flex-direction:column;gap:0.75rem;}'
+        '.dealer-inbox__summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1.5rem 0;}'
+        '.dealer-inbox__panel,.inbox-card{border:1px solid rgba(148,163,184,0.35);border-radius:18px;padding:1.25rem;background:#fff;box-shadow:0 1px 2px rgba(15,23,42,0.05);}'
+        '.dealer-inbox__cards{display:grid;gap:1rem;margin-top:1.5rem;}'
+        '.detail-list{margin:0;padding-left:1.1rem;display:grid;gap:0.4rem;}'
+        '.inbox-assign-form{margin-top:1rem;}'
+        '.inbox-thread{margin-top:1rem;}'
+        '.inbox-thread summary{cursor:pointer;font-weight:700;}'
+        '.inbox-thread ul{list-style:none;padding:0;margin:0.75rem 0 0;display:grid;gap:0.75rem;}'
+        '.inbox-thread__message{border:1px solid rgba(148,163,184,0.2);border-radius:14px;padding:0.75rem 0.9rem;background:#f8fafc;display:grid;gap:0.35rem;}'
+        '.inbox-thread__timestamp{color:#64748b;font-size:0.85rem;}'
+        '.inbox-reply-form{margin-top:1rem;}'
+        '</style></head><body><main class="page-shell dealer-inbox">'
+        '<header class="page-hero">'
+        '<p class="eyebrow">Dealer inbox</p>'
+        f'<h1>{html.escape(display_name)}</h1>'
+        f'<p>{html.escape(legal_name or "Legal name not listed")}</p>'
+        f'<p>{current_user_html}</p>'
+        '</header>'
+        f'{notice_html(notice_code)}'
+        '<section class="dealer-inbox__summary">'
+        '<article class="dealer-inbox__panel">'
+        '<h2>Inbox access</h2>'
+        f'<ul class="detail-list"><li><strong>Role:</strong> {"can manage" if can_manage else "can reply"}</li><li><strong>Website:</strong> {website_link}</li><li><strong>License:</strong> {html.escape(license_number or "—")}</li><li><strong>Inquiries:</strong> {len(inquiries)}</li></ul>'
+        '</article>'
+        '<article class="dealer-inbox__panel">'
+        '<h2>How replies work</h2>'
+        '<p>Replying marks the inquiry as responded and adds your message to the conversation history.</p>'
+        '<p>Only owners, sales managers, salespeople, and site admins can access this inbox.</p>'
+        f'<p><a class="button secondary" href="/dealerships/{urllib.parse.quote(dealer_id)}">Back to dealership profile</a></p>'
+        '</article>'
+        '</section>'
+        f'<section class="dealer-inbox__cards">{inquiry_cards_html}</section>'
+        '</main></body></html>'
+    )
+
+
+def render_buyer_inbox(data_dir: Path, current_user: dict[str, str] | None = None, notice_code: str = "") -> str:
+    db = db_path_for(data_dir)
+    if not current_user:
+        return (
+            '<!doctype html><html lang="en"><head><meta charset="utf-8" />'
+            '<meta name="viewport" content="width=device-width, initial-scale=1" />'
+            '<title>Buyer inbox</title><link rel="stylesheet" href="/styles.css" />'
+            '</head><body><main class="page-shell"><p class="empty-state">Log in to view your inbox.</p>'
+            '<p><a class="button primary" href="/login?next=/inbox">Log in</a></p></main></body></html>'
+        )
+
+    user_id = str(current_user.get("user_id", "")).strip()
+    inquiries = list_buyer_inquiries(data_dir, user_id)
+    users = list_app_users(db)
+    users_by_id = {str(user.get("user_id", "")): user for user in users}
+    dealer_profiles_by_id = {str(profile.get("dealer_id", "")): profile for profile in list_all_dealer_profiles(db)}
+    messages = load_messages(data_dir)
+    messages_by_inquiry: dict[str, list[dict]] = {}
+    for message in messages:
+        inquiry_key = str(message.get("inquiry_id", "")).strip()
+        if not inquiry_key:
+            continue
+        messages_by_inquiry.setdefault(inquiry_key, []).append(message)
+
+    for thread in messages_by_inquiry.values():
+        thread.sort(key=lambda item: str(item.get("sent_at", "")))
+
+    cards: list[str] = []
+    for inquiry in inquiries:
+        inquiry_id = str(inquiry.get("inquiry_id", "")).strip()
+        listing = inquiry.get("listing", {}) if isinstance(inquiry.get("listing", {}), dict) else {}
+        dealer_id = str(inquiry.get("dealer_id", "")).strip() or str(listing.get("dealer_id", "")).strip()
+        dealer = dealer_profiles_by_id.get(dealer_id, {})
+        dealer_name = str(dealer.get("display_name", "")).strip() or "Marketplace seller"
+        latest_message = inquiry.get("latest_message", {}) if isinstance(inquiry.get("latest_message", {}), dict) else {}
+        thread = messages_by_inquiry.get(inquiry_id, [])
+        thread_html_parts: list[str] = []
+        for message in thread:
+            sender_id = str(message.get("sender_user_id", "")).strip()
+            sender = users_by_id.get(sender_id, {})
+            sender_name = str(sender.get("full_name", "Unknown user")).strip() or "Unknown user"
+            is_self = sender_id == user_id
+            thread_html_parts.append(
+                "".join(
+                    [
+                        f'<li class="buyer-inbox__message {"buyer-inbox__message--self" if is_self else "buyer-inbox__message--seller"}">',
+                        f'<strong>{html.escape(sender_name)}</strong>',
+                        f'<span class="buyer-inbox__timestamp">{html.escape(str(message.get("sent_at", "")))}</span>',
+                        f'<p>{html.escape(str(message.get("body", "")))}</p>',
+                        "</li>",
+                    ]
+                )
+            )
+        thread_html = "".join(thread_html_parts) or '<li class="empty-state">No messages available yet.</li>'
+        listing_id = str(inquiry.get("listing_id", "")).strip()
+        listing_url = "/listing?listing_id=" + urllib.parse.quote(listing_id) if listing_id else "/"
+        reply_form_html = "".join(
+            [
+                '<form class="listing-form buyer-inbox__reply-form" method="post" action="/inbox/reply">',
+                f'<input type="hidden" name="inquiry_id" value="{html.escape(inquiry_id)}" />',
+                '<label>Reply<textarea name="body" rows="4" placeholder="Type your reply here..." required></textarea></label>',
+                '<button class="button primary" type="submit">Send reply</button>',
+                '</form>',
+            ]
+        )
+        cards.append(
+            "".join(
+                [
+                    '<article class="buyer-inbox__card">',
+                    f'<h2>{html.escape(dealer_name)}</h2>',
+                    '<ul class="detail-list">',
+                    f'<li><strong>Listing:</strong> <a href="{html.escape(listing_url)}">{html.escape(str(listing.get("year", "")))} BMW {html.escape(str(listing.get("model", "")))} {html.escape(str(listing.get("trim", "")))}</a></li>',
+                    f'<li><strong>Status:</strong> {html.escape(str(inquiry.get("status", "NEW")))} · {html.escape(str(inquiry.get("message_count", 0)))} message(s)</li>',
+                    f'<li><strong>Unread replies:</strong> {html.escape(str(inquiry.get("unread_count", 0)))}</li>',
+                    f'<li><strong>Latest activity:</strong> {html.escape(str(latest_message.get("sent_at", inquiry.get("updated_at", ""))))}</li>',
+                    f'<li><strong>Assigned to:</strong> {html.escape(str(inquiry.get("assigned_user_name", "")) or "Unassigned")}</li>',
+                    "</ul>",
+                    f'<details class="buyer-inbox__thread"><summary>View conversation</summary><ul>{thread_html}</ul></details>',
+                    reply_form_html,
+                    "</article>",
+                ]
+            )
+        )
+
+    cards_html = "".join(cards) if cards else '<p class="empty-state">No inquiries yet. Send a message from any listing to start a conversation.</p>'
+    current_user_html = (
+        f'<span class="auth-welcome">Signed in as {html.escape(current_user.get("full_name", ""))}</span>'
+        '<a class="button secondary auth-btn" href="/">Home</a>'
+        '<a class="button secondary auth-btn" href="/settings">Settings</a>'
+        '<a class="button secondary auth-btn" href="/logout">Log out</a>'
+    )
+
+    return (
+        '<!doctype html><html lang="en"><head><meta charset="utf-8" />'
+        '<meta name="viewport" content="width=device-width, initial-scale=1" />'
+        '<title>My inbox</title><link rel="stylesheet" href="/styles.css" />'
+        '<style>'
+        '.buyer-inbox .page-hero{display:flex;flex-direction:column;gap:0.75rem;}'
+        '.buyer-inbox__summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1.5rem 0;}'
+        '.buyer-inbox__panel,.buyer-inbox__card{border:1px solid rgba(148,163,184,0.35);border-radius:18px;padding:1.25rem;background:#fff;box-shadow:0 1px 2px rgba(15,23,42,0.05);}'
+        '.buyer-inbox__cards{display:grid;gap:1rem;margin-top:1.5rem;}'
+        '.buyer-inbox__thread{margin-top:1rem;}'
+        '.buyer-inbox__thread summary{cursor:pointer;font-weight:700;}'
+        '.buyer-inbox__thread ul{list-style:none;padding:0;margin:0.75rem 0 0;display:grid;gap:0.75rem;}'
+        '.buyer-inbox__message{border:1px solid rgba(148,163,184,0.2);border-radius:14px;padding:0.75rem 0.9rem;background:#f8fafc;display:grid;gap:0.35rem;}'
+        '.buyer-inbox__message--self{background:#eff6ff;border-color:rgba(37,99,235,0.25);}'
+        '.buyer-inbox__message--seller{background:#f8fafc;}'
+        '.buyer-inbox__timestamp{color:#64748b;font-size:0.85rem;}'
+        '.buyer-inbox__reply-form{margin-top:1rem;}'
+        '</style></head><body><main class="page-shell buyer-inbox">'
+        '<header class="page-hero">'
+        '<p class="eyebrow">My messages</p>'
+        '<h1>Buyer inbox</h1>'
+        '<p>Track your inquiry history, replies from dealerships, and ongoing conversations in one place.</p>'
+        f'<p>{current_user_html}</p>'
+        '</header>'
+        f'{notice_html(notice_code)}'
+        '<section class="buyer-inbox__summary">'
+        '<article class="buyer-inbox__panel">'
+        '<h2>Conversation history</h2>'
+        f'<p>{len(inquiries)} inquiry thread(s) are available in your inbox.</p>'
+        '</article>'
+        '<article class="buyer-inbox__panel">'
+        '<h2>How to use this inbox</h2>'
+        '<p>Open a conversation to review every message and continue the thread with a reply.</p>'
+        '<p>Unread replies are tracked per conversation.</p>'
+        '</article>'
+        '</section>'
+        f'<section class="buyer-inbox__cards">{cards_html}</section>'
+        '</main></body></html>'
+    )
 
 
 def render_card(listing: dict, seller_name: str, card_template: str, seller: dict | None = None) -> str:
@@ -492,6 +847,7 @@ def render_listing_detail(data_dir: Path, listing_id: str, current_user: dict | 
             '<button class="button primary" type="submit">Send inquiry</button>'
             '</form>'
             '<p class="auth-hint">The seller will see your message in their inquiry queue.</p>'
+            '<p><a class="button secondary" href="/inbox">Open buyer inbox</a></p>'
             '</section>'
         )
     owner_controls_html = ""
@@ -615,25 +971,22 @@ def render_dealership_directory(data_dir: Path, current_user: dict[str, str] | N
         )
 
     notice_block = notice_html(notice_code)
-    dealer_cards_html = (
-        "".join(dealer_cards)
-        if dealer_cards
-        else '<p class="empty-state">No approved dealerships are available yet.</p>'
-    )
     current_user_html = ""
     if current_user:
         current_user_html = (
             f'<span class="auth-welcome">Signed in as {html.escape(current_user.get("full_name", ""))}</span>'
-            '<a class="button secondary auth-btn" href="/">Home</a>'
+            '<a class="button secondary auth-btn" href="/dealerships">Back to dealerships</a>'
             '<a class="button secondary auth-btn" href="/settings">Settings</a>'
             '<a class="button secondary auth-btn" href="/logout">Log out</a>'
         )
     else:
         current_user_html = (
-            '<a class="button secondary auth-btn" href="/">Home</a>'
+            '<a class="button secondary auth-btn" href="/dealerships">Back to dealerships</a>'
             '<a class="button secondary auth-btn" href="/login?next=/dealerships">Log in</a>'
             '<a class="button secondary auth-btn" href="/register?next=/dealerships">Create account</a>'
         )
+
+    dealer_cards_html = "".join(dealer_cards) if dealer_cards else '<p class="empty-state">No approved dealerships found.</p>'
 
     return (
         '<!doctype html><html lang="en"><head><meta charset="utf-8" />'
@@ -724,12 +1077,23 @@ def render_dealership_detail(data_dir: Path, dealer_id: str, current_user: dict[
             )
         member_rows_html = "".join(rows)
 
+    notice_block = notice_html(notice_code)
+    inbox_controls_html = ""
+    if can_respond:
+        inbox_controls_html = "".join(
+            [
+                '<section class="dealership-detail__section dealership-detail__panel">',
+                '<h2>Dealer inbox</h2>',
+                '<p>View and reply to buyer messages for this dealership.</p>',
+                f'<p><a class="button primary" href="/dealerships/{urllib.parse.quote(dealer_id)}/inbox">Open inbox</a></p>',
+                '</section>',
+            ]
+        )
     inventory_cards_html = (
         "".join(inventory_cards)
         if inventory_cards
         else '<p class="empty-state">This dealership does not have any active inventory listed yet.</p>'
     )
-    notice_block = notice_html(notice_code)
     current_user_html = ""
     if current_user:
         current_user_html = (
@@ -798,6 +1162,7 @@ def render_dealership_detail(data_dir: Path, dealer_id: str, current_user: dict[
         '<p>Browse the inventory below to view vehicle details, pricing, mileage, and seller information.</p>'
         '</article>'
         '</section>'
+        f'{inbox_controls_html}'
         f'<section class="dealership-detail__section"><h2>Inventory</h2><div class="dealership-detail__inventory">{inventory_cards_html}</div></section>'
         f'{manage_block}'
         '</main></body></html>'
@@ -903,10 +1268,42 @@ def render_home(
         "A catalog-backed homepage that mixes dealer stock and individual listings, "
         "with real image URLs, mileage, titles, and vehicle details."
     )
+    community_section_html = (
+        '<section class="section community-section" id="community">'
+        '<div class="section-heading">'
+        '<div>'
+        '<p class="section-kicker">Community</p>'
+        '<h2>BMW Marketplace community</h2>'
+        '</div>'
+        '<p class="section-note">Jump into the parts marketplace now and the future forum hub when it is ready.</p>'
+        '</div>'
+        '<div class="community-grid">'
+        '<article class="community-card">'
+        '<h3>Forums</h3>'
+        '<p>A dedicated community home for build threads, DIY help, classifieds discussion, and future marketplace forums.</p>'
+        '<a class="button secondary" href="/forums">Open forums</a>'
+        '</article>'
+        '<article class="community-card">'
+        '<h3>Parts marketplace</h3>'
+        '<p>Browse BMW parts, accessories, and upgrades from the marketplace home page.</p>'
+        '<a class="button secondary" href="/parts">Browse parts marketplace</a>'
+        '</article>'
+        '</div>'
+        '<p class="community-section__note">Forums will become your own community space later, while parts already have a dedicated landing page.</p>'
+        '</section>'
+    )
 
     template = TEMPLATE_PATH.read_text(encoding="utf-8")
     reminder_html = notice_html(notice_code)
+    buyer_inbox_unread_count = 0
+    buyer_inbox_label = "Inbox"
     if current_user:
+        buyer_inbox_unread_count = sum(
+            int(inquiry.get("unread_count", 0) or 0)
+            for inquiry in list_buyer_inquiries(data_dir, str(current_user.get("user_id", "")).strip())
+        )
+        if buyer_inbox_unread_count:
+            buyer_inbox_label = f"Inbox ({buyer_inbox_unread_count})"
         owned_active = [
             listing
             for listing in filtered_active
@@ -936,6 +1333,7 @@ def render_home(
         auth_header_html = (
             f'<span class="auth-welcome">Signed in as {html.escape(current_user.get("full_name", ""))}</span>'
             '<a class="button secondary auth-btn" href="/create-listing">Create listing</a>'
+            f'<a class="button secondary auth-btn" href="/inbox">{html.escape(buyer_inbox_label)}</a>'
             '<a class="button secondary auth-btn" href="/settings">Settings</a>'
             '<a class="button secondary auth-btn" href="/logout">Log out</a>'
         )
@@ -998,6 +1396,7 @@ def render_home(
         .replace("{{HERO_TITLE}}", hero_title)
         .replace("{{HERO_SUBTITLE}}", hero_subtitle)
         .replace("{{FEATURED_CARDS_HTML}}", cards_html)
+        .replace("{{COMMUNITY_SECTION_HTML}}", community_section_html)
         .replace("{{DEALER_CARDS_HTML}}", dealer_html)
         .replace("{{PRIVATE_CARDS_HTML}}", private_html)
         .replace("{{AUTH_HEADER_HTML}}", auth_header_html)
@@ -1018,3 +1417,8 @@ def render_home(
         )
         .replace("{{SORT_OPTIONS_HTML}}", sort_html)
     )
+
+try:
+    from .forum_render import render_forum_index, render_forum_category, render_forum_thread, render_forum_new_thread, render_forum_reports
+except ImportError:
+    from forum_render import render_forum_index, render_forum_category, render_forum_thread, render_forum_new_thread, render_forum_reports

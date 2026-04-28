@@ -11,9 +11,11 @@
     <a class="back-link" href="/">Back to marketplace</a>
     {{NOTICE_HTML}}
 
-    <section class="detail-hero">
+    <section class="detail-hero detail-panel">
       <div class="detail-media">
-        {{GALLERY_HTML}}
+        <div class="detail-gallery-frame">
+          {{GALLERY_HTML}}
+        </div>
         <p class="detail-gallery-note">{{GALLERY_NOTICE}}</p>
       </div>
 
@@ -23,11 +25,17 @@
         <p class="detail-subtitle">{{DETAIL_SUBTITLE}}</p>
         <div class="detail-price">{{PRICE}}</div>
 
+        <div class="detail-pill-row">
+          <span class="tag">{{STATUS}}</span>
+          <span class="tag"><strong>VIN:</strong> {{VIN}}</span>
+          <span class="tag">Listing ID: {{LISTING_ID}}</span>
+        </div>
+
         <div class="detail-meta-grid">
           {{DETAIL_SPEC_HTML}}
         </div>
 
-        <div class="seller-card">
+        <div class="seller-card detail-seller-card">
           <span class="panel-label">Seller</span>
           <div class="seller-card__name-row">
             <strong>{{SELLER_NAME}}</strong>
@@ -36,13 +44,11 @@
           <span>{{SELLER_EMAIL}}</span>
         </div>
 
-        <div class="tags detail-tags">
-          <span class="tag">{{STATUS}}</span>
-          <span class="tag"><strong>VIN:</strong> {{VIN}}</span>
-          <span class="tag">Listing ID: {{LISTING_ID}}</span>
+        <div class="detail-actions">
+          <button class="button secondary copy-vin-button" type="button" data-vin="{{VIN}}">Copy VIN</button>
+          <div class="vehicle-report-links">{{VEHICLE_REPORTS_HTML}}</div>
         </div>
-        <button class="button secondary copy-vin-button" type="button" data-vin="{{VIN}}">Copy VIN</button>
-        <div class="vehicle-report-links">{{VEHICLE_REPORTS_HTML}}</div>
+
         {{INQUIRY_HTML}}
         {{OWNER_CONTROLS_HTML}}
       </div>
